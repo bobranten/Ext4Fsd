@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ext3Fsd", "Ext3Fsd\ext3fsd.vcproj", "{2328F787-71B4-408B-8E10-B7A95BF9A110}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ext2Mgr", "Ext2Mgr\Ext2Mgr.vcproj", "{F0E304B5-AF20-49F7-8183-5994C6EA889D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ext2Srv", "Ext2Srv\Ext2Srv.vcproj", "{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccProjectUniqueName0 = Ext3Fsd\\ext3fsd.vcproj
+		SccProjectName0 = Ext3Fsd
+		SccLocalPath0 = Ext3Fsd
+		SccProvider0 = MSSCCI:Perforce\u0020P4\u0020SCM
+		CanCheckoutShared = true
+		SccProjectUniqueName1 = Ext2Srv\\Ext2Srv.vcproj
+		SccProjectName1 = Ext2Srv
+		SccLocalPath1 = Ext2Srv
+		SccProvider1 = MSSCCI:Perforce\u0020P4\u0020SCM
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2328F787-71B4-408B-8E10-B7A95BF9A110}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2328F787-71B4-408B-8E10-B7A95BF9A110}.Debug|Win32.Build.0 = Debug|Win32
+		{2328F787-71B4-408B-8E10-B7A95BF9A110}.Release|Win32.ActiveCfg = Release|Win32
+		{2328F787-71B4-408B-8E10-B7A95BF9A110}.Release|Win32.Build.0 = Release|Win32
+		{F0E304B5-AF20-49F7-8183-5994C6EA889D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0E304B5-AF20-49F7-8183-5994C6EA889D}.Debug|Win32.Build.0 = Debug|Win32
+		{F0E304B5-AF20-49F7-8183-5994C6EA889D}.Release|Win32.ActiveCfg = Release|Win32
+		{F0E304B5-AF20-49F7-8183-5994C6EA889D}.Release|Win32.Build.0 = Release|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Debug|Win32.Build.0 = Debug|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Release|Win32.ActiveCfg = Release|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

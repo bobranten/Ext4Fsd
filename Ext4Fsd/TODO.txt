@@ -1,0 +1,103 @@
+ 1, Ext3 htree support
+11, REPARSE_POINT support ...
+14, Mount an image to a file via Ext2Fsd
+18, LVM support
+50, time precision and open as directory  (editplus)               done
+51, use SECTOR_SIZE wrongly should use 512                         done
+52, possible (rare) memory leak when mount fails                   done
+53, working with OFTE, dismount isnot clean
+54, joural replay                                                  done
+55, hardlink and symlink (see ln.c in w:\download)
+
+
+13, codepage nls files sync to latest linux kernel                 done
+    add: cp1250 acsii
+    remove:  big5 euc-kr gb2312 iso8859-8 sjis tis-620
+
+40, Pnp, Auto mount                                                done  ......
+42, Mount ext2 volume, then delete the partitions with diskmgmt.msc
+    and make a new parititon, bugchk in ClearVpbFlag ...
+43, Large file flag
+44, Large file deletion, blocks aren't released                    done  2008/01/08
+45, Directory inode not clreaed
+46, Vista: cant_wait. Only get zero file data when copying
+    bunch of directories/files from ext2 volumes under Vista.
+47, Retrieval pointers implemented for extents mapping
+48, Optimize space allocation to minimize fragemnts
+49, Vista 32: Realtek Driver Setup program : INVALID_PARAMETER
+              \\amd\g$\tools\drivers\audio\vista\setup.exe
+    caused by UAC
+
+
+
+27, Ext2RemoveEntry: should conside name or Mcb->DeOffset,         debug 2007/12/24
+    like hardlinks might be wrongly deleted.
+28, 64K block support                                              debug 2007/12/24
+29, Ext2Create: Remove the checking for AllocationSize.HighPart,   debug 2007/12/24
+    sine we already support 4G
+30, Ext2SetRenameInfo: Samba ...                                   done  2007/12/25
+31, LargetMcb                                                      done 2008/01/04
+32, CANT wait                                                      done 2008/01/04
+33, Alternative hardlink remove                                    done 2008/01/04
+34, Create file with same name of dead symlinks                    done 2008/01/04
+35, Symlink renamed: type in directory entry should be Ext2InodeType(Mcb) done 2008/01/04
+36, FreeCcb and Fcb and clear reference in Ext2CreateFile          done 2008/01/04
+37, Ext2WriteVolume: BOCK_OFFSET / SECTOR_SIZE cause miss dirty writing windows done 2008/01/04
+38, SpinLock related routines shouldn't be resident in NonPaged pool done 2008/01/04
+39, memory leak in Ext2FreeMcb                                     done 2008/01/04
+41, Ext2QueryDirectory                                             done 2008/01/04
+42, PageFile support and Vista (RESTR..._POINTERS)
+43, directory inodes are never cleaned (i_links_count issue )      done 2008/01/12
+
+2007/11/22
+
+ 2, Move with ReplaceIfExist                                       done 2007/11/24
+ 3, change notification for rename                                 done 2007/11/23
+ 5, CDROM support (no IOCTL_CDROM_READ_TOC)                        done 2007/11/23
+ 7, ExAllocate/FreePool -> WithTag                                 done 2007/11/22
+ 8, codepage/ro setting per Vcb                                    done
+10, FullName added to Mcb, remove AnsiName and Longname from Mcb   done 2007/11/23
+    Mcb->Ext2Fcb -> Fcb, Fcb->Ext2Mcb -> Mcb
+12, hiding .  (prefix, suffix)                                     done
+ 4, return code (DISK_FULL/INSUFFICIENT_RESOURCE ...)              done
+ 6, big group (group description HUGE) big memory pressure         none
+ 9, threads to process timer/workitem/Mcb de-allocation ...        done, see 19
+15, big block size: up to 32k (BDL)                                done
+16, EXT2_FEATURE_RO_COMPAT_LARGE_FILE                              done
+17, Driver Letter mgt for Session Manager\Dos Device in registry   done
+19, AllocateMcb: wakeup reaper thread                              done  2007/12/12
+20, handling . and ..                                              done  2007/12/21
+21, Trace Fcb un-released                                          done  2007/12/21
+22, DEBUG                                                          done  2007/12/21
+23, possible buffer overflow in Ext2Printf                         done  2007/12/21
+24, no need to acquire Vcb->Resource for many cases to
+    improve performance                                            done partialy
+25, Remove local variables to reduce stack overflow possiblities
+    for nested symlinks                                            done 2007/12/21
+26, non-consistent mcb reference issue (broken by symlinks)        done 2007/12/21
+
+
+2007/07/09
+1, symbolic links                                                  done 2007/11/23
+
+
+
+2006/11/06
+
+1, Block allocation/release optimzation                            done
+2, Xp64, office install failed, 1302, too long directory name      
+
+2006/10/03
+
+1, BSOD E3: Resource (extra release)
+2, Umount, Driver letter re-assign
+
+
+
+
+
+code modification guides:
+
+1, Lock layer: Ext2Global->Resouce > Vcb > Dcb > Fcb -> Glboal->Meta or other sub locks ...
+2, ERESOURCE must be 8 bytes aligned
+3, 

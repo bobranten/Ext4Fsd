@@ -1,0 +1,43 @@
+==================================
+Release Notes for Ext2Fsd V0.69
+==================================
+
+Features implemented or bugfix:
+
+    1, FIXME: superblock corruption of EXT4 volumes with 64BIT mode enabled
+    2, FIXME: possible corruption by race conditions in buffer-head reapering
+    3, FIXME: possible deadlock issues (when flushing) caused by BCB locks
+    4, FIXME: miscellaneous minor updates of Ext2Fsd code base
+
+Supported Ext3/4 features:
+
+    1, flexible inode size: > 128 bytes, up to block size
+    2, dir_index:    htree directory index
+    3, filetype:     extra file mode in dentry
+    4, large_file:   > 4G files supported
+    5, sparse_super: super block backup in group descriptor
+    6, uninit_bg:    fast fsck and group checksum
+    7, extent:       full support with extending and shrinking.
+    8, journal:      only support replay for internal journal
+    9, flex_bg:      first flexible metadata group
+   10, symlink and hardlink
+
+Unsupported Ext3/4 features:
+
+    1, 64BIT mode (to support 2^64 blocks)
+    2, journal: log-based operations, external journal
+    3, EA (extended attributes), ACL support
+
+Features to be implemented in next release:
+    1, Extents management improvement
+    2, EA and ACL security checking (WIP)
+
+WARNINGS:
+ 
+    The driver may crash your system and ruin your data unexpectedly,
+    since there might be software conflicts and I could only test it
+    on some of the popular platforms. You should use it with care and
+    use it at your own risk!
+
+Matt <mattwu@163.com>
+http://www.ext2fsd.com

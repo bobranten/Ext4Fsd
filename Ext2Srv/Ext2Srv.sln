@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ext2Srv", "Ext2Srv.vcproj", "{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 1
+		SccProjectUniqueName0 = Ext2Srv.vcproj
+		SccProjectName0 = Ext2Srv
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Perforce\u0020P4\u0020SCM
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Debug|Win32.Build.0 = Debug|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Release|Win32.ActiveCfg = Release|Win32
+		{A18F670C-DA85-43F6-8620-99A2DD8CEF1A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

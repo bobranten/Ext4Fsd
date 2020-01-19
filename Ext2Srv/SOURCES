@@ -1,0 +1,12 @@
+TARGETNAME=Ext2Srv
+TARGETPATH=obj
+TARGETTYPE=PROGRAM
+UMTYPE=windows
+
+INCLUDES=.;.\Libraries\;$(INCLUDES)
+TARGETLIBS=$(DDK_LIB_PATH)\WtsApi32.lib \
+           $(DDK_LIB_PATH)\shell32.lib
+USE_MSVCRT=1
+
+SOURCES=Ext2Pipe.cpp   Ext2Srv.cpp  \
+        Mount.cpp      Ext2Srv.rc
