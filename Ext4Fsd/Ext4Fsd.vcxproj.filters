@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Driver Files">
+      <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
+      <Extensions>inf;inv;inx;mof;mc;</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ext3">
+      <UniqueIdentifier>{13adb2ad-f681-4c9e-a21e-0fd46bbef319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ext4">
+      <UniqueIdentifier>{9ab142d9-f11c-4d93-b92a-0df6595d2e24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jbd">
+      <UniqueIdentifier>{3e51e838-e180-44c1-ae2d-53cf5297396b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\nls">
+      <UniqueIdentifier>{94a9d102-6815-4f19-9b62-763fe5d482ca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="access.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="block.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cleanup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="close.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmcb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="create.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devctl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dirctl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dispatch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ea.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="except.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fastio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fileinfo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flush.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fsctl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="init.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="misc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nls.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pnp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rbtree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shutdown.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="volinfo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ext3\generic.c">
+      <Filter>Source Files\ext3</Filter>
+    </ClCompile>
+    <ClCompile Include="ext3\htree.c">
+      <Filter>Source Files\ext3</Filter>
+    </ClCompile>
+    <ClCompile Include="ext3\indirect.c">
+      <Filter>Source Files\ext3</Filter>
+    </ClCompile>
+    <ClCompile Include="ext3\recover.c">
+      <Filter>Source Files\ext3</Filter>
+    </ClCompile>
+    <ClCompile Include="ext4\ext4_bh.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="ext4\ext4_extents.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="ext4\ext4_jbd2.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="ext4\ext4_xattr.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="ext4\extents.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd\recovery.c">
+      <Filter>Source Files\jbd</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd\replay.c">
+      <Filter>Source Files\jbd</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd\revoke.c">
+      <Filter>Source Files\jbd</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_ascii.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_base.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp437.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp737.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp775.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp850.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp852.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp855.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp857.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp860.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp861.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp862.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp863.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp864.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp865.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp866.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp869.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp874.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp932.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp936.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp949.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp950.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp1250.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp1251.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_cp1255.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_euc-jp.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-1.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-2.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-3.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-4.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-5.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-6.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-7.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-9.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-13.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-14.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_iso8859-15.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_koi8-r.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_koi8-ru.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_koi8-u.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+    <ClCompile Include="nls\nls_utf8.c">
+      <Filter>Source Files\nls</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Ext3fsd.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ext2fs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

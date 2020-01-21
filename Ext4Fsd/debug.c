@@ -2587,7 +2587,7 @@ Ext2NtStatusToString ( IN NTSTATUS Status )
 
 VOID
 Ext2TraceMcb(PCHAR fn, USHORT lc, USHORT add, PEXT2_MCB Mcb) {
-    int i;
+    size_t i;
     CHAR _space[33];
 
     _snprintf(&_space[0], 32, "%s:%d:", fn, lc);

@@ -41,7 +41,7 @@
 
 /* STRUCTS & CONSTS******************************************************/
 
-#define EXT2FSD_VERSION                 "0.69"
+#define EXT2FSD_VERSION                 "0.70"
 
 
 /* WDK DEFINITIONS ******************************************************/
@@ -2526,6 +2526,9 @@ Ext2TruncateIndirect(
 //
 // linux.c: linux lib implemenation
 //
+
+int strncmp(const char* str1, const char* str2, size_t count);
+char* strncpy(char* dest, const char* src, size_t count);
 
 int
 ext2_init_linux();

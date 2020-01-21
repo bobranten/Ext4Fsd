@@ -436,8 +436,8 @@ NTSTATUS Ext2WinntError(int rc)
     case -EBUSY:
         return STATUS_DEVICE_BUSY;
 
-    case -ENOSYS:
-        return STATUS_NOT_IMPLEMENTED;
+/*    case -ENOSYS:
+        return STATUS_NOT_IMPLEMENTED;*/
 
     case -ENOSPC:
         return STATUS_DISK_FULL;
@@ -445,8 +445,8 @@ NTSTATUS Ext2WinntError(int rc)
     case -EOPNOTSUPP:
         return STATUS_NOT_SUPPORTED;
 
-    case -EDEADLK:
-        return STATUS_POSSIBLE_DEADLOCK;
+/*    case -EDEADLK:
+        return STATUS_POSSIBLE_DEADLOCK;*/
 
     case -EEXIST:
         return STATUS_OBJECT_NAME_COLLISION;
@@ -460,8 +460,8 @@ NTSTATUS Ext2WinntError(int rc)
     case -EISDIR:
         return STATUS_FILE_IS_A_DIRECTORY;
 
-    case -ENOTEMPTY:
-        return STATUS_DIRECTORY_NOT_EMPTY;
+/*    case -ENOTEMPTY:
+        return STATUS_DIRECTORY_NOT_EMPTY;*/
 
     case -ENODEV:
         return STATUS_NO_SUCH_DEVICE;

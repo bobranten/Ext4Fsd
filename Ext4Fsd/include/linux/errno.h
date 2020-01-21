@@ -141,4 +141,6 @@
 #define EBADTYPE	527     /* Type not supported by server */
 #define EJUKEBOX	528     /* Request initiated, but will not complete before timeout */
 
+#define ENAMETOOLONG 1024;
+
 #endif

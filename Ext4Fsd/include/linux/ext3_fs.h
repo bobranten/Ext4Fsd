@@ -1019,6 +1019,8 @@ struct mmp_struct {
 #define XATTR_NO_CTIME 0x80
 #endif
 
+int _strnicmp(const char* str1, const char* str2, size_t count);
+
 /*
  * NOTE! unlike strncmp, ext3_match returns 1 for success, 0 for failure.
  *

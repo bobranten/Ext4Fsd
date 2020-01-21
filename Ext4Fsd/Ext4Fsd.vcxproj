@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E98007B5-02C6-4C8F-BB89-E0D530991559}</ProjectGuid>
+    <TemplateGuid>{dd38f7fc-d7bd-488b-9242-7d8754cde80d}</TemplateGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration>Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">Win32</Platform>
+    <RootNamespace>Ext4Fsd</RootNamespace>
+    <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <ALLOW_DATE_TIME>1</ALLOW_DATE_TIME>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <ALLOW_DATE_TIME>1</ALLOW_DATE_TIME>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <ALLOW_DATE_TIME>1</ALLOW_DATE_TIME>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <ALLOW_DATE_TIME>1</ALLOW_DATE_TIME>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x86\</OutDir>
+    <IntDir>$(ConfigurationName)\x86\</IntDir>
+    <TargetName>Ext4Fsd</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x86\</OutDir>
+    <IntDir>$(ConfigurationName)\x86\</IntDir>
+    <TargetName>Ext4Fsd</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x64\</OutDir>
+    <IntDir>$(ConfigurationName)\x64\</IntDir>
+    <TargetName>Ext4Fsd</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x64\</OutDir>
+    <IntDir>$(ConfigurationName)\x64\</IntDir>
+    <TargetName>Ext4Fsd</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\include;.\include\linux;.\include\asm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>__KERNEL__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4995;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\include;.\include\linux;.\include\asm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>__KERNEL__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4995;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\include;.\include\linux;.\include\asm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>__KERNEL__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4995;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\include;.\include\linux;.\include\asm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>__KERNEL__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4995;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <FilesToPackage Include="$(TargetPath)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="access.c" />
+    <ClCompile Include="block.c" />
+    <ClCompile Include="cleanup.c" />
+    <ClCompile Include="close.c" />
+    <ClCompile Include="cmcb.c" />
+    <ClCompile Include="create.c" />
+    <ClCompile Include="debug.c" />
+    <ClCompile Include="devctl.c" />
+    <ClCompile Include="dirctl.c" />
+    <ClCompile Include="dispatch.c" />
+    <ClCompile Include="ea.c" />
+    <ClCompile Include="except.c" />
+    <ClCompile Include="ext3\generic.c" />
+    <ClCompile Include="ext3\htree.c" />
+    <ClCompile Include="ext3\indirect.c" />
+    <ClCompile Include="ext3\recover.c" />
+    <ClCompile Include="ext4\ext4_bh.c" />
+    <ClCompile Include="ext4\ext4_extents.c" />
+    <ClCompile Include="ext4\ext4_jbd2.c" />
+    <ClCompile Include="ext4\ext4_xattr.c" />
+    <ClCompile Include="ext4\extents.c" />
+    <ClCompile Include="fastio.c" />
+    <ClCompile Include="fileinfo.c" />
+    <ClCompile Include="flush.c" />
+    <ClCompile Include="fsctl.c" />
+    <ClCompile Include="init.c" />
+    <ClCompile Include="jbd\recovery.c" />
+    <ClCompile Include="jbd\replay.c" />
+    <ClCompile Include="jbd\revoke.c" />
+    <ClCompile Include="linux.c" />
+    <ClCompile Include="lock.c" />
+    <ClCompile Include="memory.c" />
+    <ClCompile Include="misc.c" />
+    <ClCompile Include="nls.c" />
+    <ClCompile Include="nls\nls_ascii.c" />
+    <ClCompile Include="nls\nls_base.c" />
+    <ClCompile Include="nls\nls_cp1250.c" />
+    <ClCompile Include="nls\nls_cp1251.c" />
+    <ClCompile Include="nls\nls_cp1255.c" />
+    <ClCompile Include="nls\nls_cp437.c" />
+    <ClCompile Include="nls\nls_cp737.c" />
+    <ClCompile Include="nls\nls_cp775.c" />
+    <ClCompile Include="nls\nls_cp850.c" />
+    <ClCompile Include="nls\nls_cp852.c" />
+    <ClCompile Include="nls\nls_cp855.c" />
+    <ClCompile Include="nls\nls_cp857.c" />
+    <ClCompile Include="nls\nls_cp860.c" />
+    <ClCompile Include="nls\nls_cp861.c" />
+    <ClCompile Include="nls\nls_cp862.c" />
+    <ClCompile Include="nls\nls_cp863.c" />
+    <ClCompile Include="nls\nls_cp864.c" />
+    <ClCompile Include="nls\nls_cp865.c" />
+    <ClCompile Include="nls\nls_cp866.c" />
+    <ClCompile Include="nls\nls_cp869.c" />
+    <ClCompile Include="nls\nls_cp874.c" />
+    <ClCompile Include="nls\nls_cp932.c" />
+    <ClCompile Include="nls\nls_cp936.c" />
+    <ClCompile Include="nls\nls_cp949.c" />
+    <ClCompile Include="nls\nls_cp950.c" />
+    <ClCompile Include="nls\nls_euc-jp.c" />
+    <ClCompile Include="nls\nls_iso8859-1.c" />
+    <ClCompile Include="nls\nls_iso8859-13.c" />
+    <ClCompile Include="nls\nls_iso8859-14.c" />
+    <ClCompile Include="nls\nls_iso8859-15.c" />
+    <ClCompile Include="nls\nls_iso8859-2.c" />
+    <ClCompile Include="nls\nls_iso8859-3.c" />
+    <ClCompile Include="nls\nls_iso8859-4.c" />
+    <ClCompile Include="nls\nls_iso8859-5.c" />
+    <ClCompile Include="nls\nls_iso8859-6.c" />
+    <ClCompile Include="nls\nls_iso8859-7.c" />
+    <ClCompile Include="nls\nls_iso8859-9.c" />
+    <ClCompile Include="nls\nls_koi8-r.c" />
+    <ClCompile Include="nls\nls_koi8-ru.c" />
+    <ClCompile Include="nls\nls_koi8-u.c" />
+    <ClCompile Include="nls\nls_utf8.c" />
+    <ClCompile Include="pnp.c" />
+    <ClCompile Include="rbtree.c" />
+    <ClCompile Include="read.c" />
+    <ClCompile Include="shutdown.c" />
+    <ClCompile Include="volinfo.c" />
+    <ClCompile Include="write.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Ext3fsd.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ext2fs.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

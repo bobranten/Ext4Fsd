@@ -980,6 +980,61 @@ void iput(struct inode *inode)
 }
 
 //
+// string functions from linux/lib/string.c
+//
+
+int _strnicmp(const char* str1, const char* str2, size_t count)
+{
+	unsigned int c1, c2;
+
+	if (!count)
+		return 0;
+
+	do {
+		c1 = *str1++;
+		c2 = *str2++;
+		if (!c1 || !c2)
+			break;
+		if (c1 == c2)
+			continue;
+		c1 = tolower(c1);
+		c2 = tolower(c2);
+		if (c1 != c2)
+			break;
+	} while (--count);
+	return (int)c1 - (int)c2;
+}
+
+int strncmp(const char* str1, const char* str2, size_t count)
+{
+	unsigned char c1, c2;
+
+	while (count) {
+		c1 = *str1++;
+		c2 = *str2++;
+		if (c1 != c2)
+			return c1 < c2 ? -1 : 1;
+		if (!c1)
+			break;
+		count--;
+	}
+	return 0;
+}
+
+char* strncpy(char* dest, const char* src, size_t count)
+{
+	char *p = dest;
+
+	while (count) {
+		if ((*p = *src) != 0)
+			src++;
+		p++;
+		count--;
+	}
+	return dest;
+}
+
+//
 // initialzer and destructor
 //
 

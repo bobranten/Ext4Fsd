@@ -923,7 +923,6 @@ static inline handle_t *journal_current_handle(void)
 {
     return NULL;
     /* return current->journal_info; */
-#pragma message("WARNINGS: journal_current_handle NOT implemented")
 }
 
 /* The journaling code user interface:

@@ -1,1 +1,1 @@
-DIRS=Ext2Srv Ext3Fsd Ext2Mgr
+DIRS=Ext2Srv Ext4Fsd
