@@ -1,4 +1,10 @@
 
+About
+-----
+
+    This is a branch of the Ext2Fsd project by Matt Wu where I try to implement support for metadata checksums and jbd2. I have also updated the project so it can be compiled with Visual Studio 2017 and Visual Studio 2019. This is work in progress. If you need a stable driver you should get the latest official release from http://www.ext2fsd.com. If you want to try this branch you should still install the oficial release and then copy this driver over the old in \windows\system32\drivers. Bo Branten.
+
+
 Introduction
 ------------
 
