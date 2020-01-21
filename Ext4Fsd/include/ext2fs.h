@@ -2527,8 +2527,10 @@ Ext2TruncateIndirect(
 // linux.c: linux lib implemenation
 //
 
+#if _MSC_VER > 1900
 int strncmp(const char* str1, const char* str2, size_t count);
 char* strncpy(char* dest, const char* src, size_t count);
+#endif
 
 int
 ext2_init_linux();

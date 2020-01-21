@@ -140,7 +140,8 @@
 #define ESERVERFAULT	526     /* An untranslatable error occurred */
 #define EBADTYPE	527     /* Type not supported by server */
 #define EJUKEBOX	528     /* Request initiated, but will not complete before timeout */
-
+#if _MSC_VER > 1900
 #define ENAMETOOLONG 1024;
+#endif
 
 #endif

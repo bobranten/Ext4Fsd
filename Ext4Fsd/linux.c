@@ -983,6 +983,8 @@ void iput(struct inode *inode)
 // string functions from linux/lib/string.c
 //
 
+#if _MSC_VER > 1900
+
 int _strnicmp(const char* str1, const char* str2, size_t count)
 {
 	unsigned int c1, c2;
@@ -1033,6 +1035,8 @@ char* strncpy(char* dest, const char* src, size_t count)
 	}
 	return dest;
 }
+
+#endif
 
 //
 // initialzer and destructor

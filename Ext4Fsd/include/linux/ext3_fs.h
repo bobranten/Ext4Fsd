@@ -1019,7 +1019,9 @@ struct mmp_struct {
 #define XATTR_NO_CTIME 0x80
 #endif
 
+#if _MSC_VER > 1900
 int _strnicmp(const char* str1, const char* str2, size_t count);
+#endif
 
 /*
  * NOTE! unlike strncmp, ext3_match returns 1 for success, 0 for failure.
