@@ -274,10 +274,10 @@
     <ClCompile Include="write.c" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Ext3fsd.rc" />
+    <ClInclude Include="include\ext2fs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ext2fs.h" />
+    <ResourceCompile Include="Ext4Fsd.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

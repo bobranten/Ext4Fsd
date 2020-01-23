@@ -32,7 +32,7 @@ TARGETLIBS= $(TARGETLIBS)              \
 !ENDIF            
 
 # The source code:
-SOURCES=    ..\Ext3fsd.rc   \
+SOURCES=    ..\Ext4Fsd.rc   \
             ..\access.c     \
             ..\fastio.c     \
             ..\memory.c     \
