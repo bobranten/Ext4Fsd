@@ -1,5 +1,6 @@
 #include "ext2fs.h"
 #include "linux\ext4.h"
+#include "linux\jbd.h"
 
 static handle_t no_journal;
 

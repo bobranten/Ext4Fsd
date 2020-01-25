@@ -17,7 +17,6 @@
 
 #include <linux/fs.h>
 #include <linux/jbd.h>
-#include <linux/ext3_fs.h>
 
 #define EXT3_JOURNAL(inode)	(EXT3_SB((inode)->i_sb)->s_journal)
 

@@ -274,6 +274,9 @@
     <ClCompile Include="nls\nls_utf8.c">
       <Filter>Source Files\nls</Filter>
     </ClCompile>
+    <ClCompile Include="ext4\ext4_csum.c">
+      <Filter>Source Files\ext4</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ext2fs.h">

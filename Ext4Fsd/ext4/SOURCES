@@ -25,5 +25,5 @@ DRIVERTYPE=FS
 INCLUDES=.;..;..\include;$(DRIVER_INC_PATH);
 
 # The source code:
-SOURCES= ext4_bh.c ext4_extents.c ext4_jbd2.c extents.c \
-         ext4_xattr.c
+SOURCES= ext4_bh.c ext4_csum.c ext4_extents.c ext4_jbd2.c ext4_xattr.c \
+         extents.c

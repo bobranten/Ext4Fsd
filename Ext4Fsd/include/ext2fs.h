@@ -17,9 +17,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include <linux/ext2_fs.h>
-#include <linux/ext3_fs.h>
-#include <linux/ext3_fs_i.h>
 #include <linux/ext4.h>
 
 /* DEBUG ****************************************************************/
@@ -2021,10 +2018,10 @@ loff_t ext3_max_size(int blkbits, int has_huge_files);
 loff_t ext3_max_bitmap_size(int bits, int has_huge_files);
 
 
-__le16 ext4_group_desc_csum(struct ext3_sb_info *sbi, __u32 block_group,
+/*__le16 ext4_group_desc_csum(struct ext3_sb_info *sbi, __u32 block_group,
                             struct ext4_group_desc *gdp);
 int ext4_group_desc_csum_verify(struct ext3_sb_info *sbi, __u32 block_group,
-                                struct ext4_group_desc *gdp);
+                                struct ext4_group_desc *gdp);*/
 
 ext3_fsblk_t descriptor_loc(struct super_block *sb,
                             ext3_fsblk_t logical_sb_block, unsigned int nr);

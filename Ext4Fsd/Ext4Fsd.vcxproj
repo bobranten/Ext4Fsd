@@ -208,6 +208,7 @@
     <ClCompile Include="ext3\indirect.c" />
     <ClCompile Include="ext3\recover.c" />
     <ClCompile Include="ext4\ext4_bh.c" />
+    <ClCompile Include="ext4\ext4_csum.c" />
     <ClCompile Include="ext4\ext4_extents.c" />
     <ClCompile Include="ext4\ext4_jbd2.c" />
     <ClCompile Include="ext4\ext4_xattr.c" />

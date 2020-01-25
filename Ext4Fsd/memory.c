@@ -2547,6 +2547,9 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
         Vcb->sbi.s_blocks_per_group = sb->s_blocks_per_group;
         Vcb->sbi.s_first_ino = sb->s_first_ino;
         Vcb->sbi.s_desc_size = sb->s_desc_size;
+        Vcb->sbi.s_clusters_per_group = sb->s_clusters_per_group;
+        Vcb->sbi.s_inode_size = sb->s_inode_size;
+        Vcb->sbi.s_csum_seed = ext4_chksum(&Vcb->sbi, ~0, sb->s_uuid, sizeof(sb->s_uuid));
 
         if (EXT3_HAS_INCOMPAT_FEATURE(&Vcb->sb, EXT4_FEATURE_INCOMPAT_64BIT)) {
             if (Vcb->sbi.s_desc_size < EXT4_MIN_DESC_SIZE_64BIT ||
@@ -2618,6 +2621,15 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
             } else {
                 SetLongFlag(Vcb->Flags, VCB_READ_ONLY);
             }
+        }
+
+        /*
+         * Mount ext4 with 64-bit block numbers read-only while testing.
+         */
+        if (EXT3_HAS_INCOMPAT_FEATURE(&Vcb->sb, EXT4_FEATURE_INCOMPAT_64BIT)) {
+            printk(KERN_ERR "EXT3-fs: %s: Mounting ext4 with 64-bit block numbers read-only.\n",
+                   Vcb->sb.s_id);
+            SetLongFlag(Vcb->Flags, VCB_READ_ONLY);
         }
 
         has_huge_files = EXT3_HAS_RO_COMPAT_FEATURE(&Vcb->sb, EXT4_FEATURE_RO_COMPAT_HUGE_FILE);

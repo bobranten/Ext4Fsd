@@ -758,7 +758,7 @@ static int call_filldir(struct file * filp, void * cookie,
     }
     return 0;
 }
-
+#if 0
 struct fake_dirent
 {
     __le32 inode;
@@ -823,7 +823,7 @@ struct dx_map_entry
     __u16 offs;
     __u16 size;
 };
-
+#endif
 /*
  * Future: use high four bits of block for coalesce-on-delete flags
  * Mask them off for now.
