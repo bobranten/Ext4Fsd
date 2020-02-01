@@ -358,16 +358,15 @@ void ext4_block_bitmap_csum_set(struct super_block *sb, ext4_group_t group,
 static __le32 ext4_inode_csum_seed(struct inode *inode)
 {
 	/* Precompute checksum seed for inode metadata */
-	if (ext4_has_feature_metadata_csum(inode->i_sb)) {
+	if (ext4_has_metadata_csum(inode->i_sb)) {
 		struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
 		__u32 csum;
 		__le32 inum = cpu_to_le32(inode->i_ino);
-		__le32 gen = inode->i_generation;
+		__le32 gen = cpu_to_le32(inode->i_generation);
 		csum = ext4_chksum(sbi, sbi->s_csum_seed, (__u8 *)&inum, sizeof(inum));
 		return ext4_chksum(sbi, csum, (__u8 *)&gen, sizeof(gen));
 	}
-
-    return 0;
+	return 0;
 }
 
 static __u32 ext4_inode_csum(struct inode *inode, struct ext4_inode *raw,
@@ -487,7 +486,7 @@ void ext4_extent_block_csum_set(struct inode *inode,
  * Metadata checksum functions for the directory entrys.
  */
 
-static void initialize_dirent_tail(struct ext4_dir_entry_tail *t,
+void initialize_dirent_tail(struct ext4_dir_entry_tail *t,
 			    unsigned int blocksize)
 {
 	memset(t, 0, sizeof(struct ext4_dir_entry_tail));

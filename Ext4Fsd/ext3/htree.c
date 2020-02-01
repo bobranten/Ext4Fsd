@@ -394,11 +394,15 @@ int add_dirent_to_buf(struct ext2_icb *icb, struct dentry *dentry,
     unsigned short	reclen;
     int		nlen, rlen, err;
     char		*top;
+    int		csum_size = 0;
+
+    if (ext4_has_metadata_csum(inode->i_sb))
+        csum_size = sizeof(struct ext4_dir_entry_tail);
 
     reclen = EXT3_DIR_REC_LEN(namelen);
     if (!de) {
         de = (struct ext3_dir_entry_2 *)bh->b_data;
-        top = bh->b_data + dir->i_sb->s_blocksize - reclen;
+        top = bh->b_data + dir->i_sb->s_blocksize - reclen - csum_size;
         while ((char *) de <= top) {
             if (!ext3_check_dir_entry("ext3_add_entry", dir, de,
                                       bh, offset)) {
@@ -453,6 +457,7 @@ int add_dirent_to_buf(struct ext2_icb *icb, struct dentry *dentry,
     ext3_update_dx_flag(dir);
     dir->i_version++;
     ext3_mark_inode_dirty(icb, dir);
+    ext4_dirent_csum_set(dir, (struct ext4_dir_entry *)bh->b_data);
     set_buffer_dirty(bh);
     __brelse(bh);
     return 0;
@@ -1667,6 +1672,8 @@ int ext3_dx_add_entry(struct ext2_icb *icb, struct dentry *dentry,
             dxtrace(dx_show_index ("node", frames[1].entries));
             dxtrace(dx_show_index ("node",
                                    ((struct dx_node *) bh2->b_data)->entries));
+            ext4_dx_csum_set(dir, (struct ext4_dir_entry *)frame->bh->b_data);
+            ext4_dx_csum_set(dir, (struct ext4_dir_entry *)bh2->b_data);
             set_buffer_dirty(bh2);
             brelse (bh2);
         } else {
@@ -1770,7 +1777,12 @@ struct ext3_dir_entry_2 *
     char *data1 = (*bh)->b_data, *data2;
     unsigned split, move, size;
     struct ext3_dir_entry_2 *de = NULL, *de2;
+    struct ext4_dir_entry_tail *t;
+    int	csum_size = 0;
     int	err, i;
+
+    if (ext4_has_metadata_csum(dir->i_sb))
+        csum_size = sizeof(struct ext4_dir_entry_tail);
 
     bh2 = ext3_append (icb, dir, &newblock, error);
     if (!(bh2)) {
@@ -1807,8 +1819,15 @@ struct ext3_dir_entry_2 *
     /* Fancy dance to stay within two buffers */
     de2 = dx_move_dirents(data1, data2, map + split, count - split);
     de = dx_pack_dirents(data1,blocksize);
-    de->rec_len = cpu_to_le16(data1 + blocksize - (char *) de);
-    de2->rec_len = cpu_to_le16(data2 + blocksize - (char *) de2);
+    de->rec_len = cpu_to_le16(data1 + (blocksize - csum_size) - (char *) de);
+    de2->rec_len = cpu_to_le16(data2 + (blocksize - csum_size) - (char *) de2);
+    if (csum_size) {
+        t = EXT4_DIRENT_TAIL(data1, blocksize);
+        initialize_dirent_tail(t, blocksize);
+
+        t = EXT4_DIRENT_TAIL(data2, blocksize);
+        initialize_dirent_tail(t, blocksize);
+    }
     dxtrace(dx_show_leaf (icb, hinfo, (struct ext3_dir_entry_2 *) data1, blocksize, 1));
     dxtrace(dx_show_leaf (icb, hinfo, (struct ext3_dir_entry_2 *) data2, blocksize, 1));
 
@@ -1819,6 +1838,8 @@ struct ext3_dir_entry_2 *
         de = de2;
     }
     dx_insert_block (frame, hash2 + continued, newblock);
+    ext4_dx_csum_set(dir, (struct ext4_dir_entry *)frame->bh->b_data);
+    ext4_dirent_csum_set(dir, (struct ext4_dir_entry *)bh2->b_data);
     set_buffer_dirty(bh2);
     set_buffer_dirty(frame->bh);
 
@@ -1850,6 +1871,11 @@ int make_indexed_dir(struct ext2_icb *icb, struct dentry *dentry,
     struct dx_hash_info hinfo;
     ext3_lblk_t  block;
     struct fake_dirent *fde;
+    struct ext4_dir_entry_tail *t;
+    int csum_size = 0;
+
+    if (ext4_has_metadata_csum(inode->i_sb))
+        csum_size = sizeof(struct ext4_dir_entry_tail);
 
     blocksize =  dir->i_sb->s_blocksize;
     dxtrace(printk("Creating index: inode %lu\n", dir->i_ino));
@@ -1866,7 +1892,7 @@ int make_indexed_dir(struct ext2_icb *icb, struct dentry *dentry,
         brelse(bh);
         return -EIO;
     }
-    len = (unsigned int)((char *) root + blocksize - (char *) de);
+    len = (unsigned int)((char *) root + (blocksize - csum_size) - (char *) de);
 
     /* Allocate new block for the 0th block's dirents */
     bh2 = ext3_append(icb, dir, &block, &retval);
@@ -1882,7 +1908,13 @@ int make_indexed_dir(struct ext2_icb *icb, struct dentry *dentry,
     top = data1 + len;
     while ((char *)(de2 = ext3_next_entry(de)) < top)
         de = de2;
-    de->rec_len = ext3_rec_len_to_disk(blocksize + (__u32)(data1 - (char *)de));
+    de->rec_len = ext3_rec_len_to_disk((blocksize - csum_size) + (__u32)(data1 - (char *)de));
+
+    if (csum_size) {
+        t = EXT4_DIRENT_TAIL(data1, blocksize);
+        initialize_dirent_tail(t, blocksize);
+    }
+
     /* Initialize the root; the dot dirents already exist */
     de = (struct ext3_dir_entry_2 *) (&root->dotdot);
     de->rec_len = ext3_rec_len_to_disk(blocksize - EXT3_DIR_REC_LEN(2));
@@ -1902,6 +1934,8 @@ int make_indexed_dir(struct ext2_icb *icb, struct dentry *dentry,
     frame->entries = entries;
     frame->at = entries;
     frame->bh = bh;
+    ext4_dx_csum_set(dir, (struct ext4_dir_entry *)bh->b_data);
+    ext4_dirent_csum_set(dir, (struct ext4_dir_entry *)bh2->b_data);
     bh = bh2;
     /* bh and bh2 are to be marked as dirty in do_split */
     de = do_split(icb, dir, &bh, frame, &hinfo, &retval);
@@ -1943,6 +1977,11 @@ int ext3_add_entry(struct ext2_icb *icb, struct dentry *dentry, struct inode *in
 #endif
     unsigned blocksize;
     ext3_lblk_t block, blocks;
+    struct ext4_dir_entry_tail *t;
+    int	csum_size = 0;
+
+    if (ext4_has_metadata_csum(inode->i_sb))
+        csum_size = sizeof(struct ext4_dir_entry_tail);
 
     sb = dir->i_sb;
     blocksize = sb->s_blocksize;
@@ -1982,7 +2021,13 @@ int ext3_add_entry(struct ext2_icb *icb, struct dentry *dentry, struct inode *in
         return retval;
     de = (struct ext3_dir_entry_2 *) bh->b_data;
     de->inode = 0;
-    de->rec_len = ext3_rec_len_to_disk(blocksize);
+    de->rec_len = ext3_rec_len_to_disk(blocksize - csum_size);
+
+    if (csum_size) {
+        t = EXT4_DIRENT_TAIL(bh->b_data, blocksize);
+        initialize_dirent_tail(t, blocksize);
+    }
+
     return add_dirent_to_buf(icb, dentry, inode, de, bh);
 }
 
@@ -1996,9 +2041,13 @@ int ext3_delete_entry(struct ext2_icb *icb, struct inode *dir,
 {
     struct ext3_dir_entry_2 *de, *pde = NULL;
     size_t i = 0;
+    int	csum_size = 0;
+
+    if (ext4_has_metadata_csum(dir->i_sb))
+        csum_size = sizeof(struct ext4_dir_entry_tail);
 
     de = (struct ext3_dir_entry_2 *) bh->b_data;
-    while (i < bh->b_size) {
+    while (i < bh->b_size - csum_size) {
         if (!ext3_check_dir_entry("ext3_delete_entry", dir, de, bh, i))
             return -EIO;
         if (de == de_del)  {
@@ -2010,6 +2059,7 @@ int ext3_delete_entry(struct ext2_icb *icb, struct inode *dir,
                 de->inode = 0;
             dir->i_version++;
             /* ext3_journal_dirty_metadata(handle, bh); */
+            ext4_dirent_csum_set(dir, (struct ext4_dir_entry *)bh->b_data);
             set_buffer_dirty(bh);
             return 0;
         }
