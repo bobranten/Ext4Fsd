@@ -269,11 +269,12 @@ typedef struct journal_superblock_s
 	 ((j)->j_superblock->s_feature_incompat & cpu_to_be32((mask))))
 
 #define JFS_FEATURE_INCOMPAT_REVOKE	0x00000001
+#define JFS_FEATURE_INCOMPAT_64BIT	0x00000002
 
 /* Features known to this kernel version: */
 #define JFS_KNOWN_COMPAT_FEATURES	0
 #define JFS_KNOWN_ROCOMPAT_FEATURES	0
-#define JFS_KNOWN_INCOMPAT_FEATURES	JFS_FEATURE_INCOMPAT_REVOKE
+#define JFS_KNOWN_INCOMPAT_FEATURES	(JFS_FEATURE_INCOMPAT_REVOKE | JFS_FEATURE_INCOMPAT_64BIT)
 
 #ifdef __KERNEL__
 

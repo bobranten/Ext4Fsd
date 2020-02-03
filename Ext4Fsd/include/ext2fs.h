@@ -2017,12 +2017,6 @@ int ext3_check_dir_entry (const char * function, struct inode * dir,
 loff_t ext3_max_size(int blkbits, int has_huge_files);
 loff_t ext3_max_bitmap_size(int bits, int has_huge_files);
 
-
-/*__le16 ext4_group_desc_csum(struct ext3_sb_info *sbi, __u32 block_group,
-                            struct ext4_group_desc *gdp);
-int ext4_group_desc_csum_verify(struct ext3_sb_info *sbi, __u32 block_group,
-                                struct ext4_group_desc *gdp);*/
-
 ext3_fsblk_t descriptor_loc(struct super_block *sb,
                             ext3_fsblk_t logical_sb_block, unsigned int nr);
 struct ext4_group_desc * ext4_get_group_desc(struct super_block *sb,

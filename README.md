@@ -7,6 +7,8 @@ About
     and Visual Studio 2019. This is work in progress. If you need a stable driver you should get the
     latest official release from http://www.ext2fsd.com. If you want to try this branch you should
     still install the oficial release and then copy this driver over the old in \windows\system32\drivers.
+    The current status of the development is that metadata checksums is implemented but there is an
+    calculation error in the inode checksums that must be investigated before I start with jbd2.
     Bo Branten.
 
 
