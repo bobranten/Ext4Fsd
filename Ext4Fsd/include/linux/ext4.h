@@ -962,7 +962,7 @@ struct move_extent {
 #define EXT4_EPOCH_BITS 2
 #define EXT4_EPOCH_MASK ((1 << EXT4_EPOCH_BITS) - 1)
 #define EXT4_NSEC_MASK  (~0UL << EXT4_EPOCH_BITS)
-
+#if 0
 /*
  * Extended fields will fit into an inode if the filesystem was formatted
  * with large inodes (-I 256 or larger) and there are not currently any EAs
@@ -973,12 +973,13 @@ struct move_extent {
  * This macro checks if a certain field fits in the inode. Note that
  * inode-size = GOOD_OLD_INODE_SIZE + i_extra_isize
  */
-/*#define EXT4_FITS_IN_INODE(ext4_inode, einode, field)	\
+#define EXT4_FITS_IN_INODE(ext4_inode, einode, field)	\
 	((offsetof(typeof(*ext4_inode), field) +	\
 	  sizeof((ext4_inode)->field))			\
 	<= (EXT4_GOOD_OLD_INODE_SIZE +			\
-	    (einode)->i_extra_isize))*/
-#define EXT4_FITS_IN_INODE(ext4_inode, einode, field) 1
+	    (einode)->i_extra_isize))			\
+
+#endif
 /*
  * We use an encoding that preserves the times for extra epoch "00":
  *
@@ -1026,7 +1027,7 @@ static inline void ext4_decode_extra_time(struct timespec64 *time,
 	}
 	time->tv_nsec = (le32_to_cpu(extra) & EXT4_NSEC_MASK) >> EXT4_EPOCH_BITS;
 }
-
+#if 0
 #define EXT4_INODE_SET_XTIME(xtime, inode, raw_inode)				\
 do {										\
 	(raw_inode)->xtime = cpu_to_le32((inode)->xtime.tv_sec);		\
@@ -1070,7 +1071,7 @@ do {									       \
 	else								       \
 		(einode)->xtime.tv_nsec = 0;				       \
 } while (0)
-
+#endif
 #define i_disk_version osd1.linux1.l_i_version
 
 #if defined(__KERNEL__) || defined(__linux__)

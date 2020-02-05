@@ -370,7 +370,7 @@ static __le32 ext4_inode_csum_seed(struct inode *inode)
 }
 
 static __u32 ext4_inode_csum(struct inode *inode, struct ext4_inode *raw,
-			      struct ext4_inode_info *ei)
+			      struct ext4_inode_info *unused)
 {
 	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
 	__u32 csum;
@@ -378,7 +378,8 @@ static __u32 ext4_inode_csum(struct inode *inode, struct ext4_inode *raw,
 	int offset = offsetof(struct ext4_inode, i_checksum_lo);
 	unsigned int csum_size = sizeof(dummy_csum);
 
-	csum = ext4_chksum(sbi, ext4_inode_csum_seed(inode), (__u8 *)raw, offset);
+	csum = ext4_inode_csum_seed(inode);
+	csum = ext4_chksum(sbi, csum, (__u8 *)raw, offset);
 	csum = ext4_chksum(sbi, csum, (__u8 *)&dummy_csum, csum_size);
 	offset += csum_size;
 	csum = ext4_chksum(sbi, csum, (__u8 *)raw + offset,
@@ -389,7 +390,7 @@ static __u32 ext4_inode_csum(struct inode *inode, struct ext4_inode *raw,
 		csum = ext4_chksum(sbi, csum, (__u8 *)raw +
 				   EXT4_GOOD_OLD_INODE_SIZE,
 				   offset - EXT4_GOOD_OLD_INODE_SIZE);
-		if (EXT4_FITS_IN_INODE(raw, ei, i_checksum_hi)) {
+		if (offsetof(struct ext4_inode, i_checksum_hi) + sizeof(raw->i_checksum_hi) <= EXT4_GOOD_OLD_INODE_SIZE + raw->i_extra_isize) {
 			csum = ext4_chksum(sbi, csum, (__u8 *)&dummy_csum,
 					   csum_size);
 			offset += csum_size;
@@ -402,45 +403,42 @@ static __u32 ext4_inode_csum(struct inode *inode, struct ext4_inode *raw,
 }
 
 int ext4_inode_csum_verify(struct inode *inode, struct ext4_inode *raw,
-				  struct ext4_inode_info *ei)
+				  struct ext4_inode_info *unused)
 {
-	__u32 provided, calculated, isz;
+	__u32 provided, calculated;
 
-	if (EXT4_SB(inode->i_sb)->s_es->s_creator_os !=
-	    cpu_to_le32(EXT4_OS_LINUX) ||
-	    !ext4_has_feature_metadata_csum(inode->i_sb))
+	if (!ext4_has_metadata_csum(inode->i_sb))
 		return 1;
 
 	provided = le16_to_cpu(raw->i_checksum_lo);
-	calculated = ext4_inode_csum(inode, raw, ei);
+	calculated = ext4_inode_csum(inode, raw, unused);
 	if (EXT4_INODE_SIZE(inode->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
-	    EXT4_FITS_IN_INODE(raw, ei, i_checksum_hi))
-		{provided |= ((__u32)le16_to_cpu(raw->i_checksum_hi)) << 16;isz=EXT4_INODE_SIZE(inode->i_sb);}
+	    offsetof(struct ext4_inode, i_checksum_hi) + sizeof(raw->i_checksum_hi) <= EXT4_GOOD_OLD_INODE_SIZE + raw->i_extra_isize)
+		provided |= ((__u32)le16_to_cpu(raw->i_checksum_hi)) << 16;
 	else
-		{calculated &= 0xFFFF;isz=EXT4_GOOD_OLD_INODE_SIZE;}
+		calculated &= 0xFFFF;
 
-    if (provided != calculated) {
-        DbgPrint("inod %d checksum invalid: %lx!=%lx, isz=%u\n", inode->i_ino, provided, calculated, isz);
-    }
+    if (provided != calculated)
+        DbgPrint("checksum verify failed on inode %u: %lx != %lx\n", inode->i_ino, provided, calculated);
 
 	return provided == calculated;
 }
 
 void ext4_inode_csum_set(struct inode *inode, struct ext4_inode *raw,
-				struct ext4_inode_info *ei)
+				struct ext4_inode_info *unused)
 {
 	__u32 csum;
 
-	if (EXT4_SB(inode->i_sb)->s_es->s_creator_os !=
-	    cpu_to_le32(EXT4_OS_LINUX) ||
-	    !ext4_has_feature_metadata_csum(inode->i_sb))
+	if (!ext4_has_metadata_csum(inode->i_sb))
 		return;
 
-	csum = ext4_inode_csum(inode, raw, ei);
+	csum = ext4_inode_csum(inode, raw, unused);
 	raw->i_checksum_lo = cpu_to_le16(csum & 0xFFFF);
 	if (EXT4_INODE_SIZE(inode->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
-	    EXT4_FITS_IN_INODE(raw, ei, i_checksum_hi))
+	    offsetof(struct ext4_inode, i_checksum_hi) + sizeof(raw->i_checksum_hi) <= EXT4_GOOD_OLD_INODE_SIZE + raw->i_extra_isize)
 		raw->i_checksum_hi = cpu_to_le16(csum >> 16);
+    DbgPrint("set checksum on inode %u: csum == %lx\n", inode->i_ino, csum);
+    ext4_inode_csum_verify(inode, raw, unused);
 }
 
 /*
