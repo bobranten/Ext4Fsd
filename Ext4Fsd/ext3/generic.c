@@ -505,24 +505,30 @@ BOOLEAN
 Ext2LoadInode (IN PEXT2_VCB Vcb,
                IN struct inode *Inode)
 {
-    struct ext4_inode   ext3i = {0};
-    struct ext4_inode_info ei = {0};
-    LONGLONG            offset;
+    struct ext4_inode*      ext4i;
+    struct ext4_inode_info  unused = {0};
+    LONGLONG                offset;
 
     if (!Ext2GetInodeLba(Vcb, Inode->i_ino, &offset))  {
         DEBUG(DL_ERR, ("Ext2LoadInode: failed inode %u.\n", Inode->i_ino));
         return FALSE;
     }
 
-    if (!Ext2LoadBuffer(NULL, Vcb, offset, sizeof(ext3i), &ext3i)) {
+    ext4i = (struct ext4_inode*) Ext2AllocatePool(NonPagedPool, EXT4_INODE_SIZE(Inode->i_sb), EXT2_INODE_MAGIC);
+    if (!ext4i) {
         return FALSE;
     }
 
-    Ext2DecodeInode(Inode, &ext3i);
-
-    if (!ext4_inode_csum_verify(Inode, &ext3i, &ei)) {
-        //DbgPrint("inod %d checksum invalid\n", Inode->i_ino);
+    if (!Ext2LoadBuffer(NULL, Vcb, offset, EXT4_INODE_SIZE(Inode->i_sb), ext4i)) {
+        ExFreePool(ext4i);
+        return FALSE;
     }
+
+    Ext2DecodeInode(Inode, ext4i);
+
+    ext4_inode_csum_verify(Inode, ext4i, &unused);
+
+    ExFreePool(ext4i);
 
     return TRUE;
 }
@@ -555,41 +561,43 @@ Ext2SaveInode ( IN PEXT2_IRP_CONTEXT IrpContext,
                 IN PEXT2_VCB Vcb,
                 IN struct inode *Inode)
 {
-    struct ext4_inode   ext4i = {0};
-    struct ext4_inode_info ei = {0};
-
-    LONGLONG            Offset = 0;
-    ULONG               InodeSize = sizeof(ext4i);
-    BOOLEAN             rc = 0;
+    struct ext4_inode*      ext4i;
+    struct ext4_inode_info  unused = {0};
+    LONGLONG                offset;
+    BOOLEAN                 rc = 0;
 
     DEBUG(DL_INF, ( "Ext2SaveInode: Saving Inode %xh: Mode=%xh Size=%xh\n",
                     Inode->i_ino, Inode->i_mode, Inode->i_size));
-    rc = Ext2GetInodeLba(Vcb,  Inode->i_ino, &Offset);
+    rc = Ext2GetInodeLba(Vcb,  Inode->i_ino, &offset);
     if (!rc)  {
         DEBUG(DL_ERR, ( "Ext2SaveInode: failed inode %u.\n", Inode->i_ino));
         goto errorout;
     }
 
-    rc = Ext2LoadBuffer(NULL, Vcb, Offset, InodeSize, &ext4i);
+    ext4i = (struct ext4_inode*) Ext2AllocatePool(NonPagedPool, EXT4_INODE_SIZE(Inode->i_sb), EXT2_INODE_MAGIC);
+    if (!ext4i) {
+        rc = FALSE;
+        goto errorout;
+    }
+
+    rc = Ext2LoadBuffer(NULL, Vcb, offset, EXT4_INODE_SIZE(Inode->i_sb), ext4i);
     if (!rc) {
         DEBUG(DL_ERR, ( "Ext2SaveInode: failed reading inode %u.\n", Inode->i_ino));
-        goto errorout;;
+        ExFreePool(ext4i);
+        goto errorout;
     }
 
-    Ext2EncodeInode(&ext4i, Inode);
+    Ext2EncodeInode(ext4i, Inode);
 
-    ext4_inode_csum_set(Inode, &ext4i, &ei);
+    ext4_inode_csum_set(Inode, ext4i, &unused);
 
-    if (InodeSize > Vcb->InodeSize)
-    {
-        DbgPrint("InodeSize > Vcb->InodeSize\n");
-        InodeSize = Vcb->InodeSize;
-    }
-    rc = Ext2SaveBuffer(IrpContext, Vcb, Offset, InodeSize, &ext4i);
+    rc = Ext2SaveBuffer(IrpContext, Vcb, offset, EXT4_INODE_SIZE(Inode->i_sb), ext4i);
 
     if (rc && IsFlagOn(Vcb->Flags, VCB_FLOPPY_DISK)) {
         Ext2StartFloppyFlushDpc(Vcb, NULL, NULL);
     }
+
+    ExFreePool(ext4i);
 
 errorout:
     return rc;

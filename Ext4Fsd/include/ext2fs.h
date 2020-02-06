@@ -280,6 +280,7 @@ Ext2ClearFlag(PULONG Flags, ULONG FlagBit)
 #define EXT2_DIRSP_MAGIC        'SD2E'
 #define EXT2_SB_MAGIC           'BS2E'
 #define EXT2_GD_MAGIC           'DG2E'
+#define EXT2_INODE_MAGIC        'EI2E'
 #define EXT2_FLIST_MAGIC        'LF2E'
 #define EXT2_PARAM_MAGIC        'PP2E'
 #define EXT2_RWC_MAGIC          'WR2E'
