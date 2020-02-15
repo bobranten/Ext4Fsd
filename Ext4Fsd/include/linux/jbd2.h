@@ -33,6 +33,36 @@
 #include <linux/module.h>
 #endif
 
+#define KMEM_CACHE(__struct, __flags) kmem_cache_create(#__struct,\
+		sizeof(struct __struct), 0,\
+		(__flags), NULL)
+
+#define kmalloc_array(num, size, flags) kmalloc((num) * (size), flags)
+
+struct hlist_node {
+	struct hlist_node *next, **pprev;
+};
+
+/*
+ * A lockdep key is associated with each lock object. For static locks we use
+ * the lock address itself as the key. Dynamically allocated lock objects can
+ * have a statically or dynamically allocated key. Dynamically allocated lock
+ * keys must be registered before being used and must be unregistered before
+ * the key memory is freed.
+ */
+struct lockdep_subclass_key {
+	char __one_byte;
+} __attribute__ ((__packed__));
+
+#define MAX_LOCKDEP_SUBCLASSES	8UL
+/* hash_entry is used to keep track of dynamically allocated keys. */
+struct lock_class_key {
+	union {
+		struct hlist_node		hash_entry;
+		struct lockdep_subclass_key	subkeys[MAX_LOCKDEP_SUBCLASSES];
+	};
+};
+
 #define journal_oom_retry 1
 
 /*
@@ -63,7 +93,7 @@ void __jbd2_debug(int level, const char *file, const char *func,
 #define jbd_debug(n, fmt, a...) \
 	__jbd2_debug((n), __FILE__, __func__, __LINE__, (fmt), ##a)
 #else
-#define jbd_debug(n, fmt, a)    /**/
+#define jbd_debug//(n, fmt, a)    /**/
 #endif
 
 extern void *jbd2_alloc(size_t size, gfp_t flags);
@@ -375,7 +405,7 @@ static inline void jbd_unlock_bh_journal_head(struct buffer_head *bh)
 	bit_spin_unlock(BH_JournalHead, &bh->b_state);
 }
 
-#define J_ASSERT(assert)	BUG_ON(!(assert))
+#define J_ASSERT(assert)	/*BUG_ON(!(assert))*/
 
 #define J_ASSERT_BH(bh, expr)	J_ASSERT(expr)
 #define J_ASSERT_JH(jh, expr)	J_ASSERT(expr)
@@ -1542,8 +1572,8 @@ static inline bool jbd2_journal_has_csum_v2or3_feature(journal_t *j)
 
 static inline int jbd2_journal_has_csum_v2or3(journal_t *journal)
 {
-	WARN_ON_ONCE(jbd2_journal_has_csum_v2or3_feature(journal) &&
-		     journal->j_chksum_driver == NULL);
+	/*WARN_ON_ONCE(jbd2_journal_has_csum_v2or3_feature(journal) &&
+		     journal->j_chksum_driver == NULL);*/
 
 	return journal->j_chksum_driver != NULL;
 }
@@ -1599,10 +1629,12 @@ extern int jbd_blocks_per_page(struct inode *inode);
 /* JBD uses a CRC32 checksum */
 #define JBD_MAX_CHECKSUM_SIZE 4
 
-#if 0
+
+__u32 crc32c(__u32 crc, const __u8 *data, unsigned int length);
 static inline u32 jbd2_chksum(journal_t *journal, u32 crc,
 			      const void *address, unsigned int length)
 {
+#if 0
 	struct {
 		struct shash_desc shash;
 		char ctx[JBD_MAX_CHECKSUM_SIZE];
@@ -1620,8 +1652,10 @@ static inline u32 jbd2_chksum(journal_t *journal, u32 crc,
 	BUG_ON(err);
 
 	return *(u32 *)desc.ctx;
-}
 #endif
+    return crc32c(crc, address, length);
+}
+
 
 /* Return most recent uncommitted transaction */
 static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)

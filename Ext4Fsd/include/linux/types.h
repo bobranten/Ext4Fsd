@@ -57,6 +57,7 @@ typedef __u64       u64;
 #define noinline
 #endif
 
+typedef __u64 __bitwise __be64;
 typedef __u32 __bitwise __be32;
 typedef __u16 __bitwise __be16;
 

@@ -151,7 +151,7 @@ static const __u32 crc32c_table[256] = {
  * crc using table.
  */
 
-static __u32 crc32c(__u32 crc, const __u8 *data, unsigned int length)
+__u32 crc32c(__u32 crc, const __u8 *data, unsigned int length)
 {
 	while (length--)
 		crc = crc32c_table[(crc ^ *data++) & 0xFFL] ^ (crc >> 8);
