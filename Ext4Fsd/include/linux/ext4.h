@@ -3378,6 +3378,10 @@ int ext4_inode_csum_verify(struct inode *inode, struct ext4_inode *raw,
 				  struct ext4_inode_info *ei);
 void ext4_inode_csum_set(struct inode *inode, struct ext4_inode *raw,
 				struct ext4_inode_info *ei);
+int ext4_extent_block_csum_verify(struct inode *inode,
+					 struct ext4_extent_header *eh);
+void ext4_extent_block_csum_set(struct inode *inode,
+				       struct ext4_extent_header *eh);
 void initialize_dirent_tail(struct ext4_dir_entry_tail *t,
 			    unsigned int blocksize);
 int ext4_dirent_csum_verify(struct inode *inode, struct ext4_dir_entry *dirent);
@@ -3386,6 +3390,10 @@ void ext4_dirent_csum_set(struct inode *inode,
 int ext4_dx_csum_verify(struct inode *inode,
 			       struct ext4_dir_entry *dirent);
 void ext4_dx_csum_set(struct inode *inode, struct ext4_dir_entry *dirent);
+int ext4_xattr_block_csum_verify(struct inode *inode,
+					struct buffer_head *bh);
+void ext4_xattr_block_csum_set(struct inode *inode,
+				      struct buffer_head *bh);
 
 //
 // Use default packing of structures

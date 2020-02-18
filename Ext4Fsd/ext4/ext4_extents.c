@@ -225,23 +225,6 @@ int ext4_ext_check_inode(struct inode *inode)
 	return ext4_ext_check(inode, ext_inode_hdr(inode), ext_depth(inode), 0);
 }
 
-static uint32_t ext4_ext_block_csum(struct inode *inode,
-		struct ext4_extent_header *eh)
-{
-	/*return ext4_crc32c(inode->i_csum, eh, EXT4_EXTENT_TAIL_OFFSET(eh));*/
-	return 0;
-}
-
-static void ext4_extent_block_csum_set(struct inode *inode,
-		struct ext4_extent_header *eh)
-{
-	struct ext4_extent_tail *tail;
-
-	tail = find_ext4_extent_tail(eh);
-	tail->et_checksum = ext4_ext_block_csum(
-			inode, eh);
-}
-
 static int ext4_split_extent_at(void *icb,
 			     handle_t *handle,
 			     struct inode *inode,
@@ -410,10 +393,8 @@ static int __ext4_ext_check(const char *function, unsigned int line,
 	}
 
 	tail = find_ext4_extent_tail(eh);
-	if (tail->et_checksum != ext4_ext_block_csum(inode, eh)) {
-		ext_debug("Warning: extent checksum damaged? tail->et_checksum = "
-				"%lu, ext4_ext_block_csum = %lu\n",
-				tail->et_checksum, ext4_ext_block_csum(inode, eh));
+	if (!ext4_extent_block_csum_verify(inode, eh)) {
+		ext_debug("Warning: extent checksum damaged?\n");
 	}
 
 	return 0;

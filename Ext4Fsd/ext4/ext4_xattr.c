@@ -115,49 +115,6 @@ static void ext4_xattr_rehash(struct ext4_xattr_header *header,
 	header->h_hash = cpu_to_le32(hash);
 }
 
-#if CONFIG_META_CSUM_ENABLE
-static __u32
-ext4_xattr_block_checksum(PEXT2_MCB inode_ref,
-			  ext4_fsblk_t blocknr,
-			  struct ext4_xattr_header *header)
-{
-	__u32 checksum = 0;
-	__u64 le64_blocknr = blocknr;
-	struct ext4_sblock *sb = &inode_ref->fs->sb;
-
-	if (ext4_sb_feature_ro_com(sb, EXT4_FRO_COM_METADATA_CSUM)) {
-		__u32 orig_checksum;
-
-		/* Preparation: temporarily set bg checksum to 0 */
-		orig_checksum = header->h_checksum;
-		header->h_checksum = 0;
-		/* First calculate crc32 checksum against fs uuid */
-		checksum = ext4_crc32c(EXT4_CRC32_INIT, sb->uuid,
-				sizeof(sb->uuid));
-		/* Then calculate crc32 checksum block number */
-		checksum = ext4_crc32c(checksum, &le64_blocknr,
-				     sizeof(le64_blocknr));
-		/* Finally calculate crc32 checksum against 
-		 * the entire xattr block */
-		checksum = ext4_crc32c(checksum, header,
-				   ext4_sb_get_block_size(sb));
-		header->h_checksum = orig_checksum;
-	}
-	return checksum;
-}
-#else
-#define ext4_xattr_block_checksum(...) 0
-#endif
-
-static void
-ext4_xattr_set_block_checksum(PEXT2_MCB inode_ref,
-			      ext4_fsblk_t blocknr,
-			      struct ext4_xattr_header *header)
-{
-	/* TODO: Need METADATA_CSUM supports. */
-	header->h_checksum = 0;
-}
-
 static int ext4_xattr_item_cmp(struct rb_node *_a,
 			       struct rb_node *_b)
 {
@@ -965,9 +922,8 @@ static int ext4_xattr_write_to_disk(struct ext4_xattr_ref *xattr_ref)
 	if (block_modified) {
 		ext4_xattr_rehash(block_header,
 				  EXT4_XATTR_BFIRST(xattr_ref->block_bh));
-		ext4_xattr_set_block_checksum(xattr_ref->inode_ref,
-					      xattr_ref->block_bh->b_blocknr,
-					      block_header);
+		/*ext4_xattr_block_csum_set(inode,
+					      xattr_ref->block_bh);*/
 		extents_mark_buffer_dirty(xattr_ref->block_bh);
 	}
 
