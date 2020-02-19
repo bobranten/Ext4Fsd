@@ -1259,7 +1259,7 @@ journal_t *jbd2_journal_init_inode(struct inode *inode)
 	char *p;
 	unsigned long long blocknr;
 
-    DbgPrint("jbd2_journal_init_inode begin\n");
+    DbgPrint("jbd2_journal_init_inode: begin\n");
 	blocknr = bmap(inode, 0);
 	if (!blocknr) {
 		/*pr_err("%s: Cannot locate journal superblock\n",
@@ -1282,14 +1282,9 @@ journal_t *jbd2_journal_init_inode(struct inode *inode)
 	p = strreplace(journal->j_devname, '/', '!');
 	sprintf(p, "-%lu", journal->j_inode->i_ino);*/
 	jbd2_stats_proc_init(journal);
-    DbgPrint("jbd2_journal_init_inode end\n");
+    DbgPrint("jbd2_journal_init_inode: end\n");
 
 	return journal;
-}
-
-journal_t *journal_init_inode(struct inode *inode)
-{
-    return jbd2_journal_init_inode(inode);
 }
 
 /*
@@ -1453,7 +1448,7 @@ int jbd2_journal_update_sb_log_tail(journal_t *journal, tid_t tail_tid,
 out:
 	return ret;
 }
-#if 0
+
 /**
  * jbd2_mark_journal_empty() - Mark on disk journal as empty.
  * @journal: The journal to update.
@@ -1466,11 +1461,13 @@ static void jbd2_mark_journal_empty(journal_t *journal, int write_op)
 {
 	journal_superblock_t *sb = journal->j_superblock;
 
-	BUG_ON(!mutex_is_locked(&journal->j_checkpoint_mutex));
-	read_lock(&journal->j_state_lock);
+    DbgPrint("jbd2_mark_journal_empty: begin\n");
+
+	//BUG_ON(!mutex_is_locked(&journal->j_checkpoint_mutex));
+	//read_lock(&journal->j_state_lock);
 	/* Is it already empty? */
 	if (sb->s_start == 0) {
-		read_unlock(&journal->j_state_lock);
+		//read_unlock(&journal->j_state_lock);
 		return;
 	}
 	jbd_debug(1, "JBD2: Marking journal as empty (seq %d)\n",
@@ -1478,16 +1475,16 @@ static void jbd2_mark_journal_empty(journal_t *journal, int write_op)
 
 	sb->s_sequence = cpu_to_be32(journal->j_tail_sequence);
 	sb->s_start    = cpu_to_be32(0);
-	read_unlock(&journal->j_state_lock);
+	//read_unlock(&journal->j_state_lock);
 
 	jbd2_write_superblock(journal, write_op);
 
 	/* Log is no longer empty */
-	write_lock(&journal->j_state_lock);
+	//write_lock(&journal->j_state_lock);
 	journal->j_flags |= JBD2_FLUSHED;
-	write_unlock(&journal->j_state_lock);
+	//write_unlock(&journal->j_state_lock);
+    DbgPrint("jbd2_mark_journal_empty: end\n");
 }
-#endif
 
 /**
  * jbd2_journal_update_sb_errno() - Update error in the journal.
@@ -1668,7 +1665,7 @@ int jbd2_journal_load(journal_t *journal)
 	int err;
 	journal_superblock_t *sb;
 
-    DbgPrint("jbd2_journal_load begin\n");
+    DbgPrint("jbd2_journal_load: begin\n");
 	err = load_superblock(journal);
 	if (err)
 		return err;
@@ -1715,17 +1712,12 @@ int jbd2_journal_load(journal_t *journal)
 
 	journal->j_flags &= ~JBD2_ABORT;
 	journal->j_flags |= JBD2_LOADED;
-    DbgPrint("jbd2_journal_load end\n");
+    DbgPrint("jbd2_journal_load: end\n");
 	return 0;
 
 recovery_error:
 	printk(KERN_WARNING "JBD2: recovery failed\n");
 	return -EIO;
-}
-
-int journal_load(journal_t *journal)
-{
-    return jbd2_journal_load(journal);
 }
 
 /**
@@ -1739,7 +1731,7 @@ int journal_load(journal_t *journal)
 int jbd2_journal_destroy(journal_t *journal)
 {
 	int err = 0;
-    DbgPrint("jbd2_journal_destroy begin\n");
+    DbgPrint("jbd2_journal_destroy: begin\n");
 #if 0
 	/* Wait for the commit thread to wake up and die. */
 	journal_kill_thread(journal);
@@ -1803,14 +1795,9 @@ int jbd2_journal_destroy(journal_t *journal)
 		crypto_free_shash(journal->j_chksum_driver);*/
 	kfree(journal->j_wbuf);
 	kfree(journal);
-    DbgPrint("jbd2_journal_destroy end\n");
+    DbgPrint("jbd2_journal_destroy: end\n");
 
 	return err;
-}
-
-int journal_destroy(journal_t *journal)
-{
-    return jbd2_journal_destroy(journal);
 }
 
 #if 0
@@ -2064,7 +2051,7 @@ int jbd2_journal_flush(journal_t *journal)
 out:
 	return err;
 }
-
+#endif
 /**
  * int jbd2_journal_wipe() - Wipe journal contents
  * @journal: Journal to act on.
@@ -2082,14 +2069,18 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 {
 	int err = 0;
 
+    DbgPrint("jbd2_journal_wipe: begin\n");
+
 	J_ASSERT (!(journal->j_flags & JBD2_LOADED));
 
 	err = load_superblock(journal);
 	if (err)
 		return err;
 
-	if (!journal->j_tail)
+	if (!journal->j_tail) {
+        DbgPrint("jbd2_journal_wipe: journal is clean\n");
 		goto no_recovery;
+    }
 
 	printk(KERN_WARNING "JBD2: %s recovery information on journal\n",
 		write ? "Clearing" : "Ignoring");
@@ -2098,14 +2089,15 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 	if (write) {
 		/* Lock to make assertions happy... */
 		mutex_lock(&journal->j_checkpoint_mutex);
-		jbd2_mark_journal_empty(journal, REQ_SYNC | REQ_FUA);
+		jbd2_mark_journal_empty(journal, 0/*REQ_SYNC | REQ_FUA*/);
 		mutex_unlock(&journal->j_checkpoint_mutex);
 	}
 
  no_recovery:
+    DbgPrint("jbd2_journal_wipe end:\n");
 	return err;
 }
-#endif
+
 /*
  * Journal abort has very specific semantics, which we describe
  * for journal abort.
@@ -2651,11 +2643,6 @@ restart:
 }
 #endif
 
-int journal_wipe_recovery(journal_t *journal)
-{
-    return 0;
-}
-
 #ifdef CONFIG_PROC_FS
 
 #define JBD2_STATS_PROC_NAME "fs/jbd2"
@@ -2735,7 +2722,7 @@ static int __init journal_init(void)
 {
 	int ret;
 
-    DbgPrint("journal_init begin\n");
+    DbgPrint("journal_init: begin\n");
 
 	/*BUILD_BUG_ON(sizeof(struct journal_superblock_s) != 1024);*/
 
@@ -2745,7 +2732,7 @@ static int __init journal_init(void)
 	} else {
 		jbd2_journal_destroy_caches();
 	}
-    DbgPrint("journal_init end\n");
+    DbgPrint("journal_init: end\n");
 	return ret;
 }
 
@@ -2756,10 +2743,10 @@ static void __exit journal_exit(void)
 	if (n)
 		printk(KERN_ERR "JBD2: leaked %d journal_heads!\n", n);
 #endif
-    DbgPrint("journal_exit begin\n");
+    DbgPrint("journal_exit: begin\n");
 	jbd2_remove_jbd_stats_proc_entry();
 	jbd2_journal_destroy_caches();
-    DbgPrint("journal_exit end\n");
+    DbgPrint("journal_exit: end\n");
 }
 
 MODULE_LICENSE("GPL");

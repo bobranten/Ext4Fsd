@@ -291,7 +291,7 @@ int jbd2_journal_recover(journal_t *journal)
 	}*/
 	return err;
 }
-#if 0
+
 /**
  * jbd2_journal_skip_recovery - Start journal and wipe exiting records
  * @journal: journal to startup
@@ -310,6 +310,8 @@ int jbd2_journal_skip_recovery(journal_t *journal)
 	int			err;
 
 	struct recovery_info	info;
+
+    DbgPrint("jbd2_journal_skip_recovery: begin\n");
 
 	memset (&info, 0, sizeof(info));
 
@@ -330,9 +332,10 @@ int jbd2_journal_skip_recovery(journal_t *journal)
 	}
 
 	journal->j_tail = 0;
+    DbgPrint("jbd2_journal_skip_recovery: end\n");
 	return err;
 }
-#endif
+
 static inline unsigned long long read_tag_block(journal_t *journal,
 						journal_block_tag_t *tag)
 {
@@ -341,7 +344,36 @@ static inline unsigned long long read_tag_block(journal_t *journal,
 		block |= (u64)be32_to_cpu(tag->t_blocknr_high) << 32;
 	return block;
 }
-#define crc32_be crc32c
+
+/*
+ * The standard CRC-32 polynomial, first popularized by Ethernet.
+ * x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x^1+x^0
+ */
+#define CRC32_POLY_LE 0xedb88320
+#define CRC32_POLY_BE 0x04c11db7
+
+u32 crc32_le(u32 crc, unsigned char const *p, size_t len)
+{
+	int i;
+	while (len--) {
+		crc ^= *p++;
+		for (i = 0; i < 8; i++)
+			crc = (crc >> 1) ^ ((crc & 1) ? CRC32_POLY_LE : 0);
+	}
+	return crc;
+}
+
+u32 crc32_be(u32 crc, unsigned char const *p, size_t len)
+{
+	int i;
+	while (len--) {
+		crc ^= *p++ << 24;
+		for (i = 0; i < 8; i++)
+			crc = (crc << 1) ^ ((crc & 0x80000000) ? CRC32_POLY_BE : 0);
+	}
+	return crc;
+}
+
 /*
  * calc_chksums calculates the checksums for the blocks described in the
  * descriptor block.
