@@ -218,9 +218,10 @@
     <ClCompile Include="flush.c" />
     <ClCompile Include="fsctl.c" />
     <ClCompile Include="init.c" />
-    <ClCompile Include="jbd\recovery.c" />
-    <ClCompile Include="jbd\replay.c" />
-    <ClCompile Include="jbd\revoke.c" />
+    <ClCompile Include="jbd2\journal.c" />
+    <ClCompile Include="jbd2\recovery.c" />
+    <ClCompile Include="jbd2\revoke.c" />
+    <ClCompile Include="jbd2\transaction.c" />
     <ClCompile Include="linux.c" />
     <ClCompile Include="lock.c" />
     <ClCompile Include="memory.c" />

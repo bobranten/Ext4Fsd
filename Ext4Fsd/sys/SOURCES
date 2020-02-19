@@ -22,7 +22,7 @@ USER_C_FLAGS = $(USER_C_FLAGS) /D__KERNEL__
 
 INCLUDES=..\include;
 TARGETLIBS= $(TARGETPATH)\*\nlssup.lib \
-            $(TARGETPATH)\*\jbd.lib    \
+            $(TARGETPATH)\*\jbd2.lib    \
             $(TARGETPATH)\*\ext3.lib   \
             $(TARGETPATH)\*\ext4.lib
 

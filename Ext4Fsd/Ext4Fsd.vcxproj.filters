@@ -23,11 +23,11 @@
     <Filter Include="Source Files\ext4">
       <UniqueIdentifier>{9ab142d9-f11c-4d93-b92a-0df6595d2e24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\jbd">
-      <UniqueIdentifier>{3e51e838-e180-44c1-ae2d-53cf5297396b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\nls">
       <UniqueIdentifier>{94a9d102-6815-4f19-9b62-763fe5d482ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jbd2">
+      <UniqueIdentifier>{05b648dd-bb69-40ed-abff-2df7db3c7f92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,15 +141,6 @@
     </ClCompile>
     <ClCompile Include="ext4\extents.c">
       <Filter>Source Files\ext4</Filter>
-    </ClCompile>
-    <ClCompile Include="jbd\recovery.c">
-      <Filter>Source Files\jbd</Filter>
-    </ClCompile>
-    <ClCompile Include="jbd\replay.c">
-      <Filter>Source Files\jbd</Filter>
-    </ClCompile>
-    <ClCompile Include="jbd\revoke.c">
-      <Filter>Source Files\jbd</Filter>
     </ClCompile>
     <ClCompile Include="nls\nls_ascii.c">
       <Filter>Source Files\nls</Filter>
@@ -276,6 +267,18 @@
     </ClCompile>
     <ClCompile Include="ext4\ext4_csum.c">
       <Filter>Source Files\ext4</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd2\journal.c">
+      <Filter>Source Files\jbd2</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd2\recovery.c">
+      <Filter>Source Files\jbd2</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd2\revoke.c">
+      <Filter>Source Files\jbd2</Filter>
+    </ClCompile>
+    <ClCompile Include="jbd2\transaction.c">
+      <Filter>Source Files\jbd2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

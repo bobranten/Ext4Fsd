@@ -10,7 +10,7 @@
 /* INCLUDES *****************************************************************/
 
 #include <ext2fs.h>
-#include <linux/jbd.h>
+#include <linux/jbd2.h>
 
 /* GLOBALS ***************************************************************/
 
@@ -105,6 +105,8 @@ Ext2RecoverJournal(
     journal_t *             journal = NULL;
     struct ext3_super_block *esb;
 
+    DbgPrint("Ext2RecoverJournal begin\n");
+
     ExAcquireResourceExclusiveLite(&Vcb->MainResource, TRUE);
 
     /* check journal inode number */
@@ -124,43 +126,51 @@ Ext2RecoverJournal(
     ji = &jcb->Inode;
 
     /* initialize journal file from inode */
-    journal = journal_init_inode(ji);
+    journal = jbd2_journal_init_inode(ji);
 
     /* initialzation succeeds ? */
     if (!journal) {
+        DbgPrint("jbd2_journal_init_inode failed\n");
         iput(ji);
         rc = -8;
         goto errorout;
     }
 
-    /* start journal recovery */
-    rc = journal_load(journal);
-    if (0 != rc) {
-        rc = -9;
-        DbgPrint("Ext2Fsd: recover_journal: failed "
-                 "to recover journal data.\n");
+	if (ext4_has_feature_journal_needs_recovery(sb)) {
+        /* loading the journal will do a recover */
+		rc = jbd2_journal_load(journal);
+
+        if (0 != rc) {
+            DbgPrint("Ext2Fsd: recover_journal: failed "
+                 "to recover journal data. rc=%d\n", rc);
+            rc = -9;
+            //goto errorout;
+        }
+
+        /* reload super_block and group_description */
+        Ext2RefreshSuper(IrpContext, Vcb);
+        Ext2RefreshGroup(IrpContext, Vcb);
+
+        /* clear recover flag in sb */
+        if (rc == 0) {
+            ClearLongFlag(
+                Vcb->SuperBlock->s_feature_incompat,
+                EXT3_FEATURE_INCOMPAT_RECOVER);
+            Ext2SaveSuper(IrpContext, Vcb);
+            sync_blockdev(bd);
+            ClearLongFlag(Vcb->Flags, VCB_JOURNAL_RECOVER);
+        }
     }
-
-    /* reload super_block and group_description */
-    Ext2RefreshSuper(IrpContext, Vcb);
-    Ext2RefreshGroup(IrpContext, Vcb);
-
-    /* wipe journal data and clear recover flag in sb */
-    if (rc == 0) {
-        journal_wipe_recovery(journal);
-        ClearLongFlag(
-            Vcb->SuperBlock->s_feature_incompat,
-            EXT3_FEATURE_INCOMPAT_RECOVER );
-        Ext2SaveSuper(IrpContext, Vcb);
-        sync_blockdev(bd);
-        ClearLongFlag(Vcb->Flags, VCB_JOURNAL_RECOVER);
+    else {
+        /* if the journal is clean wipe it */
+		rc = jbd2_journal_wipe(journal, !IsVcbReadOnly(Vcb));
     }
 
 errorout:
 
     /* destroy journal structure */
     if (journal) {
-        journal_destroy(journal);
+        jbd2_journal_destroy(journal);
     }
 
     /* destory journal Mcb */
@@ -169,6 +179,8 @@ errorout:
     }
 
     ExReleaseResourceLite(&Vcb->MainResource);
+
+    DbgPrint("Ext2RecoverJournal end\n");
 
     return rc;
 }

@@ -1,1 +1,1 @@
-DIRS = nls ext3 ext4 jbd jbd2 sys
+DIRS = nls ext3 ext4 jbd2 sys

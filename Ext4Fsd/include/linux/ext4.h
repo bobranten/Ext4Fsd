@@ -25,7 +25,7 @@
 #include <linux/types.h>
 //#include <linux/blkdev.h>
 #include <linux/magic.h>
-//#include <linux/jbd2.h>
+#include <linux/jbd2.h>
 //#include <linux/quota.h>
 //#include <linux/rwsem.h>
 #include <linux/rbtree.h>
@@ -44,7 +44,7 @@
 #ifdef __KERNEL__
 //#include <linux/compat.h>
 #endif
-typedef struct handle_s handle_t;
+//typedef struct handle_s handle_t;
 typedef unsigned long long ext4_fsblk_t;
 #include <linux/ext4_jbd2.h>
 typedef unsigned __int16 uint16_t;
