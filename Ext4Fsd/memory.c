@@ -2628,16 +2628,6 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
             }
         }
 
-        /*
-         * Mount ext4 with 64-bit block numbers read-only while testing.
-         */
-#if 0
-        if (EXT3_HAS_INCOMPAT_FEATURE(&Vcb->sb, EXT4_FEATURE_INCOMPAT_64BIT)) {
-            printk(KERN_ERR "EXT3-fs: %s: Mounting ext4 with 64-bit block numbers read-only.\n",
-                   Vcb->sb.s_id);
-            SetLongFlag(Vcb->Flags, VCB_READ_ONLY);
-        }
-#endif
         has_huge_files = EXT3_HAS_RO_COMPAT_FEATURE(&Vcb->sb, EXT4_FEATURE_RO_COMPAT_HUGE_FILE);
 
         Vcb->sb.s_maxbytes = ext3_max_size(BLOCK_BITS, has_huge_files);

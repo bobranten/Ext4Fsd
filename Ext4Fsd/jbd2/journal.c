@@ -46,7 +46,7 @@
 //#include <trace/events/jbd2.h>
 
 //#include <linux/uaccess.h>
-#include <asm/page.h>
+//#include <asm/page.h>
 #if 0
 #ifdef CONFIG_JBD2_DEBUG
 ushort jbd2_journal_enable_debug __read_mostly;

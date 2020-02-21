@@ -388,11 +388,6 @@ Ext2QueryFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
 
             Irp->IoStatus.Information = sizeof(FILE_ALL_INFORMATION) +
                                         Mcb->ShortName.Length - sizeof(WCHAR);
-#if 0
-            sizeof(FILE_ACCESS_INFORMATION) -
-            sizeof(FILE_MODE_INFORMATION) -
-            sizeof(FILE_ALIGNMENT_INFORMATION);
-#endif
 
             Status = STATUS_SUCCESS;
         }

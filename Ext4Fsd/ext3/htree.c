@@ -1,7 +1,7 @@
 /*
  * COPYRIGHT:        See COPYRIGHT.TXT
  * PROJECT:          Ext2 File System Driver for WinNT/2K/XP
- * FILE:             lock.c
+ * FILE:             htree.c
  * PROGRAMMER:       Matt Wu <mattwu@163.com>
  * HOMEPAGE:         http://www.ext2fsd.com
  * UPDATE HISTORY:
@@ -763,72 +763,7 @@ static int call_filldir(struct file * filp, void * cookie,
     }
     return 0;
 }
-#if 0
-struct fake_dirent
-{
-    __le32 inode;
-    __le16 rec_len;
-    __u8 name_len;
-    __u8 file_type;
-};
 
-struct dx_countlimit
-{
-    __le16 limit;
-    __le16 count;
-};
-
-struct dx_entry
-{
-    __le32 hash;
-    __le32 block;
-};
-
-/*
- * dx_root_info is laid out so that if it should somehow get overlaid by a
- * dirent the two low bits of the hash version will be zero.  Therefore, the
- * hash version mod 4 should never be 0.  Sincerely, the paranoia department.
- */
-
-struct dx_root
-{
-    struct fake_dirent dot;
-    char dot_name[4];
-    struct fake_dirent dotdot;
-    char dotdot_name[4];
-    struct dx_root_info
-    {
-        __le32 reserved_zero;
-        __u8 hash_version;
-        __u8 info_length; /* 8 */
-        __u8 indirect_levels;
-        __u8 unused_flags;
-    }
-    info;
-    struct dx_entry	entries[0];
-};
-
-struct dx_node
-{
-    struct fake_dirent fake;
-    struct dx_entry	entries[0];
-};
-
-
-struct dx_frame
-{
-    struct buffer_head *bh;
-    struct dx_entry *entries;
-    struct dx_entry *at;
-};
-
-struct dx_map_entry
-{
-    __u32 hash;
-    __u16 offs;
-    __u16 size;
-};
-#endif
 /*
  * Future: use high four bits of block for coalesce-on-delete flags
  * Mask them off for now.
