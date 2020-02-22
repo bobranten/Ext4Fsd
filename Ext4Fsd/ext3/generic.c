@@ -1611,7 +1611,8 @@ repeat:
 
         /* If we didn't allocate from within the initialized part of the inode
          * table then we need to initialize up to this inode. */
-        if (EXT4_HAS_RO_COMPAT_FEATURE(sb, EXT4_FEATURE_RO_COMPAT_GDT_CSUM)) {
+        if (EXT4_HAS_RO_COMPAT_FEATURE(sb, EXT4_FEATURE_RO_COMPAT_GDT_CSUM) ||
+            EXT4_HAS_RO_COMPAT_FEATURE(sb, EXT4_FEATURE_RO_COMPAT_METADATA_CSUM)) {
 
             __u32 free;
 
