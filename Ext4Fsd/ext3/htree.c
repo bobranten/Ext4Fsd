@@ -456,8 +456,8 @@ int add_dirent_to_buf(struct ext2_icb *icb, struct dentry *dentry,
     dir->i_mtime = dir->i_ctime = ext3_current_time(dir);
     ext3_update_dx_flag(dir);
     dir->i_version++;
-    ext3_mark_inode_dirty(icb, dir);
     ext4_dirent_csum_set(dir, (struct ext4_dir_entry *)bh->b_data);
+    ext3_mark_inode_dirty(icb, dir);
     set_buffer_dirty(bh);
     __brelse(bh);
     return 0;
@@ -811,15 +811,21 @@ static inline void dx_set_limit (struct dx_entry *entries, unsigned value)
 
 static inline unsigned dx_root_limit (struct inode *dir, unsigned infosize)
 {
-    unsigned entry_space = dir->i_sb->s_blocksize - EXT3_DIR_REC_LEN(1) -
-                           EXT3_DIR_REC_LEN(2) - infosize;
-    return 0? 20: entry_space / sizeof(struct dx_entry);
+    unsigned entry_space = dir->i_sb->s_blocksize - EXT4_DIR_REC_LEN(1) -
+        EXT4_DIR_REC_LEN(2) - infosize;
+
+    if (ext4_has_metadata_csum(dir->i_sb))
+        entry_space -= sizeof(struct dx_tail);
+    return entry_space / sizeof(struct dx_entry);
 }
 
 static inline unsigned dx_node_limit (struct inode *dir)
 {
-    unsigned entry_space = dir->i_sb->s_blocksize - EXT3_DIR_REC_LEN(0);
-    return 0? 22: entry_space / sizeof(struct dx_entry);
+    unsigned entry_space = dir->i_sb->s_blocksize - EXT4_DIR_REC_LEN(0);
+
+    if (ext4_has_metadata_csum(dir->i_sb))
+        entry_space -= sizeof(struct dx_tail);
+    return entry_space / sizeof(struct dx_entry);
 }
 
 /*
