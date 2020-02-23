@@ -663,7 +663,7 @@ NTSTATUS Ext2AddDotEntries(struct ext2_icb *icb, struct inode *dir,
     de = (struct ext3_dir_entry_2 *)
          ((char *) de + le16_to_cpu(de->rec_len));
     de->inode = cpu_to_le32(dir->i_ino);
-    de->rec_len = cpu_to_le16(inode->i_sb->s_blocksize-EXT3_DIR_REC_LEN(1));
+    de->rec_len = cpu_to_le16(inode->i_sb->s_blocksize-EXT3_DIR_REC_LEN(1)-csum_size);
     de->name_len = 2;
     strcpy (de->name, "..");
     ext3_set_de_type(inode->i_sb, de, S_IFDIR);
@@ -672,6 +672,7 @@ NTSTATUS Ext2AddDotEntries(struct ext2_icb *icb, struct inode *dir,
         t = EXT4_DIRENT_TAIL(bh->b_data, blocksize);
         initialize_dirent_tail(t, blocksize);
     }
+    ext4_dirent_csum_set(inode, (struct ext4_dir_entry *)bh->b_data);
     set_buffer_dirty(bh);
     ext3_mark_inode_dirty(icb, inode);
 
