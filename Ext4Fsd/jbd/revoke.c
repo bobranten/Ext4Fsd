@@ -60,13 +60,13 @@
 #ifndef __KERNEL__
 #include "jfs_user.h"
 #else
-#include <linux/time.h>
+//#include <linux/time.h>
 #include <linux/fs.h>
 #include <linux/jbd.h>
 #include <linux/errno.h>
-#include <linux/slab.h>
+//#include <linux/slab.h>
 #include <linux/list.h>
-#include <linux/init.h>
+//#include <linux/init.h>
 #endif
 #include <linux/log2.h>
 

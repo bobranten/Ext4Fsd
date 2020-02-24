@@ -17,11 +17,11 @@
 #include "jfs_user.h"
 #else
 #include <linux/module.h>
-#include <linux/time.h>
+//#include <linux/time.h>
 #include <linux/fs.h>
 #include <linux/jbd.h>
 #include <linux/errno.h>
-#include <linux/slab.h>
+//#include <linux/slab.h>
 #endif
 
 /*

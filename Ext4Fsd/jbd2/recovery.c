@@ -13,7 +13,7 @@
 #ifndef __KERNEL__
 #include "jfs_user.h"
 #else
-#include <linux/time.h>
+//#include <linux/time.h>
 #include <linux/fs.h>
 #include <linux/jbd2.h>
 #include <linux/errno.h>
@@ -311,7 +311,7 @@ int jbd2_journal_skip_recovery(journal_t *journal)
 
 	struct recovery_info	info;
 
-    DbgPrint("jbd2_journal_skip_recovery: begin\n");
+    //DbgPrint("jbd2_journal_skip_recovery: begin\n");
 
 	memset (&info, 0, sizeof(info));
 
@@ -332,7 +332,7 @@ int jbd2_journal_skip_recovery(journal_t *journal)
 	}
 
 	journal->j_tail = 0;
-    DbgPrint("jbd2_journal_skip_recovery: end\n");
+    //DbgPrint("jbd2_journal_skip_recovery: end\n");
 	return err;
 }
 

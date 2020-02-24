@@ -20,18 +20,18 @@
  */
 
 #include <linux/module.h>
-#include <linux/time.h>
+//#include <linux/time.h>
 #include <linux/fs.h>
 #include <linux/jbd2.h>
 #include <linux/errno.h>
-#include <linux/slab.h>
-#include <linux/init.h>
-#include <linux/mm.h>
-#include <linux/freezer.h>
-#include <linux/pagemap.h>
-#include <linux/kthread.h>
-#include <linux/poison.h>
-#include <linux/proc_fs.h>
+//#include <linux/slab.h>
+//#include <linux/init.h>
+//#include <linux/mm.h>
+//#include <linux/freezer.h>
+//#include <linux/pagemap.h>
+//#include <linux/kthread.h>
+//#include <linux/poison.h>
+//#include <linux/proc_fs.h>
 //#include <linux/seq_file.h>
 //#include <linux/math64.h>
 //#include <linux/hash.h>
@@ -1259,7 +1259,7 @@ journal_t *jbd2_journal_init_inode(struct inode *inode)
 	char *p;
 	unsigned long long blocknr;
 
-    DbgPrint("jbd2_journal_init_inode: begin\n");
+    //DbgPrint("jbd2_journal_init_inode: begin\n");
 	blocknr = bmap(inode, 0);
 	if (!blocknr) {
 		/*pr_err("%s: Cannot locate journal superblock\n",
@@ -1282,7 +1282,7 @@ journal_t *jbd2_journal_init_inode(struct inode *inode)
 	p = strreplace(journal->j_devname, '/', '!');
 	sprintf(p, "-%lu", journal->j_inode->i_ino);*/
 	jbd2_stats_proc_init(journal);
-    DbgPrint("jbd2_journal_init_inode: end\n");
+    //DbgPrint("jbd2_journal_init_inode: end\n");
 
 	return journal;
 }
@@ -1461,7 +1461,7 @@ static void jbd2_mark_journal_empty(journal_t *journal, int write_op)
 {
 	journal_superblock_t *sb = journal->j_superblock;
 
-    DbgPrint("jbd2_mark_journal_empty: begin\n");
+    //DbgPrint("jbd2_mark_journal_empty: begin\n");
 
 	//BUG_ON(!mutex_is_locked(&journal->j_checkpoint_mutex));
 	//read_lock(&journal->j_state_lock);
@@ -1483,7 +1483,7 @@ static void jbd2_mark_journal_empty(journal_t *journal, int write_op)
 	//write_lock(&journal->j_state_lock);
 	journal->j_flags |= JBD2_FLUSHED;
 	//write_unlock(&journal->j_state_lock);
-    DbgPrint("jbd2_mark_journal_empty: end\n");
+    //DbgPrint("jbd2_mark_journal_empty: end\n");
 }
 
 /**
@@ -1665,7 +1665,7 @@ int jbd2_journal_load(journal_t *journal)
 	int err;
 	journal_superblock_t *sb;
 
-    DbgPrint("jbd2_journal_load: begin\n");
+    //DbgPrint("jbd2_journal_load: begin\n");
 	err = load_superblock(journal);
 	if (err)
 		return err;
@@ -1712,7 +1712,7 @@ int jbd2_journal_load(journal_t *journal)
 
 	journal->j_flags &= ~JBD2_ABORT;
 	journal->j_flags |= JBD2_LOADED;
-    DbgPrint("jbd2_journal_load: end\n");
+    //DbgPrint("jbd2_journal_load: end\n");
 	return 0;
 
 recovery_error:
@@ -1731,7 +1731,7 @@ recovery_error:
 int jbd2_journal_destroy(journal_t *journal)
 {
 	int err = 0;
-    DbgPrint("jbd2_journal_destroy: begin\n");
+    //DbgPrint("jbd2_journal_destroy: begin\n");
 #if 0
 	/* Wait for the commit thread to wake up and die. */
 	journal_kill_thread(journal);
@@ -1795,7 +1795,7 @@ int jbd2_journal_destroy(journal_t *journal)
 		crypto_free_shash(journal->j_chksum_driver);*/
 	kfree(journal->j_wbuf);
 	kfree(journal);
-    DbgPrint("jbd2_journal_destroy: end\n");
+    //DbgPrint("jbd2_journal_destroy: end\n");
 
 	return err;
 }
@@ -2069,7 +2069,7 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 {
 	int err = 0;
 
-    DbgPrint("jbd2_journal_wipe: begin\n");
+    //DbgPrint("jbd2_journal_wipe: begin\n");
 
 	J_ASSERT (!(journal->j_flags & JBD2_LOADED));
 
@@ -2078,7 +2078,7 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 		return err;
 
 	if (!journal->j_tail) {
-        DbgPrint("jbd2_journal_wipe: journal is clean\n");
+        //DbgPrint("jbd2_journal_wipe: journal is clean\n");
 		goto no_recovery;
     }
 
@@ -2094,7 +2094,7 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 	}
 
  no_recovery:
-    DbgPrint("jbd2_journal_wipe end:\n");
+    //DbgPrint("jbd2_journal_wipe end:\n");
 	return err;
 }
 
@@ -2722,7 +2722,7 @@ static int __init journal_init(void)
 {
 	int ret;
 
-    DbgPrint("journal_init: begin\n");
+    //DbgPrint("journal_init: begin\n");
 
 	/*BUILD_BUG_ON(sizeof(struct journal_superblock_s) != 1024);*/
 
@@ -2732,7 +2732,7 @@ static int __init journal_init(void)
 	} else {
 		jbd2_journal_destroy_caches();
 	}
-    DbgPrint("journal_init: end\n");
+    //DbgPrint("journal_init: end\n");
 	return ret;
 }
 
@@ -2743,10 +2743,10 @@ static void __exit journal_exit(void)
 	if (n)
 		printk(KERN_ERR "JBD2: leaked %d journal_heads!\n", n);
 #endif
-    DbgPrint("journal_exit: begin\n");
+    //DbgPrint("journal_exit: begin\n");
 	jbd2_remove_jbd_stats_proc_entry();
 	jbd2_journal_destroy_caches();
-    DbgPrint("journal_exit: end\n");
+    //DbgPrint("journal_exit: end\n");
 }
 
 MODULE_LICENSE("GPL");
