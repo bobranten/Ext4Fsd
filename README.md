@@ -9,6 +9,7 @@ About
     still install the oficial release and then copy this driver over the old in \windows\system32\drivers.
     The current status of the development is that all metadata checksums is implemented and jbd2 is
     ported to support 64-bit blocknumbers.
+    The driver is now ready to be tested!
     This work is dedicated to my mother Berit Ingegerd Branten.
     Bo Branten <bosse@acc.umu.se>
 
@@ -34,6 +35,9 @@ Active Developers
               http://blog.dynox.cn
 
     KaHo Ng : http://github.com/ngkaho1234
+
+    Bo Branten : http://github.com/bobranten
+                 http://www.acc.umu.se/~bosse
 
 
 Supported Features by Ext3Fsd

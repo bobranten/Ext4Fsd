@@ -419,7 +419,7 @@ int ext4_inode_csum_verify(struct inode *inode, struct ext4_inode *raw,
 		calculated &= 0xFFFF;
 
     if (provided != calculated)
-        DbgPrint("checksum verify failed on inode %u: %lx != %lx\n", inode->i_ino, provided, calculated);
+        DEBUG(DL_ERR, ( "checksum verify failed on inode %u: %lx != %lx\n", inode->i_ino, provided, calculated));
 
 	return provided == calculated;
 }
@@ -437,7 +437,6 @@ void ext4_inode_csum_set(struct inode *inode, struct ext4_inode *raw,
 	if (EXT4_INODE_SIZE(inode->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
 	    offsetof(struct ext4_inode, i_checksum_hi) + sizeof(raw->i_checksum_hi) <= EXT4_GOOD_OLD_INODE_SIZE + raw->i_extra_isize)
 		raw->i_checksum_hi = cpu_to_le16(csum >> 16);
-    //DbgPrint("set checksum on inode %u: csum == %lx\n", inode->i_ino, csum);
     ext4_inode_csum_verify(inode, raw, unused);
 }
 
@@ -547,7 +546,7 @@ int ext4_dirent_csum_verify(struct inode *inode, struct ext4_dir_entry *dirent)
 
 	t = get_dirent_tail(inode, dirent);
 	if (!t) {
-        DbgPrint("No space for directory leaf checksum. Please run e2fsck -D.\n");
+        DEBUG(DL_ERR, ( "No space for directory leaf checksum. Please run e2fsck -D.\n"));
 		return 0;
 	}
 
@@ -568,7 +567,7 @@ void ext4_dirent_csum_set(struct inode *inode,
 
 	t = get_dirent_tail(inode, dirent);
 	if (!t) {
-        DbgPrint("No space for directory leaf checksum. Please run e2fsck -D.\n");
+        DEBUG(DL_ERR, ( "No space for directory leaf checksum. Please run e2fsck -D.\n"));
 		return;
 	}
 
@@ -633,14 +632,14 @@ int ext4_dx_csum_verify(struct inode *inode,
 
 	c = get_dx_countlimit(inode, dirent, &count_offset);
 	if (!c) {
-		DbgPrint("dir seems corrupt?  Run e2fsck -D.");
+		DEBUG(DL_ERR, ( "dir seems corrupt?  Run e2fsck -D."));
 		return 0;
 	}
 	limit = le16_to_cpu(c->limit);
 	count = le16_to_cpu(c->count);
 	if (count_offset + (limit * sizeof(struct dx_entry)) >
 	    EXT4_BLOCK_SIZE(inode->i_sb) - sizeof(struct dx_tail)) {
-		DbgPrint("warn_no_space_for_csum in inode\n");
+		DEBUG(DL_ERR, ( "warn_no_space_for_csum in inode\n"));
 		return 0;
 	}
 	t = (struct dx_tail *)(((struct dx_entry *)c) + limit);
@@ -659,14 +658,14 @@ void ext4_dx_csum_set(struct inode *inode, struct ext4_dir_entry *dirent)
 
 	c = get_dx_countlimit(inode, dirent, &count_offset);
 	if (!c) {
-		DbgPrint("dir seems corrupt?  Run e2fsck -D.");
+		DEBUG(DL_ERR, ( "dir seems corrupt?  Run e2fsck -D."));
 		return;
 	}
 	limit = le16_to_cpu(c->limit);
 	count = le16_to_cpu(c->count);
 	if (count_offset + (limit * sizeof(struct dx_entry)) >
 	    EXT4_BLOCK_SIZE(inode->i_sb) - sizeof(struct dx_tail)) {
-		DbgPrint("warn_no_space_for_csum in inode\n");
+		DEBUG(DL_ERR, ( "warn_no_space_for_csum in inode\n"));
 		return;
 	}
 	t = (struct dx_tail *)(((struct dx_entry *)c) + limit);

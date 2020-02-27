@@ -373,7 +373,7 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
             DEBUG(DL_ERR, ( "Ext2QueryParameters: Wrong HidingPrefix ...\n"));
         }
     } else {
-        DEBUG(DL_ERR, ( "Ext2QueryParameters: HidingPrefix not specified.\n"));
+        DEBUG(DL_INF, ( "Ext2QueryParameters: HidingPrefix not specified.\n"));
     }
     Ext2Global->sHidingPrefix[HIDINGPAT_LEN - 1] = 0;
 
@@ -397,7 +397,7 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
             DEBUG(DL_ERR, ( "Ext2QueryParameters: Wrong HidingSuffix ...\n"));
         }
     } else {
-        DEBUG(DL_ERR, ( "Ext2QueryParameters: HidingSuffix not specified.\n"));
+        DEBUG(DL_INF, ( "Ext2QueryParameters: HidingSuffix not specified.\n"));
     }
     Ext2Global->sHidingPrefix[HIDINGPAT_LEN - 1] = 0;
 

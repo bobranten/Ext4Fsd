@@ -105,8 +105,6 @@ Ext2RecoverJournal(
     journal_t *             journal = NULL;
     struct ext3_super_block *esb;
 
-    DbgPrint("Ext2RecoverJournal begin\n");
-
     ExAcquireResourceExclusiveLite(&Vcb->MainResource, TRUE);
 
     /* check journal inode number */
@@ -130,7 +128,7 @@ Ext2RecoverJournal(
 
     /* initialzation succeeds ? */
     if (!journal) {
-        DbgPrint("jbd2_journal_init_inode failed\n");
+        DEBUG(DL_ERR, ( "jbd2_journal_init_inode failed\n"));
         iput(ji);
         rc = -8;
         goto errorout;
@@ -141,8 +139,8 @@ Ext2RecoverJournal(
 		rc = jbd2_journal_load(journal);
 
         if (0 != rc) {
-            DbgPrint("Ext2Fsd: recover_journal: failed "
-                 "to recover journal data. rc=%d\n", rc);
+            DEBUG(DL_ERR, ( "Ext2Fsd: recover_journal: failed "
+                 "to recover journal data. rc=%d\n", rc));
             rc = -9;
             //goto errorout;
         }
@@ -179,8 +177,6 @@ errorout:
     }
 
     ExReleaseResourceLite(&Vcb->MainResource);
-
-    DbgPrint("Ext2RecoverJournal end\n");
 
     return rc;
 }
