@@ -14,6 +14,19 @@ About
     Bo Branten <bosse@acc.umu.se>
 
 
+Test
+----
+
+    To test this driver follow these steps:
+    1. Install the current version from http://ext2fsd.com also mirrored at http://www.acc.umu.se/~bosse.
+    2. Copy the new driver over the old in \windows\system32\drivers. Precompiled drivers for 32-bit and
+    64-bit Windows is available at http://www.acc.umu.se/~bosse.
+    3. Reboot.
+    Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
+    blocknumbers from Windows.
+    (sorry I can not sign drivers so you need to turn of Windows checking for that during testing.
+
+
 Introduction
 ------------
 
