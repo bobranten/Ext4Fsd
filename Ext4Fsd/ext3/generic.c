@@ -1025,10 +1025,10 @@ Again:
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto errorout;
         }
-        ext4_group_desc_csum_set(sb, Group, gd);
         ext4_init_block_bitmap(sb, bh, Group, gd);
         set_buffer_uptodate(bh);
         gd->bg_flags &= cpu_to_le16(~EXT4_BG_BLOCK_UNINIT);
+        ext4_block_bitmap_csum_set(sb, Group, gd, bh);
         Ext2SaveGroup(IrpContext, Vcb, Group);
     } else {
         bh = sb_getblk(sb, bitmap_blk);
@@ -1084,6 +1084,7 @@ Again:
 
                 /* no blocks found: set bg_free_blocks_count to 0 */
                 ext4_free_blks_set(sb, gd, 0);
+                ext4_block_bitmap_csum_set(sb, Group, gd, bh);
                 Ext2SaveGroup(IrpContext, Vcb, Group);
 
                 /* will try next group */
@@ -1550,7 +1551,6 @@ repeat:
         set_buffer_uptodate(bh);
         gd->bg_flags &= cpu_to_le16(~EXT4_BG_INODE_UNINIT);
         ext4_inode_bitmap_csum_set(sb, Group, gd, bh, EXT4_INODES_PER_GROUP(sb) / 8);
-        ext4_group_desc_csum_set(sb, Group, gd);
         Ext2SaveGroup(IrpContext, Vcb, Group);
     } else {
         bh = sb_getblk(sb, bitmap_blk);
@@ -1649,10 +1649,8 @@ repeat:
                 /* recheck and clear flag under lock if we still need to */
                 block_bitmap_bh = sb_getblk_zero(sb, ext4_block_bitmap(sb, gd));
                 if (block_bitmap_bh) {
-                    ext4_block_bitmap_csum_set(sb, Group, gd,
-						   block_bitmap_bh);
-                    ext4_group_desc_csum_set(sb, Group, gd);
                     free = ext4_init_block_bitmap(sb, block_bitmap_bh, Group, gd);
+                    ext4_block_bitmap_csum_set(sb, Group, gd, block_bitmap_bh);
                     set_buffer_uptodate(block_bitmap_bh);
                     brelse(block_bitmap_bh);
                     gd->bg_flags &= cpu_to_le16(~EXT4_BG_BLOCK_UNINIT);
@@ -1669,7 +1667,6 @@ repeat:
             ext4_used_dirs_set(sb, gd, ext4_used_dirs_count(sb, gd) + 1);
         }
         ext4_inode_bitmap_csum_set(sb, Group, gd, bh, EXT4_INODES_PER_GROUP(sb) / 8);
-        ext4_group_desc_csum_set(sb, Group, gd);
         Ext2SaveGroup(IrpContext, Vcb, Group);
         Ext2UpdateVcbStat(IrpContext, Vcb);
         Status = STATUS_SUCCESS;
@@ -1822,7 +1819,6 @@ Ext2FreeInode(
                                ext4_used_dirs_count(sb, gd) - 1);
         }
         ext4_inode_bitmap_csum_set(sb, Group, gd, bh, EXT4_INODES_PER_GROUP(sb) / 8);
-        ext4_group_desc_csum_set(sb, Group, gd);
         Ext2SaveGroup(IrpContext, Vcb, Group);
         Ext2UpdateVcbStat(IrpContext, Vcb);
         Status = STATUS_SUCCESS;
@@ -3027,10 +3023,6 @@ int ext4_check_descriptors(struct super_block *sb)
         if (!ext4_group_desc_csum_verify(sb, i, gdp)) {
             printk(KERN_ERR "EXT4-fs: ext4_check_descriptors: "
                    "Checksum for group %u failed.\n", i);
-            if (!IsVcbReadOnly(Vcb)) {
-                //__brelse(bh);
-                //return 0;
-            }
         }
 
         if (!flexbg_flag)

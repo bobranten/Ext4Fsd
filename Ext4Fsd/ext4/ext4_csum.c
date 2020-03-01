@@ -250,7 +250,7 @@ static __le16 ext4_group_desc_csum(struct super_block *sb, __u32 block_group,
 int ext4_group_desc_csum_verify(struct super_block *sb, __u32 block_group,
 				struct ext4_group_desc *gdp)
 {
-	if (!ext4_has_feature_metadata_csum(sb))
+	if (!ext4_has_group_desc_csum(sb))
 		return 1;
 
     return gdp->bg_checksum == ext4_group_desc_csum(sb, block_group, gdp);
