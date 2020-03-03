@@ -437,7 +437,6 @@ void ext4_inode_csum_set(struct inode *inode, struct ext4_inode *raw,
 	if (EXT4_INODE_SIZE(inode->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
 	    offsetof(struct ext4_inode, i_checksum_hi) + sizeof(raw->i_checksum_hi) <= EXT4_GOOD_OLD_INODE_SIZE + raw->i_extra_isize)
 		raw->i_checksum_hi = cpu_to_le16(csum >> 16);
-    ext4_inode_csum_verify(inode, raw, unused);
 }
 
 /*

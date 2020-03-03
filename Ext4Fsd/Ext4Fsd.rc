@@ -19,8 +19,8 @@
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,69,11,1
- PRODUCTVERSION 0,69,11,1
+ FILEVERSION 0,70,0,0
+ PRODUCTVERSION 0,70,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -37,15 +37,15 @@ BEGIN
         BEGIN
             VALUE "Comments", "Matt Wu <matt@ext2fsd.com>\0"
             VALUE "CompanyName", "www.ext2fsd.com\0"
-            VALUE "FileDescription", "Ext2 File System Driver for Windows\0"
-            VALUE "FileVersion", "0.69.11.1\0"
+            VALUE "FileDescription", "Ext4 File System Driver for Windows\0"
+            VALUE "FileVersion", "0.70.0.0\0"
             VALUE "InternalName", "Ext2Fsd.sys\0"
             VALUE "LegalCopyright", "GPLv2\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Ext2Fsd.sys\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "Ext2 File System Driver\0"
-            VALUE "ProductVersion", "0.69.11.1\0"
+            VALUE "ProductName", "Ext4 File System Driver\0"
+            VALUE "ProductVersion", "0.70.0.0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
