@@ -507,7 +507,7 @@ void Ext2Log(DWORD ll, char *fn, int ln, char *format, ... )
         GetLocalTime(&st);
         sprintf_s(s, 256, "%2.2u:%2.2u:%2.2u (%x): ", st.wHour,
                   st.wMinute, st.wSecond, GetCurrentThreadId());
-        i = strlen(s);
+        i = (int)strlen(s);
     }
 
     /* write user message to buffer s */

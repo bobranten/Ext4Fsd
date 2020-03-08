@@ -136,7 +136,7 @@ errorout:
 TCHAR *
 Ext2StrStr(TCHAR *s, TCHAR *t)
 {
-    int ls = _tcslen(s), lt = _tcslen(t), i;
+    int ls = (int)_tcslen(s), lt = (int)_tcslen(t), i;
     for (i = 0; i + lt <= ls; i++) {
         if (0 == _tcsnicmp(&s[i], t, lt))
             return &s[i];
@@ -159,7 +159,7 @@ TCHAR * Ext2BuildUsrCMD(TCHAR *task)
     if (p)
         *p = 0;
 
-    len = (int)_tcslen(cmd) + 10 + _tcslen(task);
+    len = (int)_tcslen(cmd) + 10 + (int)_tcslen(task);
     refresh = new TCHAR[len];
     if (!refresh)
         goto errorout;

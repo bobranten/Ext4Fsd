@@ -1328,7 +1328,7 @@ Ext2Open(
     memset(UnicodeName, 0, sizeof(SHORT) * MAX_PATH);
     memset(AnsiName, 0, sizeof(UCHAR) * MAX_PATH);
 
-    NameLength = strlen(FileName);
+    NameLength = (USHORT)strlen(FileName);
     ASSERT(NameLength < MAX_PATH);
 
     if (FileName[0] == '\\')  {
@@ -4500,7 +4500,7 @@ Ext2AnsiToUnicode(
 
     memset(UniName, 0, sizeof(WCHAR) * UniLength);
 
-    NameLength = strlen(AnsiName);
+    NameLength = (USHORT)strlen(AnsiName);
     ASSERT(NameLength < UniLength);
 
     AnsiFilespec.MaximumLength = AnsiFilespec.Length = NameLength;

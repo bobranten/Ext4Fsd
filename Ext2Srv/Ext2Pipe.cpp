@@ -231,7 +231,7 @@ BOOLEAN Ext2QueryDrive(PPIPE_REQ *pr, ULONG len)
         rc = QueryDosDeviceA(devPath, s, l);
         if (rc) {
             q->result = 1;
-            p->len = sizeof(PIPE_REQ) + sizeof(REQ_QUERY_DRV) + strlen(s) + 1;
+            p->len = (int)(sizeof(PIPE_REQ) + sizeof(REQ_QUERY_DRV) + strlen(s) + 1);
         } else {
             q->result = 0;
         }
