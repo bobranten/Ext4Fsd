@@ -65,7 +65,7 @@ bool CMyHyperLink::GoToLinkUrl(CString csLink)
 
 	HINSTANCE hInstance = (HINSTANCE)ShellExecute(NULL, _T("open"), csLink.operator LPCTSTR(), NULL, NULL, 2);
 
-	if ((UINT)hInstance < HINSTANCE_ERROR){
+	if ((UINT_PTR)hInstance < HINSTANCE_ERROR){
 		return false;
 	}else
 		return true;

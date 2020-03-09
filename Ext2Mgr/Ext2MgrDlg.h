@@ -154,7 +154,7 @@ protected:
 	virtual BOOL OnInitDialog();
     virtual void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-    afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD dwData);
+    afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
 	afx_msg void OnDestroy();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
@@ -185,7 +185,7 @@ protected:
 	afx_msg void OnRemoveService();
     afx_msg void OnEnableAutorun(); 
     afx_msg void OnDisableAutorun();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnDrvLetter();
 	afx_msg void OnDrvQuickMount();
 	afx_msg void OnShowMain();

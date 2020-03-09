@@ -48,7 +48,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnExt2fsd();
 	afx_msg void OnDonate();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -176,7 +176,7 @@ void CAboutDlg::OnDonate()
 	GetParent()->SendMessage(WM_COMMAND, ID_DONATE);
 }
 
-void CAboutDlg::OnTimer(UINT nIDEvent) 
+void CAboutDlg::OnTimer(UINT_PTR nIDEvent) 
 {
 	// TODO: Add your message handler code here and/or call default
 	
@@ -597,7 +597,7 @@ void CExt2MgrDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-BOOL CExt2MgrDlg::OnDeviceChange(UINT nEventType, DWORD dwData)
+BOOL CExt2MgrDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
 {
     PDEV_BROADCAST_HDR lpdb = (PDEV_BROADCAST_HDR)dwData;
     PDEV_BROADCAST_DEVICEINTERFACE pdbch = (PDEV_BROADCAST_DEVICEINTERFACE)dwData;
@@ -1643,7 +1643,7 @@ void CExt2MgrDlg::OnCopyAll()
     }
 }
 
-void CExt2MgrDlg::OnTimer(UINT nIDEvent) 
+void CExt2MgrDlg::OnTimer(UINT_PTR nIDEvent) 
 {
 	// TODO: Add your message handler code here and/or call default
 
@@ -2115,7 +2115,7 @@ void CExt2MgrDlg::OnPartType()
         if (PartType.m_cPartType) {
 
             for (int i=0; i < m_DiskView.GetItemCount(); i++) {
-                if ((ULONG)part == m_DiskView.GetItemData(i)) {
+                if ((ULONG_PTR)part == m_DiskView.GetItemData(i)) {
                     Ext2RefreshDVPT(&m_DiskView, part, i);
                     break;
                 }

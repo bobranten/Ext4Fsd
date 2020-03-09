@@ -219,7 +219,7 @@ errorout:
     return;
 }
 
-void CPerfStatDlg::OnTimer(UINT nIDEvent) 
+void CPerfStatDlg::OnTimer(UINT_PTR nIDEvent) 
 {
     RefreshPerfStat();
 	

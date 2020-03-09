@@ -206,7 +206,7 @@ BOOL Ext2DefineDosDevicePipe(DWORD flags,  CHAR *dos,  CHAR *symlink)
         q->drive = (UCHAR)toupper(dos[0]);
         q->flags = flags;
         strcpy(&q->name[0], symlink);
-        p->len += strlen(symlink) + 1;
+        p->len += (int)strlen(symlink) + 1;
 
         rc = Ext2PipeControl(&p, &len);
         if (!rc) {
@@ -235,7 +235,7 @@ BOOL Ext2DefineDosDevicePipe(DWORD flags,  CHAR *dos,  CHAR *symlink)
         q->drive = (UCHAR)toupper(dos[0]);
         q->flags = flags;
         strcpy(&q->name[0], symlink);
-        p->len += strlen(symlink) + 1;
+        p->len += (int)strlen(symlink) + 1;
 
         rc = Ext2PipeControl(&p, &len);
         if ( !rc) {
@@ -460,7 +460,7 @@ errorout:
 
 TCHAR *Ext2StrLastA(TCHAR *t, TCHAR *s)
 {
-    int lt = strlen(t), ls = strlen(s), i;
+    int lt = (int)strlen(t), ls = (int)strlen(s), i;
 
     for (i = lt - ls; i >= 0; i--) {
         if (0 == _strnicmp(&t[i], s, ls))
@@ -506,7 +506,7 @@ errorout:
 
 WCHAR *Ext2StrLastW(WCHAR *t, WCHAR *s)
 {
-    int lt = wcslen(t), ls = wcslen(s), i;
+    int lt = (int)wcslen(t), ls = (int)wcslen(s), i;
 
     for (i = lt - ls; i >= 0; i--) {
         if (0 == _wcsnicmp(&t[i], s, ls))

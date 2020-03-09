@@ -214,7 +214,7 @@ void CTreeList::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
             rcText.bottom += 1;
             rcText.top = rcText.bottom - 6 + lf.lfHeight;
 
-            ::DrawText(lpDrawItemStruct->hDC, lpBuffer, strlen(lpBuffer), 
+            ::DrawText(lpDrawItemStruct->hDC, lpBuffer, (int)strlen(lpBuffer), 
                               &rcText, DT_LEFT) ;
 
             CRect rect = lpDrawItemStruct->rcItem;
@@ -263,7 +263,7 @@ void CTreeList::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
             lvi.cchTextMax = sizeof(lpBuffer);
             GetItem(&lvi);
    
-            ::DrawText(lpDrawItemStruct->hDC, lpBuffer, strlen(lpBuffer), 
+            ::DrawText(lpDrawItemStruct->hDC, lpBuffer, (int)strlen(lpBuffer), 
                               &rcText, uFormat) ;
 
             if (nCol == 0) {

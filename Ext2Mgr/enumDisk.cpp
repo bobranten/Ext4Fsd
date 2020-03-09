@@ -2803,7 +2803,7 @@ Ext2SetGlobalProperty (
                             0,
                             REG_SZ,
                             (BYTE *)Codepage,
-                            strlen(Codepage));
+                            (int)strlen(Codepage));
 
     /* set hiding filter patterns */
     status = RegSetValueEx( hKey,
@@ -2811,14 +2811,14 @@ Ext2SetGlobalProperty (
                             0,
                             REG_SZ,
                             (BYTE *)sPrefix,
-                            strlen(sPrefix));
+                            (int)strlen(sPrefix));
 
     status = RegSetValueEx( hKey,
                             "HidingSuffix",
                             0,
                             REG_SZ,
                             (BYTE *)sSuffix,
-                            strlen(sSuffix));
+                            (int)strlen(sSuffix));
 
     RegCloseKey(hKey);
 
@@ -4382,7 +4382,7 @@ Ext2SetRegistryMountPoint (
                     hKey, drvPath,
                     0, REG_SZ,
                     (BYTE *)devName,
-                    strlen(devName)
+                    (int)strlen(devName)
                     );
     } else {
         /* delete key */
@@ -5056,7 +5056,7 @@ Ext2SetAppAutorunXP(BOOL bInstall)
         }
     } else {
         status = RegSetValueEx( key, EXT2_MANAGER_NAME, 0, REG_SZ, 
-                                   (BYTE *)appPath, strlen(appPath));
+                                   (BYTE *)appPath, (int)strlen(appPath));
         if (status != ERROR_SUCCESS) {
             goto errorout;
         }
@@ -5127,7 +5127,7 @@ BOOL Ext2SetAutoRunUserList(CHAR *userList)
     }
 
     status = RegSetValueEx( key, "AutorunUsers", 0, REG_SZ, 
-                            (BYTE *)userList, strlen(userList));
+                            (BYTE *)userList, (int)strlen(userList));
     if (status != ERROR_SUCCESS) {
         goto errorout;
     }
@@ -5142,7 +5142,7 @@ errorout:
 TCHAR *
 Ext2StrStr(TCHAR *s, TCHAR *t)
 {
-    int ls = _tcslen(s), lt = _tcslen(t), i;
+    int ls = (int)_tcslen(s), lt = (int)_tcslen(t), i;
     for (i = 0; i + lt <= ls; i++) {
         if (0 == _tcsnicmp(&s[i], t, lt))
             return &s[i];

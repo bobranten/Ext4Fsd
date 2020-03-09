@@ -127,7 +127,7 @@ void WINAPI ManagerCtrlService(DWORD ctrlcode)
 VOID __cdecl
 ManagerStartMain(VOID * arg)
 {
-    BOOL isService = (BOOL) arg;
+    BOOL isService = arg != 0;
     CExt2MgrDlg* dlg = (CExt2MgrDlg*)theApp.m_pMainWnd;
 
     if (dlg) {
