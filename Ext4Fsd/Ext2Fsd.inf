@@ -16,14 +16,7 @@ InfVersion  = "01.03.00"
 Provider    = %Ext2Fsd*Author%
 Signature   = "$Windows NT$"
 DriverVer   = 03/04/2020,0.70
-CatalogFile = Ext4Fsd.cat
-
-;[ClassInstall32]
-;AddReg     = Ext2Fsd.Install.ClassReg
-
-;[Ext2Fsd.Install.ClassReg]
-;HKR,,,%REG_SZ%,"%Ext2Fsd*Class%"
-;HKR,,"Icon",%REG_SZ%,"-5"
+CatalogFile = Ext2Fsd.cat
 
 [DefaultInstall.NTx86]
 AddReg     = Ext2Fsd.Install.AddReg
@@ -125,7 +118,7 @@ HKR,,"TypesSupported",%REG_DWORD%,7
 [SourceDisksFiles]
 ; <filename> = <disk or cabinet number>,[<subdirectory>],[<filename>],[<size>],[<checksum>]
 ; Note: <filename> is neither on a disk nor in a cabinet if <disk or ;cabinet number> is 0
-Ext4Fsd.sys   = 1, "."
+Ext2Fsd.sys   = 1, "."
 
 [DestinationDirs]
 Ext2Fsd.CopyFiles.Drv.NTx86 = 12   ; %SystemRoot%\System32\Drivers
@@ -138,28 +131,28 @@ Ext2Fsd.CopyFiles.Drv.NTarm64 = 12   ; %SystemRoot%\System32\Drivers
 Ext2Fsd.DeleteFiles.Drv.NTarm64 = 12   ; %SystemRoot%\System32\Drivers
 
 [Ext2Fsd.CopyFiles.Drv.NTx86]
-Ext4Fsd.sys,,,%COPYFLG_NOPRUNE%
+Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
 [Ext2Fsd.DeleteFiles.Drv.NTx86]
-Ext4Fsd.sys,,,%DELFLG_IN_USE%
+Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTamd64]
-Ext4Fsd.sys,,,%COPYFLG_NOPRUNE%
+Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
 [Ext2Fsd.DeleteFiles.Drv.NTamd64]
-Ext4Fsd.sys,,,%DELFLG_IN_USE%
+Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTarm]
-Ext4Fsd.sys,,,%COPYFLG_NOPRUNE%
+Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
 [Ext2Fsd.DeleteFiles.Drv.NTarm]
-Ext4Fsd.sys,,,%DELFLG_IN_USE%
+Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTarm64]
-Ext4Fsd.sys,,,%COPYFLG_NOPRUNE%
+Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
 [Ext2Fsd.DeleteFiles.Drv.NTarm64]
-Ext4Fsd.sys,,,%DELFLG_IN_USE%
+Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Strings]
 Ext2Fsd*Author      = "Matt Wu"

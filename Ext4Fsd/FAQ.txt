@@ -3,7 +3,7 @@
 ================
 
 -------------------------------------------------------------------------
-Q) What systems could Ext2Fsd 0.51 support
+Q) What systems could Ext2Fsd 0.53 support
 
 A) Windows 2000, xp, 2003, Vista, Win7 (X86, AMD64)
    Windows NT 4.0 is no longer supported.
@@ -12,9 +12,9 @@ A) Windows 2000, xp, 2003, Vista, Win7 (X86, AMD64)
    Win7 AMD64/X86, Vista AMD64, XP pro X86, Win2k SP4
 
 -------------------------------------------------------------------------
-Q) How to install ext2fsd version 0.51
+Q) How to install ext2fsd version 0.53
 
-A) Just click the file of ext2fsd-0.51.exe. It will guide you for all.
+A) Just click the file of ext2fsd-0.53.exe. It will guide you for all.
    and writing on ext3 partition:
 
    Senior users can try the setup.bat or registry manually editing.
@@ -167,10 +167,9 @@ A) Add a parameter "/quiet" in command when executing Ext2Mgr, like
 -------------------------------------------------------------------------
 Q) How to build Ext2Fsd package ?
 
-A) You need Winddk (sold by Microsoft) and use the gnu ntifs.h header file.
-   But you have the ifskit if you want building for X86_64 systems. Then
-   you just select a build environment (such as windows 2003 free), and
-   then execute "build" under the root directory of Ext2Fsd source code.
+A) You need downlaod WDK (provided by Microsoft), then select a build
+   environment (such as Win7 X64 free), then execute "build" under
+   the root directory of Ext3Fsd source code.
 
 
 Matt <mattwu@163.com>

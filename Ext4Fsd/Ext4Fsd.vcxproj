@@ -121,49 +121,57 @@
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x86\</OutDir>
     <IntDir>$(ConfigurationName)\x86\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x86\</OutDir>
     <IntDir>$(ConfigurationName)\x86\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x64\</OutDir>
     <IntDir>$(ConfigurationName)\x64\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\x64\</OutDir>
     <IntDir>$(ConfigurationName)\x64\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\arm\</OutDir>
     <IntDir>$(ConfigurationName)\arm\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\arm\</OutDir>
     <IntDir>$(ConfigurationName)\arm\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\arm64\</OutDir>
     <IntDir>$(ConfigurationName)\arm64\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(SolutionDir)Ext4Fsd\$(ConfigurationName)\arm64\</OutDir>
     <IntDir>$(ConfigurationName)\arm64\</IntDir>
-    <TargetName>Ext4Fsd</TargetName>
+    <TargetName>Ext2Fsd</TargetName>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -334,6 +342,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ext4Fsd.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="Ext2Fsd.inf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
