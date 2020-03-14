@@ -1,9 +1,9 @@
-; Ext4Fsd.INF
+; Ext2Fsd.INF
 ;
 ; Setup information file for the Windows ext2,ext3,ext4 filesystem driver.
 ;
 ; Project: http://ext2fsd.sourceforge.net
-; Ext2Fsd author:  Matt Wu <mattwu@163.com>.
+; Ext2Fsd author:  Matt Wu <mattwu@163.com>
 ; Inf author: Stefan Kanthak <skanthak@nexgo.de>
 ; Updated for Windows 10: Bo Brantén <bosse@acc.umu.se>
 ;
@@ -21,50 +21,56 @@ CatalogFile = Ext2Fsd.cat
 [DefaultInstall.NTx86]
 AddReg     = Ext2Fsd.Install.AddReg
 CopyFiles  = Ext2Fsd.CopyFiles.Drv.NTx86
-CopyINF = "Ext4Fsd.inf"
+CopyINF = "Ext2Fsd.inf"
 
 [DefaultInstall.NTamd64]
 AddReg     = Ext2Fsd.Install.AddReg
 CopyFiles  = Ext2Fsd.CopyFiles.Drv.NTamd64
-CopyINF = "Ext4Fsd.inf"
+CopyINF = "Ext2Fsd.inf"
 
 [DefaultInstall.NTarm]
 AddReg     = Ext2Fsd.Install.AddReg
 CopyFiles  = Ext2Fsd.CopyFiles.Drv.NTarm
-CopyINF = "Ext4Fsd.inf"
+CopyINF = "Ext2Fsd.inf"
 
 [DefaultInstall.NTarm64]
 AddReg     = Ext2Fsd.Install.AddReg
 CopyFiles  = Ext2Fsd.CopyFiles.Drv.NTarm64
-CopyINF = "Ext4Fsd.inf"
+CopyINF = "Ext2Fsd.inf"
 
-[DefaultInstall.Services]
+[DefaultInstall.NTx86.Services]
 AddService = "%Ext2Fsd*Key%",%SVCINST_TAGTOFRONT%,Ext2Fsd.Service,Ext2Fsd.EventLog
 
 [DefaultInstall.NTamd64.Services]
 AddService = "%Ext2Fsd*Key%",%SVCINST_TAGTOFRONT%,Ext2Fsd.Service,Ext2Fsd.EventLog
 
+[DefaultInstall.NTarm.Services]
+AddService = "%Ext2Fsd*Key%",%SVCINST_TAGTOFRONT%,Ext2Fsd.Service,Ext2Fsd.EventLog
+
+[DefaultInstall.NTarm64.Services]
+AddService = "%Ext2Fsd*Key%",%SVCINST_TAGTOFRONT%,Ext2Fsd.Service,Ext2Fsd.EventLog
+
 [DefaultUninstall.NTx86]
 LegacyUninstall=1
-DelFiles   = Ext2Fsd.DeleteFiles.Drv.NTx86
+DelFiles   = Ext2Fsd.DelFiles.Drv.NTx86
 DelReg     = Ext2Fsd.Remove.DelReg
 Reboot
 
 [DefaultUninstall.NTamd64]
 LegacyUninstall=1
-DelFiles   = Ext2Fsd.DeleteFiles.Drv.NTamd64
+DelFiles   = Ext2Fsd.DelFiles.Drv.NTamd64
 DelReg     = Ext2Fsd.Remove.DelReg
 Reboot
 
 [DefaultUninstall.NTarm]
 LegacyUninstall=1
-DelFiles   = Ext2Fsd.DeleteFiles.Drv.NTarm
+DelFiles   = Ext2Fsd.DelFiles.Drv.NTarm
 DelReg     = Ext2Fsd.Remove.DelReg
 Reboot
 
 [DefaultUninstall.NTarm64]
 LegacyUninstall=1
-DelFiles   = Ext2Fsd.DeleteFiles.Drv.NTarm64
+DelFiles   = Ext2Fsd.DelFiles.Drv.NTarm64
 DelReg     = Ext2Fsd.Remove.DelReg
 Reboot
 
@@ -72,6 +78,12 @@ Reboot
 DelService = "%Ext2Fsd*Key%",%SVCINST_DELETEEVENTLOGENTRY%
 
 [DefaultUninstall.NTamd64.Services]
+DelService = "%Ext2Fsd*Key%",%SVCINST_DELETEEVENTLOGENTRY%
+
+[DefaultUninstall.NTarm.Services]
+DelService = "%Ext2Fsd*Key%",%SVCINST_DELETEEVENTLOGENTRY%
+
+[DefaultUninstall.NTarm64.Services]
 DelService = "%Ext2Fsd*Key%",%SVCINST_DELETEEVENTLOGENTRY%
 
 [Ext2Fsd.Install.AddReg]
@@ -89,7 +101,7 @@ HKR,"Software\Microsoft\Windows\CurrentVersion\Uninstall\%Ext2Fsd*Key%"
 HKR,"System\CurrentControlSet\Services\%Ext2Fsd*Key%\Parameters"
 
 [Ext2Fsd.Service]
-DisplayName    = "%Ext2Fsd*Driver%"
+DisplayName    = "%Ext2Fsd*Description%"
 ServiceType    = %SERVICE_KERNEL_FILESYSTEM_DRIVER%
 StartType      = %SERVICE_SYSTEM_START%
 ErrorControl   = %SERVICE_ERROR_NORMAL%
@@ -122,43 +134,42 @@ Ext2Fsd.sys   = 1, "."
 
 [DestinationDirs]
 Ext2Fsd.CopyFiles.Drv.NTx86 = 12   ; %SystemRoot%\System32\Drivers
-Ext2Fsd.DeleteFiles.Drv.NTx86 = 12   ; %SystemRoot%\System32\Drivers
+Ext2Fsd.DelFiles.Drv.NTx86 = 12   ; %SystemRoot%\System32\Drivers
 Ext2Fsd.CopyFiles.Drv.NTamd64 = 12   ; %SystemRoot%\System32\Drivers
-Ext2Fsd.DeleteFiles.Drv.NTamd64 = 12   ; %SystemRoot%\System32\Drivers
+Ext2Fsd.DelFiles.Drv.NTamd64 = 12   ; %SystemRoot%\System32\Drivers
 Ext2Fsd.CopyFiles.Drv.NTarm = 12   ; %SystemRoot%\System32\Drivers
-Ext2Fsd.DeleteFiles.Drv.NTarm = 12   ; %SystemRoot%\System32\Drivers
+Ext2Fsd.DelFiles.Drv.NTarm = 12   ; %SystemRoot%\System32\Drivers
 Ext2Fsd.CopyFiles.Drv.NTarm64 = 12   ; %SystemRoot%\System32\Drivers
-Ext2Fsd.DeleteFiles.Drv.NTarm64 = 12   ; %SystemRoot%\System32\Drivers
+Ext2Fsd.DelFiles.Drv.NTarm64 = 12   ; %SystemRoot%\System32\Drivers
 
 [Ext2Fsd.CopyFiles.Drv.NTx86]
 Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
-[Ext2Fsd.DeleteFiles.Drv.NTx86]
+[Ext2Fsd.DelFiles.Drv.NTx86]
 Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTamd64]
 Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
-[Ext2Fsd.DeleteFiles.Drv.NTamd64]
+[Ext2Fsd.DelFiles.Drv.NTamd64]
 Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTarm]
 Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
-[Ext2Fsd.DeleteFiles.Drv.NTarm]
+[Ext2Fsd.DelFiles.Drv.NTarm]
 Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Ext2Fsd.CopyFiles.Drv.NTarm64]
 Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 
-[Ext2Fsd.DeleteFiles.Drv.NTarm64]
+[Ext2Fsd.DelFiles.Drv.NTarm64]
 Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Strings]
 Ext2Fsd*Author      = "Matt Wu"
 Ext2Fsd*Class       = "File System"
 Ext2Fsd*Description = "Ext2,Ext3,Ext4 file system driver"
-Ext2Fsd*Driver      = "Ext2,Ext3,Ext4 file system driver"
 Ext2Fsd*eMail       = "matt@ext2fsd.com"
 Ext2Fsd*Key         = "Ext2Fsd"
 Ext2Fsd*URL         = "http://www.ext2fsd.com"
