@@ -34,8 +34,8 @@ OutFile "${PROJECTNAME}-setup.exe"
 !define MSVPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x64\Microsoft.VC142.CRT"
 !define MFCPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x86\Microsoft.VC142.MFC"
 !define MFCPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x64\Microsoft.VC142.MFC"
-!define MFCDLL "mfc140.dll"
-!define VCDLL "vcruntime140.dll"
+!define MFCDLL "mfc140"
+!define VCDLL "vcruntime140"
 
 ; the paths to the binaries when compiled with an older WDK to support Windows XP - Windows 8.1.
 ; (remember to sign or testsign the driver files before packing the installation program)
@@ -49,8 +49,8 @@ OutFile "${PROJECTNAME}-setup.exe"
 ;!define MSVPATH_X64 "c:\windows\syswow64" ; "c:\windows\sysnative"
 ;!define MFCPATH_X86 "c:\windows\syswow64"
 ;!define MFCPATH_X64 "c:\windows\syswow64" ; "c:\windows\sysnative"
-;!define MFCDLL "mfc42.dll"
-;!define VCDLL "msvcrt.dll"
+;!define MFCDLL "mfc42"
+;!define VCDLL "msvcrt"
 ; note that when building the installation program on a 64-bit system
 ; the 32-bit system dll's will be in the "\windows\syswow64" directory while
 ; the 64-bit system dll's will be in the "\windows\system32" directory and
@@ -84,8 +84,8 @@ SetOutPath $INSTDIR
 ; select the files.
 IfFileExists $WINDIR\SysWOW64\*.* 0 else
     ; 64-bit.
-    File "${MSVPATH_X64}\${VCDLL}"
-    File "${MFCPATH_X64}\${MFCDLL}"
+    File "${MSVPATH_X64}\${VCDLL}.dll"
+    File "${MFCPATH_X64}\${MFCDLL}.dll"
     File "${MGRPATH_X64}\Ext2Mgr.exe"
     File "${SRVPATH_X64}\Ext2Srv.exe"
     File "${SYSPATH_X64}\${DRIVERNAME}.pdb"
@@ -93,8 +93,8 @@ IfFileExists $WINDIR\SysWOW64\*.* 0 else
     Goto endif
 else:
     ; 32-bit.
-    File "${MSVPATH_X86}\${VCDLL}"
-    File "${MFCPATH_X86}\${MFCDLL}"
+    File "${MSVPATH_X86}\${VCDLL}.dll"
+    File "${MFCPATH_X86}\${MFCDLL}.dll"
     File "${MGRPATH_X86}\Ext2Mgr.exe"
     File "${SRVPATH_X86}\Ext2Srv.exe"
     File "${SYSPATH_X86}\${DRIVERNAME}.pdb"
