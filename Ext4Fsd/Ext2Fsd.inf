@@ -160,8 +160,7 @@ Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Strings]
 Ext2Fsd*Author      = "Matt Wu"
-Ext2Fsd*Class       = "File System"
-Ext2Fsd*Description = "Ext2,Ext3,Ext4 file system driver"
+Ext2Fsd*Description = "Ext2,Ext3,Ext4 filesystem driver"
 Ext2Fsd*eMail       = "matt@ext2fsd.com"
 Ext2Fsd*Key         = "Ext2Fsd"
 Ext2Fsd*URL         = "http://www.ext2fsd.com"

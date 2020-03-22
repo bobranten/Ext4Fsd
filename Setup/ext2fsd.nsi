@@ -13,7 +13,7 @@
 ;  ext2, ext3 and ext4 filesystems)
 ;
 Unicode true
-Name "Ext2,Ext3,Ext4 file system driver"
+Name "Ext2,Ext3,Ext4 filesystem driver"
 !define PROJECTNAME "Ext2Fsd"
 !define DRIVERNAME "Ext2Fsd"
 Icon "..\Ext2Mgr\res\Ext2Mgr.ico"
@@ -30,12 +30,13 @@ OutFile "${PROJECTNAME}-setup.exe"
 !define SRVPATH_X64 "..\Ext2Srv\Release\x64"
 !define SYSPATH_X86 "..\Ext4Fsd\Release\x86"
 !define SYSPATH_X64 "..\Ext4Fsd\Release\x64"
-!define MSVPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x86\Microsoft.VC142.CRT"
-!define MSVPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x64\Microsoft.VC142.CRT"
-!define MFCPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x86\Microsoft.VC142.MFC"
-!define MFCPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.24.28127\x64\Microsoft.VC142.MFC"
+!define MSVPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.25.28508\x86\Microsoft.VC142.CRT"
+!define MSVPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.25.28508\x64\Microsoft.VC142.CRT"
+!define MFCPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.25.28508\x86\Microsoft.VC142.MFC"
+!define MFCPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.25.28508\x64\Microsoft.VC142.MFC"
+!define VCDLL_X86 "vcruntime140"
+!define VCDLL_X64 "vcruntime140_1"
 !define MFCDLL "mfc140"
-!define VCDLL "vcruntime140"
 
 ; the paths to the binaries when compiled with an older WDK to support Windows XP - Windows 8.1.
 ; (remember to sign or testsign the driver files before packing the installation program)
@@ -49,8 +50,9 @@ OutFile "${PROJECTNAME}-setup.exe"
 ;!define MSVPATH_X64 "c:\windows\syswow64" ; "c:\windows\sysnative"
 ;!define MFCPATH_X86 "c:\windows\syswow64"
 ;!define MFCPATH_X64 "c:\windows\syswow64" ; "c:\windows\sysnative"
+;!define VCDLL_X86 "msvcrt"
+;!define VCDLL_X64 "msvcrt"
 ;!define MFCDLL "mfc42"
-;!define VCDLL "msvcrt"
 ; note that when building the installation program on a 64-bit system
 ; the 32-bit system dll's will be in the "\windows\syswow64" directory while
 ; the 64-bit system dll's will be in the "\windows\system32" directory and
@@ -84,7 +86,7 @@ SetOutPath $INSTDIR
 ; select the files.
 IfFileExists $WINDIR\SysWOW64\*.* 0 else
     ; 64-bit.
-    File "${MSVPATH_X64}\${VCDLL}.dll"
+    File "${MSVPATH_X64}\${VCDLL_X64}.dll"
     File "${MFCPATH_X64}\${MFCDLL}.dll"
     File "${MGRPATH_X64}\Ext2Mgr.exe"
     File "${SRVPATH_X64}\Ext2Srv.exe"
@@ -93,7 +95,7 @@ IfFileExists $WINDIR\SysWOW64\*.* 0 else
     Goto endif
 else:
     ; 32-bit.
-    File "${MSVPATH_X86}\${VCDLL}.dll"
+    File "${MSVPATH_X86}\${VCDLL_X86}.dll"
     File "${MFCPATH_X86}\${MFCDLL}.dll"
     File "${MGRPATH_X86}\Ext2Mgr.exe"
     File "${SRVPATH_X86}\Ext2Srv.exe"
@@ -110,12 +112,16 @@ File "..\ext4fsd\notes.txt"
 File "..\ext4fsd\readme.txt"
 
 ; install the driver.
-CopyFiles $INSTDIR\${DRIVERNAME}.sys $SYSDIR\drivers\${DRIVERNAME}.sys
-ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultInstall 132 $INSTDIR\${DRIVERNAME}.inf'
+IfFileExists $WINDIR\SysWOW64\*.* 0 else32
+    ExecWait '"$WINDIR\sysnative\rundll32.exe" setupapi.dll,InstallHinfSection DefaultInstall 132 $INSTDIR\${DRIVERNAME}.inf'
+    Goto endif32
+else32:
+    ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultInstall 132 $INSTDIR\${DRIVERNAME}.inf'
+endif32:
 
 ; create the uninstaller.
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROJECTNAME}" \
-            "DisplayName" "Ext2,Ext3,Ext4 file system driver"
+            "DisplayName" "Ext2,Ext3,Ext4 filesystem driver"
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROJECTNAME}" \
             "UninstallString" '"$INSTDIR\Uninstall.exe"'
 WriteUninstaller "Uninstall.exe"
@@ -130,8 +136,8 @@ createShortCut "$SMPROGRAMS\${PROJECTNAME}\Documents\FAQ.lnk" "$INSTDIR\Document
 createShortCut "$SMPROGRAMS\${PROJECTNAME}\Documents\Release notes.lnk" "$INSTDIR\Documents\notes.txt" "" "" "" SW_SHOWNORMAL "" "Release notes"
 createShortCut "$SMPROGRAMS\${PROJECTNAME}\Documents\README.lnk" "$INSTDIR\Documents\readme.txt" "" "" "" SW_SHOWNORMAL "" "README"
 
-; try to start the driver but a reboot may be needed if an old driver
-; was already loaded or if Windows check for signing was not disabled.
+; install Ext2Srv and start the driver.
+ExecWait '"$INSTDIR\Ext2Srv.exe" /installasservice'
 ExecWait '"net.exe" start ${DRIVERNAME}'
 SectionEnd
 
@@ -153,13 +159,19 @@ FunctionEnd
 Section "Uninstall"
 SetShellVarContext all
 
-; stop Ext2Srv and delete the reg key.
+; stop and uninstall Ext2Srv.
 ExecWait '"net.exe" stop ext2srv'
-DeleteRegKey HKLM "System\CurrentControlSet\Services\Ext2Srv"
+ExecWait '"$INSTDIR\Ext2Srv.exe" /removeservice'
 
 ; uninstall the driver.
-ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultUninstall 132 $INSTDIR\${DRIVERNAME}.inf'
-Delete $SYSDIR\drivers\${DRIVERNAME}.sys
+IfFileExists $WINDIR\SysWOW64\*.* 0 else
+    ExecWait '"$WINDIR\sysnative\rundll32.exe" setupapi.dll,InstallHinfSection DefaultUninstall 132 $INSTDIR\${DRIVERNAME}.inf'
+    Delete $INSTDIR\${VCDLL_X64}.dll"
+    Goto endif
+else:
+    ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultUninstall 132 $INSTDIR\${DRIVERNAME}.inf'
+    Delete $INSTDIR\${VCDLL_X86}.dll"
+endif:
 
 ; delete the start menu items.
 Delete "$SMPROGRAMS\${PROJECTNAME}\Documents\COPYRIGHT.lnk"
@@ -181,10 +193,8 @@ Delete $INSTDIR\${DRIVERNAME}.inf
 Delete $INSTDIR\${DRIVERNAME}.pdb
 Delete $INSTDIR\${DRIVERNAME}.sys
 Delete $INSTDIR\${MFCDLL}.dll"
-Delete $INSTDIR\${VCDLL}.dll"
 Delete $INSTDIR\Ext2Mgr.exe"
 Delete $INSTDIR\Ext2Srv.exe"
-
 Delete $INSTDIR\Uninstall.exe
 
 RMDir $INSTDIR\Documents

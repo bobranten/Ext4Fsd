@@ -14,7 +14,7 @@ ULONG g_nVols     = 0;
 EXT2_LETTER drvLetters[26];
 EXT2_LETTER drvDigits[10];
 
-ULONGLONG Ext2DrvLetters[2] = {-1, -1};
+ULONGLONG Ext2DrvLetters[2] = {(ULONGLONG)-1, (ULONGLONG)-1};
 
 PEXT2_DISK      gDisks  = NULL;
 PEXT2_CDROM     gCdroms = NULL;
