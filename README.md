@@ -5,8 +5,7 @@ About
     This is a branch of the Ext2Fsd project by Matt Wu where I try to implement support for metadata
     checksums and jbd2. I have also updated the project so it can be compiled with Visual Studio 2017
     and Visual Studio 2019. This is work in progress. If you need a stable driver you should get the
-    latest official release from http://www.ext2fsd.com. If you want to try this branch you should
-    still install the oficial release and then copy this driver over the old in \windows\system32\drivers.
+    latest official release from http://www.ext2fsd.com.
     The current status of the development is that all metadata checksums is implemented and jbd2 is
     ported to support 64-bit blocknumbers.
     The driver is now ready to be tested!
@@ -17,14 +16,16 @@ About
 Test
 ----
 
-    To test this driver follow these steps:
-    1. Install the current version from http://ext2fsd.com also mirrored at http://www.acc.umu.se/~bosse.
-    2. Copy the new driver over the old in \windows\system32\drivers. Precompiled drivers for 32-bit and
-    64-bit Windows is available at http://www.acc.umu.se/~bosse.
-    3. Reboot.
+    To test this driver run one of the installation programs:
+    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b1-setup-w10.exe for Windows 10.
+    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b1-setup-xp.exe for Windows XP - Windows 8.1.
+    If you compile the driver yourself you only need to run the installation program once, then you can
+    copy your driver over the old in \windows\system32\drivers.
     Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
     blocknumbers from Windows.
-    (sorry I can not sign drivers so you need to turn of Windows checking for that during testing.
+    (sorry I can not sign drivers so you need to turn of Windows checking for that during testing)
+    official site: http://www.ext2fsd.com/
+    my site: http://www.acc.umu.se/~bosse/
 
 
 Introduction
