@@ -17,7 +17,7 @@ Test
 ----
 
     To test this driver run one of the installation programs:
-    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b1-setup-w10.exe for Windows 10.
+    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b2-setup.exe for Windows 10.
     http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b1-setup-xp.exe for Windows XP - Windows 8.1.
     If you compile the driver yourself you only need to run the installation program once, then you can
     copy your driver over the old in \windows\system32\drivers.
