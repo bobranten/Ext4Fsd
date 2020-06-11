@@ -466,7 +466,11 @@ END
 // RCDATA
 //
 
+#ifdef _WIN64
+IDR_RCDAT_SRV           RCDATA                  "..\\Ext2Srv\\Release\\X64\\Ext2Srv.exe"
+#else
 IDR_RCDAT_SRV           RCDATA                  "..\\Ext2Srv\\Release\\X86\\Ext2Srv.exe"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //
