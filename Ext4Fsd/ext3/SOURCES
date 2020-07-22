@@ -5,9 +5,9 @@
 
 # Name and type of the output file:
 MAJORCOMP=ext2fsd
-MINORCOMP=ext4
+MINORCOMP=ext3
 
-TARGETNAME=ext4
+TARGETNAME=ext3
 TARGETTYPE=LIBRARY
 TARGETPATH=..\$(DDK_TARGET_OS)\$(DDKBUILDENV)\
 
@@ -25,5 +25,4 @@ DRIVERTYPE=FS
 INCLUDES=.;..;..\include;$(DRIVER_INC_PATH);
 
 # The source code:
-SOURCES= ext4_bh.c ext4_csum.c ext4_extents.c ext4_jbd2.c ext4_xattr.c \
-         extents.c
+SOURCES= generic.c htree.c recover.c indirect.c
