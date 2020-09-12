@@ -359,7 +359,6 @@ Ext2QueryFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             // The "inode number"
             FileInternalInformation->IndexNumber.QuadPart = (LONGLONG)Mcb->Inode.i_ino;
 
-            // Romfs doesn't have any extended attributes
             FileEaInformation->EaSize = 0;
 
             FilePositionInformation->CurrentByteOffset =
@@ -397,9 +396,6 @@ Ext2QueryFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
         case FileAlternateNameInformation:
         {
             // TODO: Handle FileAlternateNameInformation
-
-            // Here we would like to use RtlGenerate8dot3Name but I don't
-            // know how to use the argument PGENERATE_NAME_CONTEXT
         }
         */
 
