@@ -279,7 +279,7 @@ typedef struct journal_superblock_s
 #ifdef __KERNEL__
 
 #include <linux/fs.h>
-#include <linux/sched.h>
+//#include <linux/sched.h>
 
 #define J_ASSERT  ASSERT
 
