@@ -3,7 +3,7 @@ TARGETPATH=obj
 TARGETTYPE=PROGRAM
 UMTYPE=windows
 
-INCLUDES=.;.\Libraries\;$(INCLUDES)
+INCLUDES=.;.\inc\;$(INCLUDES)
 TARGETLIBS=$(DDK_LIB_PATH)\WtsApi32.lib \
            $(DDK_LIB_PATH)\shell32.lib
 USE_MSVCRT=1
