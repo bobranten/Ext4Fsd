@@ -17,7 +17,7 @@
 #ifdef CONFIG_KMOD
 #include <linux/kmod.h>
 #endif
-#include <linux/spinlock.h>
+//#include <linux/spinlock.h>
 
 struct nls_table *tables;
 spinlock_t nls_lock;

@@ -336,7 +336,7 @@ typedef struct journal_superblock_s
 #ifdef __KERNEL__
 
 #include <linux/fs.h>
-#include <linux/sched.h>
+//#include <linux/sched.h>
 
 enum jbd_state_bits {
 	BH_JBD			/* Has an attached ext3 journal_head */
