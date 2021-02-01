@@ -144,7 +144,7 @@ static __be32 jbd2_superblock_csum(journal_t *j, journal_superblock_t *sb)
 
 static int jbd2_superblock_csum_verify(journal_t *j, journal_superblock_t *sb)
 {
-	if (!jbd2_journal_has_csum_v2or3(j))
+	if (!jbd2_journal_has_csum_v2or3_feature(j))
 		return 1;
 
 	return sb->s_checksum == jbd2_superblock_csum(j, sb);
@@ -152,7 +152,7 @@ static int jbd2_superblock_csum_verify(journal_t *j, journal_superblock_t *sb)
 
 static void jbd2_superblock_csum_set(journal_t *j, journal_superblock_t *sb)
 {
-	if (!jbd2_journal_has_csum_v2or3(j))
+	if (!jbd2_journal_has_csum_v2or3_feature(j))
 		return;
 
 	sb->s_checksum = jbd2_superblock_csum(j, sb);
@@ -1609,6 +1609,7 @@ static int journal_get_superblock(journal_t *journal)
 	/* Check superblock checksum */
 	if (!jbd2_superblock_csum_verify(journal, sb)) {
 		printk(KERN_ERR "JBD2: journal checksum error\n");
+		DbgPrint("JBD2: journal checksum error\n");
 		err = -EFSBADCRC;
 		goto out;
 	}
@@ -1767,21 +1768,19 @@ int jbd2_journal_destroy(journal_t *journal)
 	spin_unlock(&journal->j_list_lock);
 #endif
 	if (journal->j_sb_buffer) {
-#if 0
 		if (!is_journal_aborted(journal)) {
-			mutex_lock_io(&journal->j_checkpoint_mutex);
+			//mutex_lock_io(&journal->j_checkpoint_mutex);
 
-			write_lock(&journal->j_state_lock);
+			//write_lock(&journal->j_state_lock);
 			journal->j_tail_sequence =
 				++journal->j_transaction_sequence;
-			write_unlock(&journal->j_state_lock);
+			//write_unlock(&journal->j_state_lock);
 
 			jbd2_mark_journal_empty(journal,
-					REQ_SYNC | REQ_PREFLUSH | REQ_FUA);
-			mutex_unlock(&journal->j_checkpoint_mutex);
+					0/*REQ_SYNC | REQ_PREFLUSH | REQ_FUA*/);
+			//mutex_unlock(&journal->j_checkpoint_mutex);
 		} else
 			err = -EIO;
-#endif
 		brelse(journal->j_sb_buffer);
 	}
 
