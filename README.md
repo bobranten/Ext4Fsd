@@ -17,8 +17,8 @@ Test
 ----
 
     To test this driver run one of the installation programs:
-    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b2-setup.exe for Windows 8 - Windows 10.
-    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b1-setup-xp.exe for Windows XP - Windows 7.
+    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3w10-setup.exe for Windows 8 - Windows 10.
+    http://www.acc.umu.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3xp-setup.exe for Windows XP - Windows 7.
     If you compile the driver yourself you only need to run the installation program once, then you can
     copy your driver file over the old in \windows\system32\drivers.
     Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
@@ -31,7 +31,7 @@ Test
 Introduction
 ------------
 
-    Ext3Fsd is an ext2/3/4 file system driver for Windows (2K/2003/XP/7/8/10).
+    Ext4Fsd is an ext2/3/4 file system driver for Windows (XP/Vista/7/8/10).
     It's a free and open-source software, everyone can modify or distribute under GNU GPLv2.
 
     
@@ -54,7 +54,7 @@ Active Developers
                  http://www.acc.umu.se/~bosse
 
 
-Supported Features by Ext3Fsd
+Supported Features by Ext4Fsd
 -----------------------------
 
     1, flexible inode size: > 128 bytes, up to block size
