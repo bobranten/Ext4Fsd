@@ -17,6 +17,7 @@ Provider    = %Ext2Fsd*Author%
 Signature   = "$Windows NT$"
 DriverVer   = 03/04/2020,0.70
 CatalogFile = Ext2Fsd.cat
+PnpLockdown = 1
 
 [DefaultInstall.NTx86]
 AddReg     = Ext2Fsd.Install.AddReg
