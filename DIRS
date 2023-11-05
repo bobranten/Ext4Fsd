@@ -1,1 +1,1 @@
-DIRS=Ext2Srv Ext4Fsd
+DIRS=Ext2Srv Ext4Fsd Ext2Manager
