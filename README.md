@@ -30,7 +30,7 @@ Test
 Introduction
 ------------
 
-    Ext4Fsd is an ext2/3/4 file system driver for Windows (XP/Vista/7/8/10).
+    Ext4Fsd is an ext2/3/4 file system driver for Windows (XP/Vista/7/8/10/11).
     It's a free and open-source software, everyone can modify or distribute under GNU GPLv2.
 
     
