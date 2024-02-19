@@ -459,7 +459,7 @@ struct dentry *Ext2BuildEntry(PEXT2_VCB Vcb, PEXT2_MCB Dcb, PUNICODE_STRING File
             de->d_parent = Dcb->de;
 
         Oem.MaximumLength = (USHORT)Ext2UnicodeToOEMSize(Vcb, FileName) + 1;
-        Oem.Buffer = ExAllocatePool(PagedPool, Oem.MaximumLength);
+        Oem.Buffer = Ext2AllocatePool(PagedPool, Oem.MaximumLength, 'EB2E');
         if (!Oem.Buffer) {
             DEBUG(DL_ERR, ( "Ex2BuildEntry: failed to allocate OEM name.\n"));
             __leave;

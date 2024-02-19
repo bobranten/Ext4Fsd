@@ -2601,7 +2601,7 @@ Ext2CheckDismount (
     BOOLEAN bDeleted = FALSE, bTearDown = FALSE;
     ULONG   UnCleanCount = 0;
 
-    NewVpb = ExAllocatePoolWithTag(NonPagedPool, VPB_SIZE, TAG_VPB);
+    NewVpb = Ext2AllocatePool(NonPagedPool, VPB_SIZE, TAG_VPB);
     if (NewVpb == NULL) {
         DEBUG(DL_ERR, ( "Ex2CheckDismount: failed to allocate NewVpb.\n"));
         return FALSE;

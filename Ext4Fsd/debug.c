@@ -2687,8 +2687,17 @@ Ext2AllocatePool(
     IN ULONG Tag
 )
 {
-    return ExAllocatePoolWithTag(
-               PoolType,
+    POOL_FLAGS PoolFlags;
+
+    if (PoolType == PagedPool)
+        PoolFlags = POOL_FLAG_PAGED;
+    else if (PoolType == NonPagedPool)
+        PoolFlags = POOL_FLAG_NON_PAGED;
+    else
+        PoolFlags = 0;
+
+    return ExAllocatePool2(
+               PoolFlags,
                NumberOfBytes,
                Tag);
 }
