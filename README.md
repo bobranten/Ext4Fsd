@@ -12,6 +12,14 @@ About
     Bo Branten <bosse@accum.se>
 
 
+Signed for Win11?
+-----------------
+
+    Help me test a signed version for Windows 11:
+    Install program: https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
+    Driver file to upgrade: https://www.accum.se/~bosse/ext2fsd/0.70/ext2fsd.sys
+
+
 Test
 ----
 
