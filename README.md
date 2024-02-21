@@ -1,10 +1,16 @@
 
+New
+---
+
+    Signed driver for Windows 11: https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
+
+
 About
 -----
 
     This is a branch of the Ext2Fsd project by Matt Wu where I try to implement support for metadata
-    checksums and jbd2. I have also updated the project so it can be compiled with Visual Studio 2017
-    and Visual Studio 2019.
+    checksums and jbd2. I have also updated the project so it can be compiled with Visual Studio 2019
+    and Visual Studio 2022.
     The current status of the development is that all metadata checksums is implemented and jbd2 is
     ported to support 64-bit blocknumbers.
     The driver is now ready to be tested!
@@ -12,18 +18,11 @@ About
     Bo Branten <bosse@accum.se>
 
 
-Signed for Win11?
------------------
-
-    Help me test a signed version for Windows 11:
-    Install program: https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
-    Driver file to upgrade: https://www.accum.se/~bosse/ext2fsd/0.70/ext2fsd.sys
-
-
 Test
 ----
 
     To test this driver run one of the installation programs:
+    Signed driver for Windows 11: https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
     http://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3w10-setup.exe for Windows 8 - Windows 10.
     http://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3xp-setup.exe for Windows XP - Windows 7.
     If you compile the driver yourself you only need to run the installation program once, then you can
@@ -31,7 +30,6 @@ Test
     Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
     blocknumbers from Windows.
     (sorry I can not sign drivers so you need to turn of Windows checking for that during testing)
-    official site: http://www.ext2fsd.com/
     my site: http://www.accum.se/~bosse/
 
 
@@ -42,7 +40,7 @@ Introduction
     It's a free and open-source software, everyone can modify or distribute under GNU GPLv2.
 
     
-Development Website
+Old Development Website
 -------------------
 
     Matt Wu <mattwu@163.com>
