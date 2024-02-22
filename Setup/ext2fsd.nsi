@@ -17,8 +17,8 @@ Name "Ext2,Ext3,Ext4 filesystem driver"
 !define PROJECTNAME "Ext2Fsd"
 !define DRIVERNAME "Ext2Fsd"
 Icon "..\Ext2Mgr\res\Ext2Mgr.ico"
-Caption "${PROJECTNAME} 0.70 beta"
-DirText "This is a beta release of the ${PROJECTNAME} project from Bo Brantén to test the new ext4 features metadata checksums and 64-bit block numbers. You may choose the install directory:"
+Caption "${PROJECTNAME} 0.70"
+DirText "This is a release of the ${PROJECTNAME} project from Bo Brantén to test the new ext4 features metadata checksums and 64-bit block numbers. You may choose the install directory:"
 InstallDir "$PROGRAMFILES\${PROJECTNAME}"
 OutFile "${PROJECTNAME}-setup.exe"
 
@@ -30,10 +30,10 @@ OutFile "${PROJECTNAME}-setup.exe"
 !define SRVPATH_X64 "..\Ext2Srv\Release\x64"
 !define SYSPATH_X86 "..\Ext4Fsd\Release\x86"
 !define SYSPATH_X64 "..\Ext4Fsd\Release\x64"
-!define MSVPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\x86\Microsoft.VC142.CRT"
-!define MSVPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\x64\Microsoft.VC142.CRT"
-!define MFCPATH_X86 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\x86\Microsoft.VC142.MFC"
-!define MFCPATH_X64 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\x64\Microsoft.VC142.MFC"
+!define MSVPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x86\Microsoft.VC143.CRT"
+!define MSVPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x64\Microsoft.VC143.CRT"
+!define MFCPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x86\Microsoft.VC143.MFC"
+!define MFCPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x64\Microsoft.VC143.MFC"
 !define VCDLL_X86 "vcruntime140"
 !define VCDLL_X64 "vcruntime140_1"
 !define MFCDLL "mfc140"
@@ -90,7 +90,7 @@ IfFileExists $WINDIR\SysWOW64\*.* 0 else
     File "${MFCPATH_X64}\${MFCDLL}.dll"
     File "${MGRPATH_X64}\Ext2Mgr.exe"
     File "${SRVPATH_X64}\Ext2Srv.exe"
-    File "${SYSPATH_X64}\${DRIVERNAME}.pdb"
+;    File "${SYSPATH_X64}\${DRIVERNAME}.pdb"
     File "${SYSPATH_X64}\${DRIVERNAME}.sys"
     Goto endif
 else:
@@ -99,7 +99,7 @@ else:
     File "${MFCPATH_X86}\${MFCDLL}.dll"
     File "${MGRPATH_X86}\Ext2Mgr.exe"
     File "${SRVPATH_X86}\Ext2Srv.exe"
-    File "${SYSPATH_X86}\${DRIVERNAME}.pdb"
+;    File "${SYSPATH_X86}\${DRIVERNAME}.pdb"
     File "${SYSPATH_X86}\${DRIVERNAME}.sys"
 endif:
 
@@ -190,7 +190,7 @@ Delete $INSTDIR\Documents\notes.txt"
 Delete $INSTDIR\Documents\readme.txt"
 
 Delete $INSTDIR\${DRIVERNAME}.inf
-Delete $INSTDIR\${DRIVERNAME}.pdb
+;Delete $INSTDIR\${DRIVERNAME}.pdb
 Delete $INSTDIR\${DRIVERNAME}.sys
 Delete $INSTDIR\${MFCDLL}.dll"
 Delete $INSTDIR\Ext2Mgr.exe"
