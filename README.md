@@ -4,6 +4,8 @@ New
 
     Signed driver for Windows 11:
     https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
+    Signed driver for Windows 10:
+    https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win10.exe
 
 
 About
@@ -25,16 +27,20 @@ Test
     To test this driver run one of the installation programs:
     Signed driver for Windows 11:
     https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win11.exe
+    Signed driver for Windows 10:
+    https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-setup-signed-win10.exe
+    Signed driver files for manual install: (even ARM/ARM64)
+    https://www.accum.se/~bosse/ext2fsd/0.70/signed/
+    Unsigned driver for older Windows:
     For Windows 8 - Windows 10:
-    http://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3w10-setup.exe
+    https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3w10-setup.exe
     For Windows XP - Windows 7:
-    http://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3xp-setup.exe
+    https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3xp-setup.exe
 
     If you compile the driver yourself you only need to run the installation program once, then you can
     copy your driver file over the old in \windows\system32\drivers.
     Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
     blocknumbers from Windows.
-    (sorry I can not sign drivers so you need to turn of Windows checking for that during testing)
     my site: http://www.accum.se/~bosse/
 
 
