@@ -11,11 +11,12 @@ New
 About
 -----
 
-    This is a branch of the Ext2Fsd project by Matt Wu where I try to implement support for metadata
-    checksums and jbd2. I have also updated the project so it can be compiled with Visual Studio 2019
+    This is a branch of the Ext2Fsd project by Matt Wu where I try to
+    implement support for metadata checksums and jbd2. I have also
+    updated the project so it can be compiled with Visual Studio 2019
     and Visual Studio 2022.
-    The current status of the development is that all metadata checksums is implemented and jbd2 is
-    ported to support 64-bit blocknumbers.
+    The current status of the development is that all metadata checksums
+    is implemented and jbd2 is ported to support 64-bit blocknumbers.
     The driver is now ready to be tested!
     This work is dedicated to my mother Berit Ingegerd Branten.
     Bo Branten <bosse@accum.se>
@@ -37,10 +38,11 @@ Test
     For Windows XP - Windows 7:
     https://www.accum.se/~bosse/ext2fsd/0.70/Ext2Fsd-0.70b3xp-setup.exe
 
-    If you compile the driver yourself you only need to run the installation program once, then you can
-    copy your driver file over the old in \windows\system32\drivers.
-    Now you can read and write ext4 filesystems using the new features metadata checksums and 64-bit
-    blocknumbers from Windows.
+    If you compile the driver yourself you only need to run the installation
+    program once, then you can copy your driver file over the old in
+    \windows\system32\drivers.
+    Now you can read and write ext4 filesystems using the new features
+    metadata checksums and 64-bit blocknumbers from Windows.
     my site: http://www.accum.se/~bosse/
 
 
@@ -48,7 +50,8 @@ Introduction
 ------------
 
     Ext4Fsd is an ext2/3/4 file system driver for Windows (XP/Vista/7/8/10/11).
-    It's a free and open-source software, everyone can modify or distribute under GNU GPLv2.
+    It's a free and open-source software, everyone can modify or distribute
+    under GNU GPLv2.
 
     
 Old Development Website
