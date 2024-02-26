@@ -12,10 +12,10 @@
 [Version]
 Class       = ExtendedFileSystem
 ClassGuid   = {19290421-C680-482C-9068-E87D5FE49CA4}
-InfVersion  = "01.03.00"
+InfVersion  = "01.04.00"
 Provider    = %Ext2Fsd*Author%
 Signature   = "$Windows NT$"
-DriverVer   = 03/04/2020,0.70
+DriverVer   = 02/26/2024,0.71
 CatalogFile = Ext2Fsd.cat
 PnpLockdown = 1
 
@@ -160,12 +160,12 @@ Ext2Fsd.sys,,,%COPYFLG_NOPRUNE%
 Ext2Fsd.sys,,,%DELFLG_IN_USE%
 
 [Strings]
-Ext2Fsd*Author      = "Matt Wu"
+Ext2Fsd*Author      = "Bo Branten"
 Ext2Fsd*Description = "Ext2,Ext3,Ext4 filesystem driver"
-Ext2Fsd*eMail       = "matt@ext2fsd.com"
+Ext2Fsd*eMail       = "bosse@accum.se"
 Ext2Fsd*Key         = "Ext2Fsd"
-Ext2Fsd*URL         = "http://www.ext2fsd.com"
-Ext2Fsd*Version     = "0.70"
+Ext2Fsd*URL         = "http://www.accum.se/~bosse"
+Ext2Fsd*Version     = "0.71"
 
 ; Non-Localizable Strings
 DELFLG_IN_USE   = 0x00000001
