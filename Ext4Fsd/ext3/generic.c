@@ -1025,6 +1025,7 @@ Again:
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto errorout;
         }
+        ext4_group_desc_csum_set(&Vcb->sb, Group, gd);
         ext4_init_block_bitmap(sb, bh, Group, gd);
         set_buffer_uptodate(bh);
         gd->bg_flags &= cpu_to_le16(~EXT4_BG_BLOCK_UNINIT);
@@ -1547,6 +1548,7 @@ repeat:
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto errorout;
         }
+        ext4_group_desc_csum_set(&Vcb->sb, Group, gd);
         ext4_init_inode_bitmap(sb, bh, Group, gd);
         set_buffer_uptodate(bh);
         gd->bg_flags &= cpu_to_le16(~EXT4_BG_INODE_UNINIT);
@@ -1592,6 +1594,7 @@ repeat:
         RtlZeroMemory(&InodeBitmap, sizeof(RTL_BITMAP));
         if (ext4_free_inodes_count(sb, gd) > 0) {
             ext4_free_inodes_set(sb, gd, 0);
+            ext4_inode_bitmap_csum_set(sb, Group, gd, bh, EXT4_INODES_PER_GROUP(sb) / 8);
             Ext2SaveGroup(IrpContext, Vcb, Group);
         }
         goto repeat;
@@ -1649,6 +1652,7 @@ repeat:
                 /* recheck and clear flag under lock if we still need to */
                 block_bitmap_bh = sb_getblk_zero(sb, ext4_block_bitmap(sb, gd));
                 if (block_bitmap_bh) {
+                    ext4_group_desc_csum_set(&Vcb->sb, Group, gd);
                     free = ext4_init_block_bitmap(sb, block_bitmap_bh, Group, gd);
                     ext4_block_bitmap_csum_set(sb, Group, gd, block_bitmap_bh);
                     set_buffer_uptodate(block_bitmap_bh);
