@@ -72,6 +72,9 @@ Active Developers
     Bo Branten : http://github.com/bobranten
                  http://www.accum.se/~bosse
 
+    Thanks to Olof Lagerkvist https://github.com/LTRData
+    for important help to this project!
+
 
 Supported Features by Ext4Fsd
 -----------------------------
