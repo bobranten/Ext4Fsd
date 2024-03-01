@@ -1,0 +1,50 @@
+
+; DUMMY.INF
+; Dummy inf file.
+
+[Version]
+signature = "$Windows NT$"
+Class = SCSIAdapter
+ClassGUID = {4D36E97B-E325-11CE-BFC1-08002BE10318}
+Provider = "LTR Data"
+DriverVer = 02/22/2024,12.51.57.866
+CatalogFile = ext2fsd_dummy.cat
+
+
+[SourceDisksNames]
+1 = "EXT4 File System Driver"
+
+
+[SourceDisksFiles.x86]
+ext2fsd.sys = 1, x86
+
+[SourceDisksFiles.amd64]
+ext2fsd.sys = 1, x64
+
+[SourceDisksFiles.arm]
+ext2fsd.sys = 1, arm
+
+[SourceDisksFiles.arm64]
+ext2fsd.sys = 1, arm64
+
+[DestinationDirs]
+ext2fsdSysFiles = 12
+ 
+
+[DefaultInstall.ntx86]
+CopyFiles = ext2fsdSysFiles
+
+
+[ext2fsdSysFiles]
+ext2fsd.sys
+
+[DefaultInstall.ntx86.Services]
+AddService = ext2fsd, , ext2fsdDrv
+
+
+[ext2fsdDrv]
+DisplayName = "EXT4 File System Driver"
+StartType = 1
+ServiceType = 2
+ErrorControl = 0
+ServiceBinary = %12%\ext2fsd.sys
