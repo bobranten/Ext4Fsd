@@ -61,23 +61,30 @@ extern "C" {
 
 #else
 
+#ifndef RtlUshortByteSwap
 USHORT
 FASTCALL
 RtlUshortByteSwap(
     IN USHORT Source
 );
+#endif
 
+#ifndef RtlUlongByteSwap
 ULONG
 FASTCALL
 RtlUlongByteSwap(
     IN ULONG Source
 );
+#endif
 
+#ifndef RtlUlonglongByteSwap
 ULONGLONG
 FASTCALL
 RtlUlonglongByteSwap(
     IN ULONGLONG Source
 );
+#endif
+
 #endif
 
 #define __swab16(x) RtlUshortByteSwap(x)

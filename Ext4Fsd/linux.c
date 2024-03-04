@@ -1006,6 +1006,8 @@ int _strnicmp(const char* str1, const char* str2, size_t count)
 	return (int)c1 - (int)c2;
 }
 
+#if !defined(_M_ARM64) && !defined(_M_ARM)
+
 int strncmp(const char* str1, const char* str2, size_t count)
 {
 	unsigned char c1, c2;
@@ -1034,6 +1036,8 @@ char* strncpy(char* dest, const char* src, size_t count)
 	}
 	return dest;
 }
+
+#endif
 
 #endif
 

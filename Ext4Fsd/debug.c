@@ -12,6 +12,8 @@
 #include "stdarg.h"
 #include "ext2fs.h"
 
+#include <wdm.h>
+
 /* GLOBALS ***************************************************************/
 
 #if EXT2_DEBUG
