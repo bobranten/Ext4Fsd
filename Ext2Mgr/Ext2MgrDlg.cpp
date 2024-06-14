@@ -134,6 +134,10 @@ BOOL CAboutDlg::OnInitDialog()
     // Set the Tooltiptext
     // m_lMail.SetTootTipText("Write a mail to Ext2Fsd group.");
 
+    // Disable the "Donate" dialog because the information is outdated.
+    CWnd* donate = GetDlgItem(ID_DONATE);
+    if (donate) donate->EnableWindow(false);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -166,7 +170,7 @@ void CAboutDlg::OnExt2fsd()
 {
 	// TODO: Add your control notification handler code here
     ShellExecute(this->GetSafeHwnd(), "open", 
-                 "http://www.ext2fsd.com", 
+                 "http://github.com/bobranten/Ext4Fsd/", 
                  NULL, NULL, SW_SHOW );	
 }
 
@@ -544,6 +548,11 @@ BOOL CExt2MgrDlg::OnInitDialog()
             pSubFile->EnableMenuItem(ID_ENABLE_AUTOSTART, MF_BYCOMMAND|MF_ENABLED);
             pSubFile->EnableMenuItem(ID_DISABLE_AUTOSTART, MF_BYCOMMAND|MF_GRAYED|MF_DISABLED);
         }
+    }
+    // Disable the "Donate" dialog because the information is outdated.
+    CMenu* pSubHelp = pMenu->GetSubMenu(3);
+    if (pSubHelp) {
+        pSubHelp->EnableMenuItem(ID_DONATE, MF_BYCOMMAND | MF_GRAYED | MF_DISABLED);
     }
 
     m_Menu.CreatePopupMenu();
