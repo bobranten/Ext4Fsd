@@ -212,7 +212,6 @@
     <ClInclude Include="Donate.h" />
     <ClInclude Include="enumDisk.h" />
     <ClInclude Include="Ext2Attribute.h" />
-    <ClInclude Include="ext2fs.h" />
     <ClInclude Include="Ext2Mgr.h" />
     <ClInclude Include="Ext2MgrDlg.h" />
     <ClInclude Include="HyperLink.h" />
@@ -227,10 +226,11 @@
     <ClInclude Include="ServiceManage.h" />
     <ClInclude Include="Splash.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="super.h" />
+    <ClInclude Include="swap.h" />
     <ClInclude Include="SysTray.h" />
     <ClInclude Include="toolbar.h" />
     <ClInclude Include="TreeList.h" />
-    <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ext2Mgr.rc" />

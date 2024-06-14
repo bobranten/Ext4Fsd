@@ -2128,7 +2128,7 @@ Ext2QueryVolumeFS(
     PEXT2_VOLUME    volume
     )
 {
-    struct ext2_super_block *sb = NULL;
+    struct ext4_super_block *sb = NULL;
 	union swap_header*	swap = NULL;
     PUCHAR  buffer = NULL;
 
@@ -2141,7 +2141,7 @@ Ext2QueryVolumeFS(
     }
 
     swap = (union swap_header*)&buffer[SWAP_HEADER_OFFSET];
-    sb = (struct ext2_super_block *)&buffer[SUPER_BLOCK_OFFSET];
+    sb = (struct ext4_super_block *)&buffer[SUPER_BLOCK_OFFSET];
 
     status = Ext2Read( Handle, FALSE, volume->FssInfo.BytesPerSector, 
                        (ULONGLONG)0,PAGE_SIZE, (PUCHAR) buffer);
@@ -2151,17 +2151,26 @@ Ext2QueryVolumeFS(
         return FALSE;
     }
 
-    if (sb->s_magic == EXT2_SUPER_MAGIC) {
+    if (sb->s_magic == EXT4_SUPER_MAGIC) {
 
         volume->FsaInfo.FileSystemNameLength = 8;
         volume->FsaInfo.FileSystemName[0] = (WCHAR)'E';
         volume->FsaInfo.FileSystemName[1] = (WCHAR)'X';
         volume->FsaInfo.FileSystemName[2] = (WCHAR)'T';
         volume->FsaInfo.FileSystemName[4] = 0;
-        
-        if ((sb->s_feature_incompat & EXT3_FEATURE_INCOMPAT_JOURNAL_DEV) ||
-            (sb->s_feature_incompat & EXT3_FEATURE_INCOMPAT_RECOVER) ||
-            (sb->s_feature_compat & EXT3_FEATURE_COMPAT_HAS_JOURNAL) ) {
+
+        if (sb->s_feature_incompat & EXT4_FEATURE_INCOMPAT_EXTENTS) {
+            volume->FsaInfo.FileSystemName[3] = (WCHAR)'4';
+            volume->EVP.bExt3 = TRUE;
+            // Add a "+" after the filesystem name, e.g "EXT4+", if the ondisk filesystem
+            // contains features not yet supported by the Windows driver.
+            if (sb->s_feature_incompat & ~EXT4_FEATURE_INCOMPAT_SUPP) {
+                volume->FsaInfo.FileSystemName[4] = (WCHAR)'+';
+                volume->FsaInfo.FileSystemNameLength += 2;
+            }
+        } else if ((sb->s_feature_incompat & EXT4_FEATURE_INCOMPAT_JOURNAL_DEV) ||
+            (sb->s_feature_incompat & EXT4_FEATURE_INCOMPAT_RECOVER) ||
+            (sb->s_feature_compat & EXT4_FEATURE_COMPAT_HAS_JOURNAL)) {
             volume->FsaInfo.FileSystemName[3] = (WCHAR)'3';
             volume->EVP.bExt3 = TRUE;
         } else {

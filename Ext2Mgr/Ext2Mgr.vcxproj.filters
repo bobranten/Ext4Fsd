@@ -101,9 +101,6 @@
     <ClInclude Include="Ext2Attribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ext2fs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Ext2Mgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -155,7 +152,10 @@
     <ClInclude Include="TreeList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="types.h">
+    <ClInclude Include="super.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="swap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

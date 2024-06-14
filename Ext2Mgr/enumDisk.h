@@ -9,13 +9,15 @@
 #include <regstr.h>
 #include <winsvc.h>
 #include "dbt.h"
-#include "ext2fs.h"
+#include "super.h"
+#include "swap.h"
 #include <winioctl.h>
 
 //#include <devioctl.h> 
 //#include <mountmgr.h>
 
-
+#define SUPER_BLOCK_OFFSET              (0x400)
+#define SUPER_BLOCK_SIZE                (0x400)
 
 /******************************************************************
 *                                                                 *
