@@ -22,7 +22,6 @@ extern PEXT2_GLOBAL Ext2Global;
 #pragma alloc_text(PAGE, Ext2SetVolumeInformation)
 #endif
 
-
 NTSTATUS
 Ext2QueryVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -96,7 +95,7 @@ Ext2QueryVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             }
 
             FsVolInfo = (PFILE_FS_VOLUME_INFORMATION) Buffer;
-            FsVolInfo->VolumeCreationTime.QuadPart = 0;
+            FsVolInfo->VolumeCreationTime = Ext2NtTime(Vcb->SuperBlock->s_mkfs_time);
             FsVolInfo->VolumeSerialNumber = Vcb->Vpb->SerialNumber;
             VolumeLabelLength = Vcb->Vpb->VolumeLabelLength;
             FsVolInfo->VolumeLabelLength = VolumeLabelLength;
@@ -156,10 +155,6 @@ Ext2QueryVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             FsDevInfo = (PFILE_FS_DEVICE_INFORMATION) Buffer;
             FsDevInfo->DeviceType =
                 Vcb->TargetDeviceObject->DeviceType;
-
-            if (FsDevInfo->DeviceType != FILE_DEVICE_DISK) {
-                DbgBreak();
-            }
 
             FsDevInfo->Characteristics =
                 Vcb->TargetDeviceObject->Characteristics;
@@ -231,27 +226,15 @@ Ext2QueryVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
 
             PFFFSI = (PFILE_FS_FULL_SIZE_INFORMATION) Buffer;
 
-            /*
-                            typedef struct _FILE_FS_FULL_SIZE_INFORMATION {
-                                LARGE_INTEGER   TotalAllocationUnits;
-                                LARGE_INTEGER   CallerAvailableAllocationUnits;
-                                LARGE_INTEGER   ActualAvailableAllocationUnits;
-                                ULONG           SectorsPerAllocationUnit;
-                                ULONG           BytesPerSector;
-                            } FILE_FS_FULL_SIZE_INFORMATION, *PFILE_FS_FULL_SIZE_INFORMATION;
-            */
+            PFFFSI->TotalAllocationUnits.QuadPart =
+                ext3_blocks_count(SUPER_BLOCK);
 
-            {
-                PFFFSI->TotalAllocationUnits.QuadPart =
-                    ext3_blocks_count(SUPER_BLOCK);
-
-                PFFFSI->CallerAvailableAllocationUnits.QuadPart =
-                    ext3_free_blocks_count(SUPER_BLOCK);
+            PFFFSI->CallerAvailableAllocationUnits.QuadPart =
+                ext3_free_blocks_count(SUPER_BLOCK);
 
                 /* - Vcb->SuperBlock->s_r_blocks_count; */
-                PFFFSI->ActualAvailableAllocationUnits.QuadPart =
-                    ext3_free_blocks_count(SUPER_BLOCK);
-            }
+            PFFFSI->ActualAvailableAllocationUnits.QuadPart =
+                ext3_free_blocks_count(SUPER_BLOCK);
 
             PFFFSI->SectorsPerAllocationUnit =
                 Vcb->BlockSize / Vcb->DiskGeometry.BytesPerSector;
@@ -351,7 +334,6 @@ Ext2SetVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             PFILE_FS_LABEL_INFORMATION      VolLabelInfo = NULL;
             ULONG                           VolLabelLen;
             UNICODE_STRING                  LabelName  ;
-
             OEM_STRING                      OemName;
 
             VolLabelInfo = (PFILE_FS_LABEL_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
