@@ -510,7 +510,7 @@ Ext2LoadInode (IN PEXT2_VCB Vcb,
     }
 
     if (!Ext2LoadBuffer(NULL, Vcb, offset, EXT4_INODE_SIZE(Inode->i_sb), ext4i)) {
-        ExFreePool(ext4i);
+        Ext2FreePool(ext4i, EXT2_INODE_MAGIC);
         return FALSE;
     }
 
@@ -518,7 +518,7 @@ Ext2LoadInode (IN PEXT2_VCB Vcb,
 
     ext4_inode_csum_verify(Inode, ext4i, &unused);
 
-    ExFreePool(ext4i);
+    Ext2FreePool(ext4i, EXT2_INODE_MAGIC);
 
     return TRUE;
 }
@@ -572,7 +572,7 @@ Ext2SaveInode ( IN PEXT2_IRP_CONTEXT IrpContext,
     rc = Ext2LoadBuffer(NULL, Vcb, offset, EXT4_INODE_SIZE(Inode->i_sb), ext4i);
     if (!rc) {
         DEBUG(DL_ERR, ( "Ext2SaveInode: failed reading inode %u.\n", Inode->i_ino));
-        ExFreePool(ext4i);
+        Ext2FreePool(ext4i, EXT2_INODE_MAGIC);
         goto errorout;
     }
 
@@ -586,7 +586,7 @@ Ext2SaveInode ( IN PEXT2_IRP_CONTEXT IrpContext,
         Ext2StartFloppyFlushDpc(Vcb, NULL, NULL);
     }
 
-    ExFreePool(ext4i);
+    Ext2FreePool(ext4i, EXT2_INODE_MAGIC);
 
 errorout:
     return rc;

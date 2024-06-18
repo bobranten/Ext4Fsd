@@ -622,7 +622,7 @@ Ext2IsVolumeDirty (
         IrpSp = (PEXTENDED_IO_STACK_LOCATION)IoGetCurrentIrpStackLocation(Irp);
 
         //
-        //  Get a pointer to the output buffer.  Look at the system buffer field in th
+        //  Get a pointer to the output buffer.  Look at the system buffer field in the
         //  irp first.  Then the Irp Mdl.
         //
 
@@ -2677,7 +2677,7 @@ Ext2CheckDismount (
 
     if (NewVpb != NULL) {
         DEBUG(DL_DBG, ( "Ext2CheckDismount: freeing new Vpb %p\n", NewVpb));
-        ExFreePoolWithTag(NewVpb, TAG_VPB);
+        Ext2FreePool(NewVpb, TAG_VPB);
         DEC_MEM_COUNT(PS_VPB, NewVpb, sizeof(VPB));
     }
 

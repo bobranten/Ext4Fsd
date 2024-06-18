@@ -433,7 +433,7 @@ VOID Ext2FreeEntry (IN struct dentry *de)
     ASSERT(de != NULL);
 
     if (de->d_name.name)
-        ExFreePool(de->d_name.name);
+        Ext2FreePool(de->d_name.name, 'EB2E');
 
     ExFreeToNPagedLookasideList(&(Ext2Global->Ext2DentryLookasideList), de);
     DEC_MEM_COUNT(PS_DENTRY, de, sizeof(struct dentry));
@@ -2819,7 +2819,7 @@ Ext2DestroyVcb (IN PEXT2_VCB Vcb)
     if (IsFlagOn(Vcb->Flags, VCB_NEW_VPB)) {
         ASSERT(Vcb->Vpb2 != NULL);
         DEBUG(DL_DBG, ("Ext2DestroyVcb: Vpb2 to be freed: %p\n", Vcb->Vpb2));
-        ExFreePoolWithTag(Vcb->Vpb2, TAG_VPB);
+        Ext2FreePool(Vcb->Vpb2, TAG_VPB);
         DEC_MEM_COUNT(PS_VPB, Vcb->Vpb2, sizeof(VPB));
         Vcb->Vpb2 = NULL;
     }
