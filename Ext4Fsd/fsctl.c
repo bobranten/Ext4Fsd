@@ -39,7 +39,6 @@ extern PEXT2_GLOBAL Ext2Global;
 #pragma alloc_text(PAGE, Ext2FileSystemControl)
 #endif
 
-
 VOID
 Ext2SetVpbFlag (
     IN PVPB     Vpb,
@@ -130,7 +129,6 @@ Ext2LockVcb (IN PEXT2_VCB    Vcb,
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2LockVolume (IN PEXT2_IRP_CONTEXT IrpContext)
@@ -291,7 +289,6 @@ Ext2UnlockVolume (
     return Status;
 }
 
-
 NTSTATUS
 Ext2InvalidateVolumes ( IN PEXT2_IRP_CONTEXT IrpContext )
 {
@@ -324,7 +321,6 @@ Ext2InvalidateVolumes ( IN PEXT2_IRP_CONTEXT IrpContext )
             Status = STATUS_PRIVILEGE_NOT_HELD;
             __leave;
         }
-
 
 #ifndef _GNU_NTIFS_
         InputLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -529,7 +525,6 @@ Ext2OplockRequest (
             __leave;
         }
 
-
         ASSERT((Ccb->Identifier.Type == EXT2CCB) &&
                (Ccb->Identifier.Size == sizeof(EXT2_CCB)));
 
@@ -577,7 +572,6 @@ Ext2OplockRequest (
 
             Ext2BugCheck(EXT2_BUGCHK_FSCTL, FsCtrlCode, 0, 0);
         }
-
 
         //
         //  Call the FsRtl routine to grant/acknowledge oplock.
@@ -662,7 +656,6 @@ Ext2IsVolumeDirty (
 
     return status;
 }
-
 
 NTSTATUS
 Ext2QueryExtentMappings(
@@ -903,7 +896,6 @@ Ext2QueryRetrievalPointers (
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2GetRetrievalPointers (
@@ -1378,8 +1370,6 @@ Ext2ReadSymlink (
                             BytesRead);
 }
 
-
-
 NTSTATUS
 Ext2GetReparsePoint (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -1511,7 +1501,6 @@ Ext2GetReparsePoint (IN PEXT2_IRP_CONTEXT IrpContext)
     
     return Status;
 }
-
 
 NTSTATUS
 Ext2WriteSymlink (
@@ -1775,7 +1764,6 @@ Ext2TruncateSymlink(
 out:
     return status;
 }
-
 
 /* FIXME: We can only handle one reparse point right now. */
 NTSTATUS
@@ -2375,7 +2363,6 @@ Ext2VerifyVcb (IN PEXT2_IRP_CONTEXT IrpContext,
 
 }
 
-
 NTSTATUS
 Ext2VerifyVolume (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -2431,7 +2418,6 @@ Ext2VerifyVolume (IN PEXT2_IRP_CONTEXT IrpContext)
                      0,
                      &ChangeCount,
                      &dwBytes );
-
 
         if (!NT_SUCCESS(Status)) {
             Status = STATUS_WRONG_VOLUME;
@@ -2491,7 +2477,6 @@ Ext2VerifyVolume (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
-
 NTSTATUS
 Ext2IsVolumeMounted (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -2503,7 +2488,6 @@ Ext2IsVolumeMounted (IN PEXT2_IRP_CONTEXT IrpContext)
 
     ASSERT((IrpContext->Identifier.Type == EXT2ICX) &&
            (IrpContext->Identifier.Size == sizeof(EXT2_IRP_CONTEXT)));
-
 
     DeviceObject = IrpContext->DeviceObject;
 
@@ -2517,7 +2501,6 @@ Ext2IsVolumeMounted (IN PEXT2_IRP_CONTEXT IrpContext)
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2DismountVolume (IN PEXT2_IRP_CONTEXT IrpContext)
@@ -2656,7 +2639,6 @@ Ext2CheckDismount (
 
         DEBUG(DL_DBG, ("Ext2CheckDismount: Vpb: %p bDeleted=%d bTearDown=%d\n",
                         Vpb, bDeleted, bTearDown));
-
 
     } else if (bForce) {
 
@@ -2820,7 +2802,6 @@ Ext2PurgeFile ( IN PEXT2_FCB Fcb,
     ASSERT((Fcb->Identifier.Type == EXT2FCB) &&
            (Fcb->Identifier.Size == sizeof(EXT2_FCB)));
 
-
     if (!IsVcbReadOnly(Fcb->Vcb) && FlushBeforePurge) {
         DEBUG(DL_INF, ( "Ext2PurgeFile: CcFlushCache on %wZ.\n",
                         &Fcb->Mcb->FullName));
@@ -2844,7 +2825,6 @@ Ext2PurgeFile ( IN PEXT2_FCB Fcb,
 
     return STATUS_SUCCESS;
 }
-
 
 NTSTATUS
 Ext2FileSystemControl (IN PEXT2_IRP_CONTEXT IrpContext)

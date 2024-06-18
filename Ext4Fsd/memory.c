@@ -126,7 +126,6 @@ Ext2FreeIrpContext (IN PEXT2_IRP_CONTEXT IrpContext)
     ExFreeToNPagedLookasideList(&(Ext2Global->Ext2IrpContextLookasideList), IrpContext);
 }
 
-
 PEXT2_FCB
 Ext2AllocateFcb (
     IN PEXT2_VCB   Vcb,
@@ -440,7 +439,6 @@ VOID Ext2FreeEntry (IN struct dentry *de)
     DEC_MEM_COUNT(PS_DENTRY, de, sizeof(struct dentry));
 }
 
-
 struct dentry *Ext2BuildEntry(PEXT2_VCB Vcb, PEXT2_MCB Dcb, PUNICODE_STRING FileName)
 {
     OEM_STRING      Oem = { 0 };
@@ -538,7 +536,6 @@ Ext2JointExtents(
 
     List->Next = Extent;
 }
-
 
 VOID
 Ext2DestroyExtentChain(IN PEXT2_EXTENT Chain)
@@ -640,7 +637,6 @@ Ext2ClearAllExtents(PLARGE_MCB  Zone)
         DbgBreak();
     }
 }
-
 
 BOOLEAN
 Ext2AddVcbExtent (
@@ -782,7 +778,6 @@ Ext2LookupVcbExtent (
 
     return rc;
 }
-
 
 BOOLEAN
 Ext2AddMcbExtent (
@@ -934,7 +929,6 @@ Ext2LookupMcbExtent (
     return rc;
 }
 
-
 BOOLEAN
 Ext2AddMcbMetaExts (
     IN PEXT2_VCB Vcb,
@@ -1020,7 +1014,6 @@ Again:
     return rc;
 }
 
-
 BOOLEAN
 Ext2AddBlockExtent(
     IN PEXT2_VCB    Vcb,
@@ -1053,7 +1046,6 @@ Ext2AddBlockExtent(
     ASSERT(Start == Block);
     return Ext2AddVcbExtent(Vcb, Vbn, Length);
 }
-
 
 BOOLEAN
 Ext2LookupBlockExtent(
@@ -1089,7 +1081,6 @@ Ext2LookupBlockExtent(
 
     return rc;
 }
-
 
 BOOLEAN
 Ext2RemoveBlockExtent(
@@ -1354,7 +1345,6 @@ Ext2BuildExtents(
     return Status;
 }
 
-
 BOOLEAN
 Ext2BuildName(
     IN OUT PUNICODE_STRING  Target,
@@ -1589,7 +1579,6 @@ Ext2FreeMcb (IN PEXT2_VCB Vcb, IN PEXT2_MCB Mcb)
     DEC_MEM_COUNT(PS_MCB, Mcb, sizeof(EXT2_MCB));
 }
 
-
 PEXT2_MCB
 Ext2SearchMcb(
     PEXT2_VCB           Vcb,
@@ -1612,7 +1601,6 @@ Ext2SearchMcb(
 
     return Mcb;
 }
-
 
 PEXT2_MCB
 Ext2SearchMcbWithoutLock(
@@ -1871,7 +1859,6 @@ Ext2CheckSetBlock(PEXT2_IRP_CONTEXT IrpContext, PEXT2_VCB Vcb, LONGLONG Block)
         return FALSE;
     }
 
-
     RtlInitializeBitMap(&bitmap, (PULONG)bh->b_data, Length);
 
     if (RtlCheckBit(&bitmap, dwBlk) == 0) {
@@ -1903,7 +1890,6 @@ Ext2CheckBitmapConsistency(PEXT2_IRP_CONTEXT IrpContext, PEXT2_VCB Vcb)
         Ext2CheckSetBlock(IrpContext, Vcb, ext4_block_bitmap(&Vcb->sb, gd));
         Ext2CheckSetBlock(IrpContext, Vcb, ext4_inode_bitmap(&Vcb->sb, gd));
 
-
         if (i == Vcb->sbi.s_groups_count - 1) {
             InodeBlocks = ((INODES_COUNT % INODES_PER_GROUP) *
                            Vcb->InodeSize + Vcb->BlockSize - 1) /
@@ -1928,7 +1914,6 @@ Ext2InsertVcb(PEXT2_VCB Vcb)
 {
     InsertTailList(&(Ext2Global->VcbList), &Vcb->Next);
 }
-
 
 /* Ext2Global->Resource should be already acquired */
 VOID
@@ -2582,7 +2567,6 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
         Vcb->sbi.s_itb_per_group = Vcb->sbi.s_inodes_per_group /
                                    Vcb->sbi.s_inodes_per_block;
 
-
         Vcb->sbi.s_desc_per_block = BLOCK_SIZE / GROUP_DESC_SIZE;
         Vcb->sbi.s_desc_per_block_bits = ilog2(Vcb->sbi.s_desc_per_block);
 
@@ -2774,7 +2758,6 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
     return Status;
 }
 
-
 VOID
 Ext2TearDownStream(IN PEXT2_VCB Vcb)
 {
@@ -2857,7 +2840,6 @@ Ext2DestroyVcb (IN PEXT2_VCB Vcb)
     DEC_MEM_COUNT(PS_VCB, Vcb->DeviceObject, sizeof(EXT2_VCB));
 }
 
-
 /* uninitialize cache map */
 
 VOID
@@ -2868,7 +2850,6 @@ Ext2SyncUninitializeCacheMap (
     CACHE_UNINITIALIZE_EVENT UninitializeCompleteEvent;
     NTSTATUS WaitStatus;
     LARGE_INTEGER Ext2LargeZero = {0,0};
-
 
     KeInitializeEvent( &UninitializeCompleteEvent.Event,
                        SynchronizationEvent,
@@ -3026,7 +3007,6 @@ Ext2FirstUnusedMcb(PEXT2_VCB Vcb, BOOLEAN Wait, ULONG Number)
     return Head;
 }
 
-
 /* Reaper thread to release unused Mcb blocks */
 VOID
 Ext2McbReaperThread(
@@ -3156,7 +3136,6 @@ Ext2McbReaperThread(
     PsTerminateSystemThread(STATUS_SUCCESS);
 }
 
-
 /* get buffer heads from global Vcb BH list */
 
 BOOLEAN
@@ -3205,7 +3184,6 @@ Ext2QueryUnusedBH(PEXT2_VCB Vcb, PLIST_ENTRY head)
 
     return IsFlagOn(Vcb->Flags, VCB_BEING_DROPPED);
 }
-
 
 /* Reaper thread to release unused buffer heads */
 VOID
@@ -3505,7 +3483,6 @@ Ext2StartReaper(PEXT2_REAPER Reaper, EXT2_REAPER_RELEASE Free)
 
     return status;
 }
-
 
 VOID
 Ext2StopReaper(PEXT2_REAPER Reaper)

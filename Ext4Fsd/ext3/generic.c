@@ -18,7 +18,6 @@ extern PEXT2_GLOBAL Ext2Global;
 
 /* DEFINITIONS *************************************************************/
 
-
 /* FUNCTIONS ***************************************************************/
 
 NTSTATUS
@@ -58,7 +57,6 @@ errorout:
     return Status;
 }
 
-
 BOOLEAN
 Ext2SaveSuper(
     IN PEXT2_IRP_CONTEXT    IrpContext,
@@ -83,7 +81,6 @@ Ext2SaveSuper(
 
     return rc;
 }
-
 
 BOOLEAN
 Ext2RefreshSuper (
@@ -149,7 +146,6 @@ Ext2PutGroup(IN PEXT2_VCB Vcb)
     struct ext4_sb_info *sbi = &Vcb->sbi;
     unsigned long i;
 
-
     if (NULL == Vcb->sbi.s_gd) {
         return;
     }
@@ -161,7 +157,6 @@ Ext2PutGroup(IN PEXT2_VCB Vcb)
 
     ClearFlag(Vcb->Flags, VCB_GD_LOADED);
 }
-
 
 BOOLEAN
 Ext2LoadGroupBH(IN PEXT2_VCB Vcb)
@@ -198,7 +193,6 @@ Ext2LoadGroupBH(IN PEXT2_VCB Vcb)
 
     return rc;
 }
-
 
 BOOLEAN
 Ext2LoadGroup(IN PEXT2_VCB Vcb)
@@ -295,7 +289,6 @@ Ext2DropBH(IN PEXT2_VCB Vcb)
     ClearFlag(Vcb->Flags, VCB_BEING_DROPPED);
 }
 
-
 VOID
 Ext2FlushRange(IN PEXT2_VCB Vcb, LARGE_INTEGER s, LARGE_INTEGER e)
 {
@@ -378,7 +371,6 @@ errorout:
     return STATUS_SUCCESS;
 }
 
-
 BOOLEAN
 Ext2SaveGroup(
     IN PEXT2_IRP_CONTEXT    IrpContext,
@@ -400,7 +392,6 @@ Ext2SaveGroup(
 
     return TRUE;
 }
-
 
 BOOLEAN
 Ext2RefreshGroup(
@@ -500,7 +491,6 @@ void Ext2EncodeInode(struct ext4_inode *dst,  struct inode *src)
         dst->i_extra_isize = src->i_extra_isize;
 }
 
-
 BOOLEAN
 Ext2LoadInode (IN PEXT2_VCB Vcb,
                IN struct inode *Inode)
@@ -532,7 +522,6 @@ Ext2LoadInode (IN PEXT2_VCB Vcb,
 
     return TRUE;
 }
-
 
 BOOLEAN
 Ext2ClearInode (
@@ -671,7 +660,6 @@ errorout:
 	return rc;
 }
 
-
 BOOLEAN
 Ext2LoadBlock (IN PEXT2_VCB Vcb,
                IN ULONG     Index,
@@ -709,7 +697,6 @@ Ext2LoadBlock (IN PEXT2_VCB Vcb,
 
     return rc; 
 }
-
 
 BOOLEAN
 Ext2SaveBlock ( IN PEXT2_IRP_CONTEXT    IrpContext,
@@ -807,7 +794,6 @@ Ext2LoadBuffer( IN PEXT2_IRP_CONTEXT    IrpContext,
     return rc;
 }
 
-
 BOOLEAN
 Ext2ZeroBuffer( IN PEXT2_IRP_CONTEXT    IrpContext,
                 IN PEXT2_VCB            Vcb,
@@ -878,7 +864,6 @@ Ext2ZeroBuffer( IN PEXT2_IRP_CONTEXT    IrpContext,
     return rc;
 }
 
-
 BOOLEAN
 Ext2SaveBuffer( IN PEXT2_IRP_CONTEXT    IrpContext,
                 IN PEXT2_VCB            Vcb,
@@ -945,7 +930,6 @@ Ext2SaveBuffer( IN PEXT2_IRP_CONTEXT    IrpContext,
 
     return rc;
 }
-
 
 VOID
 Ext2UpdateVcbStat(
@@ -1322,7 +1306,6 @@ errorout:
     return Status;
 }
 
-
 NTSTATUS
 Ext2NewInode(
     IN PEXT2_IRP_CONTEXT    IrpContext,
@@ -1473,7 +1456,6 @@ repeat:
              */
 
             for (j = 1; j < Vcb->sbi.s_groups_count; j <<= 1) {
-
 
                 i = (i + j) % Vcb->sbi.s_groups_count;
                 gd = ext4_get_group_desc(sb, i, &gb);
@@ -1686,7 +1668,6 @@ errorout:
     if (gb)
         fini_bh(&gb);
 
-
     return Status;
 }
 
@@ -1726,7 +1707,6 @@ errorout:
 
     return status;
 }
-
 
 NTSTATUS
 Ext2FreeInode(
@@ -1841,7 +1821,6 @@ errorout:
     return Status;
 }
 
-
 NTSTATUS
 Ext2AddEntry (
     IN PEXT2_IRP_CONTEXT   IrpContext,
@@ -1912,7 +1891,6 @@ Ext2AddEntry (
 
     return status;
 }
-
 
 NTSTATUS
 Ext2SetFileType (
@@ -2156,7 +2134,6 @@ Ext2SetParentEntry (
 
     } __finally {
 
-
         if (Ext2DerefXcb(&Dcb->ReferenceCount) == 0) {
             DEBUG(DL_ERR, ( "Ext2SetParentEntry: Dcb reference goes to ZERO.\n"));
         }
@@ -2202,7 +2179,6 @@ int ext3_check_dir_entry (const char * function, struct inode * dir,
     }
     return error_msg == NULL ? 1 : 0;
 }
-
 
 /*
  * p is at least 6 bytes before the end of page
@@ -2901,7 +2877,6 @@ struct ext4_group_desc * ext4_get_group_desc(struct super_block *sb,
 
     return desc;
 }
-
 
 /**
  * ext4_count_free_blocks() -- count filesystem free blocks
