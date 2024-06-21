@@ -2132,7 +2132,6 @@ Ext2QueryVolumeFS(
 	union swap_header*	swap = NULL;
     PUCHAR  buffer = NULL;
 
-
     NT::NTSTATUS          status;
 
     buffer = (PUCHAR)malloc(PAGE_SIZE);
@@ -2157,7 +2156,6 @@ Ext2QueryVolumeFS(
         volume->FsaInfo.FileSystemName[0] = (WCHAR)'E';
         volume->FsaInfo.FileSystemName[1] = (WCHAR)'X';
         volume->FsaInfo.FileSystemName[2] = (WCHAR)'T';
-        volume->FsaInfo.FileSystemName[4] = 0;
 
         if (sb->s_feature_incompat & EXT4_FEATURE_INCOMPAT_EXTENTS) {
             volume->FsaInfo.FileSystemName[3] = (WCHAR)'4';
@@ -2188,7 +2186,9 @@ Ext2QueryVolumeFS(
         volume->FsaInfo.FileSystemName[1] = (WCHAR)'W';
         volume->FsaInfo.FileSystemName[2] = (WCHAR)'A';
         volume->FsaInfo.FileSystemName[3] = (WCHAR)'P';
-        volume->FsaInfo.FileSystemName[4] = 0;
+        // Show swap partitions as unused.
+        volume->FssInfo.AvailableAllocationUnits = volume->FssInfo.TotalAllocationUnits;
+        volume->bRecognized = TRUE;
     }
 
 errorout:
