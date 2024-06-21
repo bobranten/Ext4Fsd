@@ -3185,8 +3185,8 @@ Ext2InitializeVolume(
 
         } else {
             if (Ext2QueryExt2Property(hVolume, &volume->EVP)) {
-                volume->bRecognized = TRUE;
             }
+            volume->bRecognized = TRUE;
         }
 
         /* convert the unicode file system name to mbs */
