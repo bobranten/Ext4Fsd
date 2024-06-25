@@ -2189,6 +2189,57 @@ Ext2QueryVolumeFS(
         // Show swap partitions as unused.
         volume->FssInfo.AvailableAllocationUnits = volume->FssInfo.TotalAllocationUnits;
         volume->bRecognized = TRUE;
+        goto errorout;
+    }
+
+    if (*((PULONG)&buffer[XFS_MAGIC_OFFSET]) == XFS_SB_MAGIC_LE) {
+        volume->FsaInfo.FileSystemNameLength = 6;
+        volume->FsaInfo.FileSystemName[0] = (WCHAR)'X';
+        volume->FsaInfo.FileSystemName[1] = (WCHAR)'F';
+        volume->FsaInfo.FileSystemName[2] = (WCHAR)'S';
+        goto errorout;
+    }
+
+    // The LVM superblock is stored in one of the first 4 sectors as an option to pvcreate
+    if ((memcmp(&buffer[0*512], LVM_MAGIC, 8) == 0) ||
+        (memcmp(&buffer[1*512], LVM_MAGIC, 8) == 0) ||
+        (memcmp(&buffer[2*512], LVM_MAGIC, 8) == 0) ||
+        (memcmp(&buffer[3*512], LVM_MAGIC, 8) == 0)) {
+        volume->FsaInfo.FileSystemNameLength = 6;
+        volume->FsaInfo.FileSystemName[0] = (WCHAR)'L';
+        volume->FsaInfo.FileSystemName[1] = (WCHAR)'V';
+        volume->FsaInfo.FileSystemName[2] = (WCHAR)'M';
+        goto errorout;
+    }
+
+    if (*((PULONG)&buffer[512]) == BSD_DISKMAGIC) {
+        volume->FsaInfo.FileSystemNameLength = 6;
+        volume->FsaInfo.FileSystemName[0] = (WCHAR)'B';
+        volume->FsaInfo.FileSystemName[1] = (WCHAR)'S';
+        volume->FsaInfo.FileSystemName[2] = (WCHAR)'D';
+        goto errorout;
+    }
+
+    Ext2Read(Handle, FALSE, 512, (ULONGLONG)BTRFS_SUPER_BLOCK_OFFSET, 4096, buffer);
+
+    if (*((PULONGLONG)&buffer[BTRFS_MAGIC_OFFSET]) == BTRFS_MAGIC) {
+        volume->FsaInfo.FileSystemNameLength = 10;
+        volume->FsaInfo.FileSystemName[0] = (WCHAR)'B';
+        volume->FsaInfo.FileSystemName[1] = (WCHAR)'T';
+        volume->FsaInfo.FileSystemName[2] = (WCHAR)'R';
+        volume->FsaInfo.FileSystemName[3] = (WCHAR)'F';
+        volume->FsaInfo.FileSystemName[4] = (WCHAR)'S';
+        goto errorout;
+    }
+
+    Ext2Read(Handle, FALSE, 512, (ULONGLONG)RAID_SUPER_BLOCK_OFFSET, 4096, buffer);
+
+    if (*((PULONG)&buffer[RAID_MAGIC_OFFSET]) == RAID_MAGIC) {
+        volume->FsaInfo.FileSystemNameLength = 8;
+        volume->FsaInfo.FileSystemName[0] = (WCHAR)'R';
+        volume->FsaInfo.FileSystemName[1] = (WCHAR)'A';
+        volume->FsaInfo.FileSystemName[2] = (WCHAR)'I';
+        volume->FsaInfo.FileSystemName[3] = (WCHAR)'D';
     }
 
 errorout:

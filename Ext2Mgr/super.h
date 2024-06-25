@@ -1,7 +1,7 @@
 #ifndef SUPER_H
 #define SUPER_H
 
-/* The following is a subset of ext4.h used by the application */
+/* This is a subset of ext4.h used by the application */
 
 typedef unsigned char __u8;
 typedef unsigned short __u16, __le16;
@@ -231,5 +231,24 @@ struct ext4_super_block {
 					 EXT4_FEATURE_INCOMPAT_64BIT| \
 					 EXT4_FEATURE_INCOMPAT_FLEX_BG| \
 					 EXT4_FEATURE_INCOMPAT_CSUM_SEED)
+
+/* Definitions for other common filesystems so the application can list them. */
+
+#define BTRFS_MAGIC					0x4D5F53665248425FULL /* '_BHRfS_M' */
+#define BTRFS_MAGIC_OFFSET			64
+#define BTRFS_SUPER_BLOCK_OFFSET	0x10000
+
+#define XFS_SB_MAGIC_BE				0x58465342 /* 'XFSB' */
+#define XFS_SB_MAGIC_LE				0x42534658 /* 'BSFX' */
+#define XFS_MAGIC_OFFSET			0
+#define XFS_SUPER_BLOCK_OFFSET		0
+
+#define RAID_MAGIC					0xa92b4efc
+#define RAID_MAGIC_OFFSET			0
+#define RAID_SUPER_BLOCK_OFFSET		0x1000
+
+#define LVM_MAGIC					"LABELONE"
+
+#define	BSD_DISKMAGIC				0x82564557 /* The disk magic number */
 
 #endif /* SUPER_H */
