@@ -368,8 +368,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,7,9
- PRODUCTVERSION 3,0,7,9
+ FILEVERSION 3,0,71,1
+ PRODUCTVERSION 3,0,71,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -384,14 +384,15 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Ext2Fsd Group (www.ext2fsd.com)"
-            VALUE "FileDescription", "Ext2 Volume Manager for Windows"
-            VALUE "FileVersion", "3.0.7.9"
+            VALUE "Comments", "Bo Branten <bosse@accum.se>\0"
+            VALUE "CompanyName", "http://www.accum.se/~bosse\0"
+            VALUE "FileDescription", "Ext2 Volume Manager"
+            VALUE "FileVersion", "3.0.71.1"
             VALUE "InternalName", "Ext2Mgr"
-            VALUE "LegalCopyright", "Copyright (C) 2016 Ext2Fsd Group"
+            VALUE "LegalCopyright", "Copyright (C) GPL v2.0"
             VALUE "OriginalFilename", "Ext2Mgr.exe"
-            VALUE "ProductName", "Ext2 Volume Manager for Windows"
-            VALUE "ProductVersion", "3.0.7.9"
+            VALUE "ProductName", "Ext2 Volume Manager"
+            VALUE "ProductVersion", "3.0.71.1"
         END
     END
     BLOCK "VarFileInfo"

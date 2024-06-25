@@ -122,7 +122,7 @@ BOOL CAboutDlg::OnInitDialog()
         s.Format("Ext2Fsd: < 0.42 (Dec 2007)\0");
     }
     SET_TEXT(IDC_DRIVER, s);
-    s  = "Ext2Mgr: 3.00 (";
+    s  = "Ext2Mgr: 0.71b(";
     s += __DATE__;
     s += ")\0";
     SET_TEXT(IDC_PROGRAM, s);
