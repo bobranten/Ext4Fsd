@@ -17,7 +17,6 @@ extern PEXT2_GLOBAL Ext2Global;
 
 /* DEFINITIONS *************************************************************/
 
-
 NTSTATUS
 Ext2FlushCompletionRoutine (
     IN PDEVICE_OBJECT DeviceObject,
@@ -27,7 +26,6 @@ Ext2FlushCompletionRoutine (
 {
     if (Irp->PendingReturned)
         IoMarkIrpPending( Irp );
-
 
     if (Irp->IoStatus.Status == STATUS_INVALID_DEVICE_REQUEST)
         Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -139,7 +137,6 @@ Ext2FlushFiles(
     return IoStatus.Status;
 }
 
-
 NTSTATUS
 Ext2Flush (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -213,6 +210,8 @@ Ext2Flush (IN PEXT2_IRP_CONTEXT IrpContext)
                 __leave;
             }
 
+            /* TO INVESTIGATE: Ext2FlushFiles will always return STATUS_SUCCESS so Ext2FlushVolume will never be called? */
+
             Status = Ext2FlushVolume(IrpContext, (PEXT2_VCB)(FcbOrVcb), FALSE);
 
             if (NT_SUCCESS(Status) && IsFlagOn(Vcb->Volume->Flags, FO_FILE_MODIFIED)) {
@@ -234,7 +233,6 @@ Ext2Flush (IN PEXT2_IRP_CONTEXT IrpContext)
 
         DEBUG(DL_INF, ("Ext2Flush-post: total mcb records=%u\n",
                        FsRtlNumberOfRunsInLargeMcb(&Vcb->Extents)));
-
 
     } __finally {
 

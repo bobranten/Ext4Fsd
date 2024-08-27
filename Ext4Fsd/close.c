@@ -186,6 +186,9 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
+/* TO INVESTIGATE: Since no call in Ext2Close return STATUS_PENDING (because the wait parameter to
+   ExAcquireResourceExclusiveLite is TRUE) the functions below will never be called and could be removed? */
+
 VOID
 Ext2QueueCloseRequest (IN PEXT2_IRP_CONTEXT IrpContext)
 {
