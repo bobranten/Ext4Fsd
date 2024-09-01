@@ -979,7 +979,6 @@ struct move_extent {
 	<= (EXT4_GOOD_OLD_INODE_SIZE +			\
 	    (einode)->i_extra_isize))			\
 
-#endif
 /*
  * We use an encoding that preserves the times for extra epoch "00":
  *
@@ -1027,7 +1026,7 @@ static inline void ext4_decode_extra_time(struct timespec64 *time,
 	}
 	time->tv_nsec = (le32_to_cpu(extra) & EXT4_NSEC_MASK) >> EXT4_EPOCH_BITS;
 }
-#if 0
+
 #define EXT4_INODE_SET_XTIME(xtime, inode, raw_inode)				\
 do {										\
 	(raw_inode)->xtime = cpu_to_le32((inode)->xtime.tv_sec);		\

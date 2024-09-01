@@ -45,9 +45,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#if 0
     unsigned short __cdecl _byteswap_ushort(unsigned short);
     unsigned long  __cdecl _byteswap_ulong (unsigned long);
     unsigned __int64 __cdecl _byteswap_uint64(unsigned __int64);
+#endif
 #ifdef __cplusplus
 }
 #endif
