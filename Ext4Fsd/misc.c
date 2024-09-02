@@ -61,6 +61,61 @@ Ext2LinuxTime (IN LARGE_INTEGER SysTime)
     return Ext2Time;
 }
 
+VOID
+Ext2TimeToSecondsSince1970(
+    IN PLARGE_INTEGER SysTime,
+    OUT PULONG SecondsSince1970LowPart,
+    OUT PULONG SecondsSince1970HighPart)
+{
+    LARGE_INTEGER LinuxTime;
+
+    LinuxTime.QuadPart = SysTime->QuadPart / (ULONGLONG)TICKSPERSEC - SECS_1601_TO_1970;
+
+    *SecondsSince1970LowPart = LinuxTime.LowPart;
+    *SecondsSince1970HighPart = LinuxTime.HighPart;
+}
+
+VOID
+Ext2SecondsSince1970ToTime(
+    IN ULONG SecondsSince1970LowPart,
+    IN ULONG SecondsSince1970HighPart,
+    OUT PLARGE_INTEGER SysTime)
+{
+    SysTime->QuadPart = (((LONGLONG)SecondsSince1970HighPart << 32) + SecondsSince1970LowPart) * (ULONGLONG)TICKSPERSEC + TICKS_1601_TO_1970;
+}
+
+VOID
+Ext2SetInodeTime(
+    IN PLARGE_INTEGER SysTime,
+    OUT PULONG i_time,
+    OUT PULONG i_time_extra)
+{
+    LARGE_INTEGER LinuxTime;
+    ULONG epoc, nano_sec;
+
+    Ext2TimeToSecondsSince1970(SysTime, &LinuxTime.LowPart, &LinuxTime.HighPart);
+    epoc = ((LinuxTime.QuadPart - (signed int)LinuxTime.QuadPart) >> 32) & EXT4_EPOCH_MASK;
+    nano_sec = (SysTime->QuadPart % (ULONGLONG)TICKSPERSEC) * 100;
+    *i_time = LinuxTime.LowPart;
+    *i_time_extra = (epoc | (nano_sec << EXT4_EPOCH_BITS));
+}
+
+LARGE_INTEGER
+Ext2GetInodeTime(
+    IN ULONG i_time,
+    IN ULONG i_time_extra)
+{
+    LARGE_INTEGER LinuxTime, SysTime;
+    ULONG epoc, nano_sec;
+
+    epoc = i_time_extra & EXT4_EPOCH_MASK;
+    nano_sec = (i_time_extra & EXT4_NSEC_MASK) >> EXT4_EPOCH_BITS;
+    LinuxTime.QuadPart = (signed)i_time + ((ULONGLONG)epoc << 32);
+    Ext2SecondsSince1970ToTime(LinuxTime.LowPart, LinuxTime.HighPart, &SysTime);
+    SysTime.QuadPart += nano_sec / 100;
+
+    return SysTime;
+}
 
 ULONG
 Ext2MbsToUnicode(
@@ -178,7 +233,6 @@ Ext2UnicodeToMbs (
     return Length;
 }
 
-
 ULONG
 Ext2OEMToUnicodeSize(
     IN PEXT2_VCB        Vcb,
@@ -201,7 +255,6 @@ errorout:
     return Length;
 }
 
-
 NTSTATUS
 Ext2OEMToUnicode(
     IN PEXT2_VCB           Vcb,
@@ -210,7 +263,6 @@ Ext2OEMToUnicode(
 )
 {
     NTSTATUS  Status;
-
 
     if (Vcb->Codepage.PageTable) {
         Status = Ext2MbsToUnicode(Vcb->Codepage.PageTable,
@@ -255,7 +307,6 @@ Ext2UnicodeToOEMSize(
 
     return RtlxUnicodeStringToOemSize(Unicode);
 }
-
 
 NTSTATUS
 Ext2UnicodeToOEM (

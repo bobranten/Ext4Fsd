@@ -2882,6 +2882,35 @@ Ext2NtTime (IN ULONG i_time);
 ULONG
 Ext2LinuxTime (IN LARGE_INTEGER SysTime);
 
+#define TICKSPERSEC 10000000
+#define SECSPERDAY  86400
+/* 1601 to 1970 is 369 years plus 89 leap days */
+#define SECS_1601_TO_1970  ((369 * 365 + 89) * (ULONGLONG)SECSPERDAY)
+#define TICKS_1601_TO_1970 (SECS_1601_TO_1970 * TICKSPERSEC)
+
+VOID
+Ext2TimeToSecondsSince1970(
+    IN PLARGE_INTEGER SysTime,
+    OUT PULONG SecondsSince1970LowPart,
+    OUT PULONG SecondsSince1970HighPart);
+
+VOID
+Ext2SecondsSince1970ToTime(
+    IN ULONG SecondsSince1970LowPart,
+    IN ULONG SecondsSince1970HighPart,
+    OUT PLARGE_INTEGER SysTime);
+
+VOID
+Ext2SetInodeTime(
+    IN PLARGE_INTEGER SysTime,
+    OUT PULONG i_time,
+    OUT PULONG i_time_extra);
+
+LARGE_INTEGER
+Ext2GetInodeTime(
+    IN ULONG i_time,
+    IN ULONG i_time_extra);
+
 ULONG
 Ext2OEMToUnicodeSize(
     IN PEXT2_VCB        Vcb,
