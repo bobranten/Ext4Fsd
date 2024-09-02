@@ -47,7 +47,6 @@ static inline kdev_t to_kdev_t(int dev)
     return 0;
 }
 
-
 //
 // file system specific structures
 //
@@ -79,9 +78,10 @@ struct inode {
     __u32               i_ino;              /* inode number */
     loff_t			    i_size;             /* size */
     __u32               i_atime;	        /* Access time */
-    __u32               i_ctime;	        /* Creation time */
+    __u32               i_ctime;	        /* Inode change time */
     __u32               i_mtime;	        /* Modification time */
-    __u32               i_dtime;	        /* Deletion Time */
+    __u32               i_crtime;	        /* File creation time */
+    __u32               i_dtime;	        /* Deletion time */
     __u64               i_blocks;
     __u32               i_block[15];
     umode_t			    i_mode;             /* mode */
@@ -97,6 +97,10 @@ struct inode {
     void               *i_priv;             /* EXT2_MCB */
 
     __u16               i_extra_isize;      /* extra fields' size */
+    __u32               i_atime_extra;      /* extra Access time        (nsec << 2 | epoch) */
+    __u32               i_ctime_extra;      /* extra Change time        (nsec << 2 | epoch) */
+    __u32               i_mtime_extra;      /* extra Modification time  (nsec << 2 | epoch) */
+    __u32               i_crtime_extra;     /* extra File creation time (nsec << 2 | epoch) */
     __u64               i_file_acl;
 };
 
@@ -112,7 +116,6 @@ struct inode {
 #define I_CLEAR            32
 
 #define I_DIRTY (I_DIRTY_SYNC | I_DIRTY_DATASYNC | I_DIRTY_PAGES)
-
 
 struct dentry {
     atomic_t                d_count;
