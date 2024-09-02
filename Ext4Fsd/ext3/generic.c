@@ -462,6 +462,17 @@ void Ext2DecodeInode(struct inode *dst, struct ext4_inode *src)
         dst->i_extra_isize = src->i_extra_isize;
     else
         dst->i_extra_isize = 0;
+    if (EXT4_INODE_SIZE(dst->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
+        offsetof(struct ext4_inode, i_atime_extra) + sizeof(src->i_atime_extra) <= (ULONGLONG)EXT4_GOOD_OLD_INODE_SIZE + src->i_extra_isize) {
+        dst->i_atime_extra = src->i_atime_extra;
+        dst->i_ctime_extra = src->i_ctime_extra;
+        dst->i_mtime_extra = src->i_mtime_extra;
+    }
+    if (EXT4_INODE_SIZE(dst->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
+        offsetof(struct ext4_inode, i_crtime_extra) + sizeof(src->i_crtime_extra) <= (ULONGLONG)EXT4_GOOD_OLD_INODE_SIZE + src->i_extra_isize) {
+        dst->i_crtime = src->i_crtime;
+        dst->i_crtime_extra = src->i_crtime_extra;
+    }
 }
 
 void Ext2EncodeInode(struct ext4_inode *dst,  struct inode *src)
@@ -489,6 +500,17 @@ void Ext2EncodeInode(struct ext4_inode *dst,  struct inode *src)
     if (EXT4_HAS_RO_COMPAT_FEATURE(src->i_sb,
                                    EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE))
         dst->i_extra_isize = src->i_extra_isize;
+    if (EXT4_INODE_SIZE(src->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
+        offsetof(struct ext4_inode, i_atime_extra) + sizeof(dst->i_atime_extra) <= (ULONGLONG)EXT4_GOOD_OLD_INODE_SIZE + dst->i_extra_isize) {
+        dst->i_atime_extra = src->i_atime_extra;
+        dst->i_ctime_extra = src->i_ctime_extra;
+        dst->i_mtime_extra = src->i_mtime_extra;
+    }
+    if (EXT4_INODE_SIZE(src->i_sb) > EXT4_GOOD_OLD_INODE_SIZE &&
+        offsetof(struct ext4_inode, i_crtime_extra) + sizeof(dst->i_crtime_extra) <= (ULONGLONG)EXT4_GOOD_OLD_INODE_SIZE + dst->i_extra_isize) {
+        dst->i_crtime = src->i_crtime;
+        dst->i_crtime_extra = src->i_crtime_extra;
+    }
 }
 
 BOOLEAN
