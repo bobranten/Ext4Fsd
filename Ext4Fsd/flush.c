@@ -77,8 +77,8 @@ Ext2FlushFile (
                 LARGE_INTEGER   SysTime;
                 KeQuerySystemTime(&SysTime);
 
-                Fcb->Inode->i_mtime = Ext2LinuxTime(SysTime);
-                Fcb->Mcb->LastWriteTime = Ext2NtTime(Fcb->Inode->i_mtime);
+                Ext2SetInodeTime(&SysTime, &Fcb->Inode->i_mtime, &Fcb->Inode->i_mtime_extra);
+                Fcb->Mcb->LastWriteTime = Ext2GetInodeTime(Fcb->Inode->i_mtime, Fcb->Inode->i_mtime_extra);
                 Ext2SaveInode(IrpContext, Fcb->Vcb, Fcb->Inode);
             }
         }

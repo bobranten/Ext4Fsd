@@ -113,10 +113,10 @@ Ext2RefreshSuper (
             return FALSE;
 
         /* initializeroot node */
-        Vcb->McbTree->CreationTime = Ext2NtTime(Vcb->McbTree->Inode.i_ctime);
-        Vcb->McbTree->LastAccessTime = Ext2NtTime(Vcb->McbTree->Inode.i_atime);
-        Vcb->McbTree->LastWriteTime = Ext2NtTime(Vcb->McbTree->Inode.i_mtime);
-        Vcb->McbTree->ChangeTime = Ext2NtTime(Vcb->McbTree->Inode.i_mtime);
+        Vcb->McbTree->CreationTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_ctime, Vcb->McbTree->Inode.i_ctime_extra);
+        Vcb->McbTree->LastAccessTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_atime, Vcb->McbTree->Inode.i_atime_extra);
+        Vcb->McbTree->LastWriteTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_mtime, Vcb->McbTree->Inode.i_mtime_extra);
+        Vcb->McbTree->ChangeTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_mtime, Vcb->McbTree->Inode.i_mtime_extra);
     }
 
     return TRUE;

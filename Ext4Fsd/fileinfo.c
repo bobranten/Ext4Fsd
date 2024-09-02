@@ -495,7 +495,6 @@ Ext2QueryFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
-
 NTSTATUS
 Ext2SetFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -658,20 +657,20 @@ Ext2SetFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             struct inode *Inode = &Mcb->Inode;
 
             if (FBI->CreationTime.QuadPart != 0 && FBI->CreationTime.QuadPart != -1) {
-                Inode->i_ctime = Ext2LinuxTime(FBI->CreationTime);
-                Mcb->CreationTime = Ext2NtTime(Inode->i_ctime);
+                Ext2SetInodeTime(&FBI->CreationTime, &Inode->i_ctime, &Inode->i_ctime_extra);
+                Mcb->CreationTime = Ext2GetInodeTime(Inode->i_ctime, Inode->i_ctime_extra);
                 NotifyFilter |= FILE_NOTIFY_CHANGE_CREATION;
             }
 
             if (FBI->LastAccessTime.QuadPart != 0 && FBI->LastAccessTime.QuadPart != -1) {
-                Inode->i_atime = Ext2LinuxTime(FBI->LastAccessTime);
-                Mcb->LastAccessTime = Ext2NtTime(Inode->i_atime);
+                Ext2SetInodeTime(&FBI->LastAccessTime, &Inode->i_atime, &Inode->i_atime_extra);
+                Mcb->LastAccessTime = Ext2GetInodeTime(Inode->i_atime, Inode->i_atime_extra);
                 NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_ACCESS;
             }
 
             if (FBI->LastWriteTime.QuadPart != 0 && FBI->LastWriteTime.QuadPart != -1) {
-                Inode->i_mtime = Ext2LinuxTime(FBI->LastWriteTime);
-                Mcb->LastWriteTime = Ext2NtTime(Inode->i_mtime);
+                Ext2SetInodeTime(&FBI->LastWriteTime, &Inode->i_mtime, &Inode->i_mtime_extra);
+                Mcb->LastWriteTime = Ext2GetInodeTime(Inode->i_mtime, Inode->i_mtime_extra);
                 NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_WRITE;
                 SetFlag(Ccb->Flags, CCB_LAST_WRITE_UPDATED);
             }
@@ -1133,7 +1132,6 @@ Ext2BlockMap(
 	return status;
 }
 
-
 NTSTATUS
 Ext2ExpandFile(
     PEXT2_IRP_CONTEXT IrpContext,
@@ -1184,7 +1182,6 @@ Ext2ExpandFile(
 errorout:
     return status;
 }
-
 
 NTSTATUS
 Ext2TruncateFile(
@@ -2044,7 +2041,7 @@ Ext2DeleteFile(
             /* set delete time and free the inode */
             KeQuerySystemTime(&SysTime);
             Mcb->Inode.i_nlink = 0;
-            Mcb->Inode.i_dtime = Ext2LinuxTime(SysTime);
+            { ULONG dummy; Ext2TimeToSecondsSince1970(&SysTime, &Mcb->Inode.i_dtime, &dummy); }
             Ext2SaveInode(IrpContext, Vcb, &Mcb->Inode);
             Ext2FreeInode(IrpContext, Vcb, Mcb->Inode.i_ino, Ext2InodeType(Mcb));
         }

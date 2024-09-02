@@ -250,10 +250,10 @@ Ext2ProcessEntry(
 
         } else {
 
-            FDI->CreationTime = Ext2NtTime(Inode.i_ctime);
-            FDI->LastAccessTime = Ext2NtTime(Inode.i_atime);
-            FDI->LastWriteTime = Ext2NtTime(Inode.i_mtime);
-            FDI->ChangeTime = Ext2NtTime(Inode.i_mtime);
+            FDI->CreationTime = Ext2GetInodeTime(Inode.i_ctime, Inode.i_ctime_extra);
+            FDI->LastAccessTime = Ext2GetInodeTime(Inode.i_atime, Inode.i_atime_extra);
+            FDI->LastWriteTime = Ext2GetInodeTime(Inode.i_mtime, Inode.i_mtime_extra);
+            FDI->ChangeTime = Ext2GetInodeTime(Inode.i_mtime, Inode.i_mtime_extra);
         }
 
         FDI->FileAttributes = FileAttributes;
@@ -306,10 +306,10 @@ Ext2ProcessEntry(
 
         } else {
 
-            FBI->CreationTime = Ext2NtTime(Inode.i_ctime);
-            FBI->LastAccessTime = Ext2NtTime(Inode.i_atime);
-            FBI->LastWriteTime = Ext2NtTime(Inode.i_mtime);
-            FBI->ChangeTime = Ext2NtTime(Inode.i_mtime);
+            FBI->CreationTime = Ext2GetInodeTime(Inode.i_ctime, Inode.i_ctime_extra);
+            FBI->LastAccessTime = Ext2GetInodeTime(Inode.i_atime, Inode.i_atime_extra);
+            FBI->LastWriteTime = Ext2GetInodeTime(Inode.i_mtime, Inode.i_mtime_extra);
+            FBI->ChangeTime = Ext2GetInodeTime(Inode.i_mtime, Inode.i_mtime_extra);
         }
 
         FBI->FileAttributes = FileAttributes;

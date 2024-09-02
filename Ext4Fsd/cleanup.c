@@ -29,7 +29,6 @@ Ext2Cleanup (IN PEXT2_IRP_CONTEXT IrpContext)
     PIRP            Irp = NULL;
     PEXT2_MCB       Mcb = NULL;
 
-
     BOOLEAN         VcbResourceAcquired = FALSE;
     BOOLEAN         FcbResourceAcquired = FALSE;
     BOOLEAN         FcbPagingIoResourceAcquired = FALSE;
@@ -163,10 +162,9 @@ Ext2Cleanup (IN PEXT2_IRP_CONTEXT IrpContext)
                 LARGE_INTEGER   SysTime;
                 KeQuerySystemTime(&SysTime);
 
-                Fcb->Inode->i_atime =
-                    Fcb->Inode->i_mtime = Ext2LinuxTime(SysTime);
-                Fcb->Mcb->LastAccessTime =
-                    Fcb->Mcb->LastWriteTime = Ext2NtTime(Fcb->Inode->i_atime);
+                Ext2SetInodeTime(&SysTime, &Fcb->Inode->i_mtime, &Fcb->Inode->i_mtime_extra);
+                Ext2SetInodeTime(&SysTime, &Fcb->Inode->i_atime, &Fcb->Inode->i_atime_extra);
+                Fcb->Mcb->LastAccessTime = Fcb->Mcb->LastWriteTime = Ext2GetInodeTime(Fcb->Inode->i_atime, Fcb->Inode->i_atime_extra);
 
                 Ext2SaveInode(IrpContext, Vcb, Fcb->Inode);
 

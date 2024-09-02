@@ -31,7 +31,6 @@ extern PEXT2_GLOBAL Ext2Global;
 #pragma alloc_text(PAGE, Ext2SupersedeOrOverWriteFile)
 #endif
 
-
 BOOLEAN
 Ext2IsNameValid(PUNICODE_STRING FileName)
 {
@@ -61,7 +60,6 @@ Ext2IsNameValid(PUNICODE_STRING FileName)
 
     return TRUE;
 }
-
 
 NTSTATUS
 Ext2FollowLink (
@@ -486,10 +484,10 @@ Ext2LookupFile (
                             }
                         }
 
-                        Mcb->CreationTime = Ext2NtTime(Mcb->Inode.i_ctime);
-                        Mcb->LastAccessTime = Ext2NtTime(Mcb->Inode.i_atime);
-                        Mcb->LastWriteTime = Ext2NtTime(Mcb->Inode.i_mtime);
-                        Mcb->ChangeTime = Ext2NtTime(Mcb->Inode.i_mtime);
+                        Mcb->CreationTime = Ext2GetInodeTime(Mcb->Inode.i_ctime, Mcb->Inode.i_ctime_extra);
+                        Mcb->LastAccessTime = Ext2GetInodeTime(Mcb->Inode.i_atime, Mcb->Inode.i_atime_extra);
+                        Mcb->LastWriteTime = Ext2GetInodeTime(Mcb->Inode.i_mtime, Mcb->Inode.i_mtime_extra);
+                        Mcb->ChangeTime = Ext2GetInodeTime(Mcb->Inode.i_mtime, Mcb->Inode.i_mtime_extra);
 
                         /* process symlink */
                         if (S_ISLNK(Mcb->Inode.i_mode) && !bNotFollow) {
@@ -560,7 +558,6 @@ Ext2LookupFile (
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2ScanDir (
@@ -1949,7 +1946,6 @@ errorout:
     return Status;
 }
 
-
 NTSTATUS
 Ext2Create (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -2075,8 +2071,9 @@ Ext2CreateInode(
     Ext2ClearInode(IrpContext, Vcb, iNo);
     Inode.i_sb = &Vcb->sb;
     Inode.i_ino = iNo;
-    Inode.i_ctime = Inode.i_mtime =
-    Inode.i_atime = Ext2LinuxTime(SysTime);
+    Ext2SetInodeTime(&SysTime, &Inode.i_ctime, &Inode.i_ctime_extra);
+    Ext2SetInodeTime(&SysTime, &Inode.i_mtime, &Inode.i_mtime_extra);
+    Ext2SetInodeTime(&SysTime, &Inode.i_atime, &Inode.i_atime_extra);
     if (IsFlagOn(Vcb->Flags, VCB_USER_IDS)) {
         Inode.i_uid = Vcb->uid;
         Inode.i_gid = Vcb->gid;
@@ -2135,7 +2132,6 @@ errorout:
     return Status;
 }
 
-
 NTSTATUS
 Ext2SupersedeOrOverWriteFile(
     IN PEXT2_IRP_CONTEXT IrpContext,
@@ -2186,10 +2182,10 @@ Ext2SupersedeOrOverWriteFile(
     Fcb->Inode->i_size = 0;
 
     if (Disposition == FILE_SUPERSEDE) {
-        Fcb->Inode->i_ctime = Ext2LinuxTime(CurrentTime);
+        Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_ctime, &Fcb->Inode->i_ctime_extra);
     }
-    Fcb->Inode->i_atime =
-        Fcb->Inode->i_mtime = Ext2LinuxTime(CurrentTime);
+    Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_mtime, &Fcb->Inode->i_mtime_extra);
+    Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_atime, &Fcb->Inode->i_atime_extra);
     Ext2SaveInode(IrpContext, Vcb, Fcb->Inode);
 
     // See if we need to overwrite EA of the file

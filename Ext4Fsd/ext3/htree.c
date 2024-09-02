@@ -108,7 +108,6 @@ static void TEA_transform(__u32 buf[4], __u32 const in[])
     buf[1] += b1;
 }
 
-
 /* The old legacy hash */
 static __u32 dx_hack_hash_unsigned(const char *name, int len)
 {
@@ -198,15 +197,18 @@ static void str2hashbuf_unsigned(const char *msg, int len, __u32 *buf, int num)
 		*buf++ = pad;
 }
 
-
 #endif /* EXT2_HTREE_INDEX */
 
 __u32 ext3_current_time(struct inode *in)
 {
-    LARGE_INTEGER   SysTime;
-    KeQuerySystemTime(&SysTime);
+    LARGE_INTEGER SysTime;
+    ULONG hi, lo;
 
-    return Ext2LinuxTime(SysTime);
+    KeQuerySystemTime(&SysTime);
+    Ext2SetInodeTime(&SysTime, &lo, &hi);
+    in->i_ctime_extra = in->i_mtime_extra = hi;
+    in->i_ctime = in->i_mtime = lo;
+    return lo;
 }
 
 void ext3_warning (struct super_block * sb, const char * function,
@@ -223,7 +225,6 @@ void ext3_warning (struct super_block * sb, const char * function,
     va_end(args);
 #endif
 }
-
 
 /* ext3_bread is safe for meta-data blocks. it's not safe to read file data,
    since file data is managed by file cache, not volume cache */
@@ -302,7 +303,6 @@ struct buffer_head *ext3_append(struct ext2_icb *icb, struct inode *inode,
 
     return ext3_bread(icb, inode, *block, err);
 }
-
 
 void ext3_inc_count(struct inode *inode)
 {
@@ -551,7 +551,6 @@ int ext3_dirhash(const char *name, int len, struct dx_hash_info *hinfo)
 }
 EXPORT_SYMBOL(ext3_dirhash);
 
-
 /*
  * These functions convert from the major/minor hash to an f_pos
  * value.
@@ -627,7 +626,6 @@ static void free_rb_tree_fname(struct rb_root *root)
     }
     root->rb_node = NULL;
 }
-
 
 static struct dir_private_info *create_dir_info(loff_t pos)
 {
@@ -923,7 +921,6 @@ struct stats dx_show_entries(struct ext2_icb *icb, struct dx_hash_info *hinfo,
     return rc;
 }
 #endif /* DX_DEBUG */
-
 
 int ext3_save_inode ( struct ext2_icb *icb, struct inode *in)
 {
@@ -1292,7 +1289,6 @@ errout:
 
     return (err);
 }
-
 
 /*
  * Directory block splitting, compacting
