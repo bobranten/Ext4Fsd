@@ -493,7 +493,6 @@ void Ext2EncodeInode(struct ext4_inode *dst,  struct inode *src)
     dst->i_ctime = src->i_ctime;
     dst->i_mtime = src->i_mtime;
     dst->i_dtime = src->i_dtime;
-    dst->i_extra_isize = src->i_extra_isize;
     ASSERT(src->i_sb);
     ext3_inode_blocks_set(dst, src);
     memcpy(&dst->i_block[0], &src->i_block[0], sizeof(__u32) * 15);
