@@ -23,7 +23,6 @@ CHAR            gVersion[]   = EXT2FSD_VERSION;
 CHAR            gTime[] = __TIME__;
 CHAR            gDate[] = __DATE__;
 
-
 /* DEFINITIONS ***********************************************************/
 
 NTSTATUS
@@ -180,7 +179,6 @@ Ext2RegistryQueryCallback(
         }
     }
 
-
     return STATUS_SUCCESS;
 }
 
@@ -264,7 +262,6 @@ Ext2QueryGlobalParameters(IN PUNICODE_STRING RegistryPath)
     QueryTable[i].EntryContext = NULL;
     QueryTable[i].QueryRoutine = Ext2RegistryQueryCallback;
     i++;
-
 
     /*
      * 7 hidden suffix
@@ -353,7 +350,6 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
     }
     Ext2Global->Codepage.AnsiName[CODEPAGE_MAXLEN - 1] = 0;
 
-
     /* set global hidden prefix pattern */
     if (wcslen(&Ext2Global->wHidingPrefix[0])) {
         UniName.Length = sizeof(WCHAR) * wcslen(&Ext2Global->wHidingPrefix[0]);
@@ -376,7 +372,6 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
         DEBUG(DL_INF, ( "Ext2QueryParameters: HidingPrefix not specified.\n"));
     }
     Ext2Global->sHidingPrefix[HIDINGPAT_LEN - 1] = 0;
-
 
     /* set global hidden suffix pattern */
     if (wcslen(&Ext2Global->wHidingSuffix[0])) {
@@ -409,7 +404,6 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
 
     return TRUE;
 }
-
 
 #define NLS_OEM_LEAD_BYTE_INFO            (*NlsOemLeadByteInfo)
 
@@ -472,16 +466,12 @@ DriverEntry (
     ASSERT(FIELD_OFFSET(EXT2_SUPER_BLOCK, s_magic) == 56);
 
     DbgPrint(
-        "Ext2Fsd --"
-#ifdef _WIN2K_TARGET_
-        " Win2k --"
-#endif
-        " Version "
+        "Ext2Fsd -- Version "
         EXT2FSD_VERSION
 #if EXT2_DEBUG
-        " Checked"
+        " Debug"
 #else
-        " Free"
+        " Release"
 #endif
         " -- "
         __DATE__ " "
@@ -642,8 +632,6 @@ DriverEntry (
 
     FastIoDispatch->AcquireForModWrite            = Ext2AcquireFileForModWrite;
     FastIoDispatch->ReleaseForModWrite            = Ext2ReleaseFileForModWrite;
-    FastIoDispatch->AcquireForModWrite            = Ext2AcquireFileForModWrite;
-    FastIoDispatch->ReleaseForModWrite            = Ext2ReleaseFileForModWrite;
     FastIoDispatch->AcquireForCcFlush             = Ext2AcquireFileForCcFlush;
     FastIoDispatch->ReleaseForCcFlush             = Ext2ReleaseFileForCcFlush;
     FastIoDispatch->AcquireFileForNtCreateSection = Ext2AcquireForCreateSection;
@@ -711,7 +699,6 @@ DriverEntry (
     Ext2Global->CacheManagerNoOpCallbacks.ReleaseFromLazyWrite = Ext2NoOpRelease;
     Ext2Global->CacheManagerNoOpCallbacks.AcquireForReadAhead  = Ext2NoOpAcquire;
     Ext2Global->CacheManagerNoOpCallbacks.ReleaseFromReadAhead = Ext2NoOpRelease;
-
 
 #ifndef _WIN2K_TARGET_
     //
