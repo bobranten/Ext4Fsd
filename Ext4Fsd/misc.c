@@ -36,31 +36,6 @@ Ext2Log2(ULONG Value)
     return (Order - 1);
 }
 
-LARGE_INTEGER
-Ext2NtTime (IN ULONG i_time)
-{
-    LARGE_INTEGER SysTime;
-
-    SysTime.QuadPart = 0;
-    RtlSecondsSince1970ToTime(i_time, &SysTime);
-
-    return SysTime;
-}
-
-ULONG
-Ext2LinuxTime (IN LARGE_INTEGER SysTime)
-{
-    ULONG   Ext2Time = 0;
-
-    if (!RtlTimeToSecondsSince1970(&SysTime, &Ext2Time)) {
-        LARGE_INTEGER NtTime;
-        KeQuerySystemTime(&NtTime);
-        RtlTimeToSecondsSince1970(&NtTime, &Ext2Time);
-    }
-
-    return Ext2Time;
-}
-
 VOID
 Ext2TimeToSecondsSince1970(
     IN PLARGE_INTEGER SysTime,

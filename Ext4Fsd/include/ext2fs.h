@@ -2876,12 +2876,6 @@ Ext2StopReaper(PEXT2_REAPER Reaper);
 ULONG
 Ext2Log2(ULONG Value);
 
-LARGE_INTEGER
-Ext2NtTime (IN ULONG i_time);
-
-ULONG
-Ext2LinuxTime (IN LARGE_INTEGER SysTime);
-
 #define TICKSPERSEC 10000000
 #define SECSPERDAY  86400
 /* 1601 to 1970 is 369 years plus 89 leap days */
