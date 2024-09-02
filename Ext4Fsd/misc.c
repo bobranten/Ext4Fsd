@@ -36,6 +36,21 @@ Ext2Log2(ULONG Value)
     return (Order - 1);
 }
 
+/* The built in functions RtlTimeToSecondsSince1970 and RtlSecondsSince1970ToTime is
+ * not "year 2038 safe" because they use 32-bit seconds. The new functions
+ * Ext2TimeToSecondsSince1970 and Ext2SecondsSince1970ToTime is a reimplementation
+ * that uses 64-bit seconds.
+ * 
+ * The superblock has new time fields ending in "_hi" containing the high 8-bit of
+ * the seconds and the existing time fields contain the lower 32-bit.
+ * 
+ * The inodes has new time fields ending in "_extra". They contain both the high
+ * 2-bit of the seconds, that is bit 33 and 34 and also the nano seconds encoded
+ * as (nsec << 2 | epoch) The existing fields contain the low 32-bit of the seconds.
+ * 
+ * Windows system time is in number of 100 nano seconds.
+*/
+
 VOID
 Ext2TimeToSecondsSince1970(
     IN PLARGE_INTEGER SysTime,
@@ -66,13 +81,14 @@ Ext2SetInodeTime(
     OUT PULONG i_time_extra)
 {
     LARGE_INTEGER LinuxTime;
-    ULONG epoc, nano_sec;
+    ULONG epoch, nano_sec;
 
     Ext2TimeToSecondsSince1970(SysTime, &LinuxTime.LowPart, &LinuxTime.HighPart);
-    epoc = ((LinuxTime.QuadPart - (signed int)LinuxTime.QuadPart) >> 32) & EXT4_EPOCH_MASK;
+    epoch = ((LinuxTime.QuadPart - (signed int)LinuxTime.QuadPart) >> 32) & EXT4_EPOCH_MASK;
     nano_sec = (SysTime->QuadPart % (ULONGLONG)TICKSPERSEC) * 100;
+    /* i_time is lower 32-bit and i_time_extra is (nsec << 2 | epoch) */
     *i_time = LinuxTime.LowPart;
-    *i_time_extra = (epoc | (nano_sec << EXT4_EPOCH_BITS));
+    *i_time_extra = (epoch | (nano_sec << EXT4_EPOCH_BITS));
 }
 
 LARGE_INTEGER
@@ -81,11 +97,12 @@ Ext2GetInodeTime(
     IN ULONG i_time_extra)
 {
     LARGE_INTEGER LinuxTime, SysTime;
-    ULONG epoc, nano_sec;
+    ULONG epoch, nano_sec;
 
-    epoc = i_time_extra & EXT4_EPOCH_MASK;
+    /* i_time is lower 32-bit and i_time_extra is (nsec << 2 | epoch) */
+    epoch = i_time_extra & EXT4_EPOCH_MASK;
     nano_sec = (i_time_extra & EXT4_NSEC_MASK) >> EXT4_EPOCH_BITS;
-    LinuxTime.QuadPart = (signed)i_time + ((ULONGLONG)epoc << 32);
+    LinuxTime.QuadPart = (signed)i_time + ((ULONGLONG)epoch << 32);
     Ext2SecondsSince1970ToTime(LinuxTime.LowPart, LinuxTime.HighPart, &SysTime);
     SysTime.QuadPart += nano_sec / 100;
 
