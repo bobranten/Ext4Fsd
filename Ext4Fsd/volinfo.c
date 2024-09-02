@@ -95,7 +95,7 @@ Ext2QueryVolumeInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             }
 
             FsVolInfo = (PFILE_FS_VOLUME_INFORMATION) Buffer;
-            FsVolInfo->VolumeCreationTime = Ext2NtTime(Vcb->SuperBlock->s_mkfs_time);
+            Ext2SecondsSince1970ToTime(Vcb->SuperBlock->s_mkfs_time, Vcb->SuperBlock->s_mkfs_time_hi, &FsVolInfo->VolumeCreationTime);
             FsVolInfo->VolumeSerialNumber = Vcb->Vpb->SerialNumber;
             VolumeLabelLength = Vcb->Vpb->VolumeLabelLength;
             FsVolInfo->VolumeLabelLength = VolumeLabelLength;
