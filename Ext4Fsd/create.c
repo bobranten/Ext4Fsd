@@ -2071,6 +2071,7 @@ Ext2CreateInode(
     Ext2ClearInode(IrpContext, Vcb, iNo);
     Inode.i_sb = &Vcb->sb;
     Inode.i_ino = iNo;
+    Ext2SetInodeTime(&SysTime, &Inode.i_crtime, &Inode.i_crtime_extra);
     Ext2SetInodeTime(&SysTime, &Inode.i_ctime, &Inode.i_ctime_extra);
     Ext2SetInodeTime(&SysTime, &Inode.i_mtime, &Inode.i_mtime_extra);
     Ext2SetInodeTime(&SysTime, &Inode.i_atime, &Inode.i_atime_extra);
@@ -2182,6 +2183,7 @@ Ext2SupersedeOrOverWriteFile(
     Fcb->Inode->i_size = 0;
 
     if (Disposition == FILE_SUPERSEDE) {
+        Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_crtime, &Fcb->Inode->i_crtime_extra);
         Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_ctime, &Fcb->Inode->i_ctime_extra);
     }
     Ext2SetInodeTime(&CurrentTime, &Fcb->Inode->i_mtime, &Fcb->Inode->i_mtime_extra);
