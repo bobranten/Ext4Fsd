@@ -2033,7 +2033,8 @@ Ext2RemoveEntry (
         	    if (!inode->i_nlink)
         		    ext3_orphan_add(handle, inode);
         */
-        inode->i_ctime = dir->i_ctime = dir->i_mtime = ext3_current_time(dir);
+        dir->i_ctime = dir->i_mtime = ext3_current_time(dir);
+        inode->i_ctime = inode->i_mtime = ext3_current_time(inode);
         ext3_dec_count(inode);
         ext3_mark_inode_dirty(IrpContext, inode);
 
