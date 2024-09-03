@@ -33,6 +33,8 @@ Ext2ShutDown (IN PEXT2_IRP_CONTEXT IrpContext)
 
     BOOLEAN                 GlobalResourceAcquired = FALSE;
 
+    LARGE_INTEGER           SysTime, LinuxTime;
+
     __try {
 
         Status = STATUS_SUCCESS;
@@ -64,27 +66,21 @@ Ext2ShutDown (IN PEXT2_IRP_CONTEXT IrpContext)
 
                 if (IsMounted(Vcb)) {
 
+                    /* update fs write time */
+                    KeQuerySystemTime(&SysTime);
+                    Ext2TimeToSecondsSince1970(&SysTime, &LinuxTime.LowPart, &LinuxTime.HighPart);
+                    Vcb->SuperBlock->s_wtime = LinuxTime.LowPart;
+                    Vcb->SuperBlock->s_wtime_hi = (UCHAR)LinuxTime.HighPart;
+
                     /* update mount count */
                     Vcb->SuperBlock->s_mnt_count++;
-                    if (Vcb->SuperBlock->s_mnt_count >
-                            Vcb->SuperBlock->s_max_mnt_count ) {
-                        Vcb->SuperBlock->s_mnt_count =
-                            Vcb->SuperBlock->s_max_mnt_count;
-                    }
                     Ext2SaveSuper(IrpContext, Vcb);
 
                     /* flush dirty cache for all files */
-                    Status = Ext2FlushFiles(IrpContext, Vcb, TRUE);
-                    if (!NT_SUCCESS(Status)) {
-                        DbgBreak();
-                    }
+                    Ext2FlushFiles(IrpContext, Vcb, TRUE);
 
                     /* flush volume stream's cache to disk */
-                    Status = Ext2FlushVolume(IrpContext, Vcb, TRUE);
-
-                    if (!NT_SUCCESS(Status) && Status != STATUS_MEDIA_WRITE_PROTECTED) {
-                        DbgBreak();
-                    }
+                    Ext2FlushVolume(IrpContext, Vcb, TRUE);
 
                     /* send shutdown request to underlying disk */
                     Ext2DiskShutDown(Vcb);

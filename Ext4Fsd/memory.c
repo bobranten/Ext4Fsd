@@ -2279,6 +2279,7 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
     USHORT                      Buffer[2];
     ULONG                       ChangeCount = 0, features;
     CC_FILE_SIZES               FileSizes;
+    LARGE_INTEGER               SysTime, LinuxTime;
     int                         i, has_huge_files;
 
     BOOLEAN                     VcbResourceInitialized = FALSE;
@@ -2708,6 +2709,12 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
 
         /* query parameters from registry */
         Ext2PerformRegistryVolumeParams(Vcb);
+
+        /* update fs mount time */
+        KeQuerySystemTime(&SysTime);
+        Ext2TimeToSecondsSince1970(&SysTime, &LinuxTime.LowPart, &LinuxTime.HighPart);
+        Vcb->SuperBlock->s_mtime = LinuxTime.LowPart;
+        Vcb->SuperBlock->s_mtime_hi = (UCHAR)LinuxTime.HighPart;
 
         SetLongFlag(Vcb->Flags, VCB_INITIALIZED);
 
