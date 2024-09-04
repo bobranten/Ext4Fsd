@@ -484,10 +484,13 @@ Ext2LookupFile (
                             }
                         }
 
-                        Mcb->CreationTime = Ext2GetInodeTime(Mcb->Inode.i_ctime, Mcb->Inode.i_ctime_extra);
                         Mcb->LastAccessTime = Ext2GetInodeTime(Mcb->Inode.i_atime, Mcb->Inode.i_atime_extra);
                         Mcb->LastWriteTime = Ext2GetInodeTime(Mcb->Inode.i_mtime, Mcb->Inode.i_mtime_extra);
-                        Mcb->ChangeTime = Ext2GetInodeTime(Mcb->Inode.i_mtime, Mcb->Inode.i_mtime_extra);
+                        Mcb->ChangeTime = Ext2GetInodeTime(Mcb->Inode.i_ctime, Mcb->Inode.i_ctime_extra);
+                        if (Mcb->Inode.i_crtime)
+                            Mcb->CreationTime = Ext2GetInodeTime(Mcb->Inode.i_crtime, Mcb->Inode.i_crtime_extra);
+                        else
+                            Mcb->CreationTime = Ext2GetInodeTime(Mcb->Inode.i_ctime, Mcb->Inode.i_ctime_extra);
 
                         /* process symlink */
                         if (S_ISLNK(Mcb->Inode.i_mode) && !bNotFollow) {

@@ -2694,10 +2694,13 @@ Ext2InitializeVcb( IN PEXT2_IRP_CONTEXT IrpContext,
         }
 
         /* initializeroot node */
-        Vcb->McbTree->CreationTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_ctime, Vcb->McbTree->Inode.i_ctime_extra);
         Vcb->McbTree->LastAccessTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_atime, Vcb->McbTree->Inode.i_atime_extra);
         Vcb->McbTree->LastWriteTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_mtime, Vcb->McbTree->Inode.i_mtime_extra);
-        Vcb->McbTree->ChangeTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_mtime, Vcb->McbTree->Inode.i_mtime_extra);
+        Vcb->McbTree->ChangeTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_ctime, Vcb->McbTree->Inode.i_ctime_extra);
+        if (Vcb->McbTree->Inode.i_crtime)
+            Vcb->McbTree->CreationTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_crtime, Vcb->McbTree->Inode.i_crtime_extra);
+        else
+            Vcb->McbTree->CreationTime = Ext2GetInodeTime(Vcb->McbTree->Inode.i_ctime, Vcb->McbTree->Inode.i_ctime_extra);
 
         /* check bitmap if user specifies it */
         if (IsFlagOn(Ext2Global->Flags, EXT2_CHECKING_BITMAP)) {

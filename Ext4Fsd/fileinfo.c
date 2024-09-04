@@ -657,8 +657,8 @@ Ext2SetFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             struct inode *Inode = &Mcb->Inode;
 
             if (FBI->CreationTime.QuadPart != 0 && FBI->CreationTime.QuadPart != -1) {
-                Ext2SetInodeTime(&FBI->CreationTime, &Inode->i_ctime, &Inode->i_ctime_extra);
-                Mcb->CreationTime = Ext2GetInodeTime(Inode->i_ctime, Inode->i_ctime_extra);
+                Ext2SetInodeTime(&FBI->CreationTime, &Inode->i_crtime, &Inode->i_crtime_extra);
+                Mcb->CreationTime = Ext2GetInodeTime(Inode->i_crtime, Inode->i_crtime_extra);
                 NotifyFilter |= FILE_NOTIFY_CHANGE_CREATION;
             }
 
@@ -676,7 +676,9 @@ Ext2SetFileInformation (IN PEXT2_IRP_CONTEXT IrpContext)
             }
 
             if (FBI->ChangeTime.QuadPart !=0 && FBI->ChangeTime.QuadPart != -1) {
-                Mcb->ChangeTime = FBI->ChangeTime;
+                Ext2SetInodeTime(&FBI->ChangeTime, &Inode->i_ctime, &Inode->i_ctime_extra);
+                Mcb->ChangeTime = Ext2GetInodeTime(Inode->i_ctime, Inode->i_ctime_extra);
+                NotifyFilter |= FILE_NOTIFY_CHANGE_ATTRIBUTES;
             }
 
             if (FBI->FileAttributes != 0) {
@@ -2041,6 +2043,7 @@ Ext2DeleteFile(
             /* set delete time and free the inode */
             KeQuerySystemTime(&SysTime);
             Mcb->Inode.i_nlink = 0;
+            /* i_dtime is only the lower 32-bits because it is used as a relative time */
             { ULONG dummy; Ext2TimeToSecondsSince1970(&SysTime, &Mcb->Inode.i_dtime, &dummy); }
             Ext2SaveInode(IrpContext, Vcb, &Mcb->Inode);
             Ext2FreeInode(IrpContext, Vcb, Mcb->Inode.i_ino, Ext2InodeType(Mcb));
