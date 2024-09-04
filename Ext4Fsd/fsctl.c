@@ -2047,6 +2047,7 @@ Ext2MountVolume (IN PEXT2_IRP_CONTEXT IrpContext)
     PEXT2_SUPER_BLOCK           Ext2Sb = NULL;
     ULONG                       dwBytes;
     DISK_GEOMETRY               DiskGeometry;
+    LARGE_INTEGER               SysTime, LinuxTime;
 
     __try {
 
@@ -2215,6 +2216,12 @@ Ext2MountVolume (IN PEXT2_IRP_CONTEXT IrpContext)
             if (!ext4_superblock_csum_verify(&Vcb->sb, Ext2Sb)) {
                 DEBUG(DL_ERR, ( "Found ext4 filesystem with invalid superblock checksum. Run e2fsck?\n"));
             }
+
+            /* update fs mount time */
+            KeQuerySystemTime(&SysTime);
+            Ext2TimeToSecondsSince1970(&SysTime, &LinuxTime.LowPart, &LinuxTime.HighPart);
+            Vcb->SuperBlock->s_mtime = LinuxTime.LowPart;
+            Vcb->SuperBlock->s_mtime_hi = (UCHAR)LinuxTime.HighPart;
 
             SetLongFlag(Vcb->Flags, VCB_MOUNTED);
             SetFlag(Vcb->Vpb->Flags, VPB_MOUNTED);
