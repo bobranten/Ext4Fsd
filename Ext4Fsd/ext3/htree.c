@@ -1630,7 +1630,7 @@ int ext3_dx_add_entry(struct ext2_icb *icb, struct dentry *dentry,
             frame->entries = entries = entries2;
             frame->bh = bh2;
         }
-        // ext3_journal_dirty_metadata(handle, frames[0].bh);
+        ext4_dx_csum_set(dir, (struct ext4_dir_entry*)frames[0].bh->b_data);
         set_buffer_dirty(frames[0].bh);
     }
     de = do_split(icb, dir, &bh, frame, &hinfo, &err);
