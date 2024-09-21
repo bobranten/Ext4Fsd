@@ -304,14 +304,33 @@ struct buffer_head *ext3_append(struct ext2_icb *icb, struct inode *inode,
     return ext3_bread(icb, inode, *block, err);
 }
 
+/*
+ * Set directory link count to 1 if nlinks > EXT4_LINK_MAX, or if nlinks == 2
+ * since this indicates that nlinks count was previously 1 to avoid overflowing
+ * the 16-bit i_links_count field on disk.  Directories with i_nlink == 1 mean
+ * that subdirectory link counts are not being maintained accurately.
+ *
+ * The caller has already checked for i_nlink overflow in case the DIR_LINK
+ * feature is not enabled and returned -EMLINK.  The is_dx() check is a proxy
+ * for checking S_ISDIR(inode) (since the INODE_INDEX feature will not be set
+ * on regular files) and to avoid creating huge/slow non-HTREE directories.
+ */
 void ext3_inc_count(struct inode *inode)
 {
     inode->i_nlink++;
+    if (is_dx(inode) &&
+        (inode->i_nlink > EXT4_LINK_MAX || inode->i_nlink == 2))
+        inode->i_nlink = 1;
 }
 
+/*
+ * If a directory had nlink == 1, then we should let it be 1. This indicates
+ * directory has >EXT4_LINK_MAX subdirs.
+ */
 void ext3_dec_count(struct inode *inode)
 {
-    inode->i_nlink--;
+    if (!S_ISDIR(inode->i_mode) || inode->i_nlink > 2)
+        inode->i_nlink--;
 }
 
 unsigned char ext3_type_by_mode(umode_t mode)
