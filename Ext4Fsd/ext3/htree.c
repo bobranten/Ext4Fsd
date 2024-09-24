@@ -733,19 +733,6 @@ int ext3_htree_store_dirent(struct file *dir_file, __u32 hash,
     return 0;
 }
 
-static unsigned char ext3_filetype_table[] = {
-    DT_UNKNOWN, DT_REG, DT_DIR, DT_CHR, DT_BLK, DT_FIFO, DT_SOCK, DT_LNK
-};
-
-static unsigned char get_dtype(struct super_block *sb, int filetype)
-{
-    if (!EXT3_HAS_INCOMPAT_FEATURE(sb, EXT3_FEATURE_INCOMPAT_FILETYPE) ||
-            (filetype >= EXT3_FT_MAX))
-        return DT_UNKNOWN;
-
-    return (ext3_filetype_table[filetype]);
-}
-
 /*
  * This is a helper function for ext3_dx_readdir.  It calls filldir
  * for all entres on the fname linked list.  (Normally there is only

@@ -52,7 +52,6 @@ typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
 #include <linux/ext4_ext.h>
 
-#define __FS_HAS_ENCRYPTION IS_ENABLED(CONFIG_EXT4_FS_ENCRYPTION)
 //#include <linux/fscrypt.h>
 
 //#include <linux/compiler.h>
@@ -99,7 +98,6 @@ typedef unsigned __int64 uint64_t;
 #define EXT2_EXTENTS_FL EXT4_EXTENTS_FL
 #define EXT2_NAME_LEN EXT4_NAME_LEN
 #define EXT3_NAME_LEN EXT4_NAME_LEN
-#define EXT4_NAME_LEN 255
 #define EXT2_MIN_BLOCK_SIZE EXT4_MIN_BLOCK_SIZE
 #define EXT2_FEATURE_RO_COMPAT_LARGE_FILE EXT4_FEATURE_RO_COMPAT_LARGE_FILE
 #define EXT2_DIR_REC_LEN EXT4_DIR_REC_LEN
@@ -2296,23 +2294,25 @@ void ext4_insert_dentry(struct inode *inode,
 			struct ext4_dir_entry_2 *de,
 			int buf_size,
 			struct ext4_filename *fname);
+
 static inline void ext4_update_dx_flag(struct inode *inode)
 {
 	if (!ext4_has_feature_dir_index(inode->i_sb))
 		ext4_clear_inode_flag(inode, EXT4_INODE_INDEX);
 }
+
 static const unsigned char ext4_filetype_table[] = {
 	DT_UNKNOWN, DT_REG, DT_DIR, DT_CHR, DT_BLK, DT_FIFO, DT_SOCK, DT_LNK
 };
-#if 0
-static inline  unsigned char get_dtype(struct super_block *sb, int filetype)
+
+static inline unsigned char get_dtype(struct super_block *sb, int filetype)
 {
 	if (!ext4_has_feature_filetype(sb) || filetype >= EXT4_FT_MAX)
 		return DT_UNKNOWN;
 
 	return ext4_filetype_table[filetype];
 }
-#endif
+
 extern int ext4_check_all_de(struct inode *dir, struct buffer_head *bh,
 			     void *buf, int buf_size);
 
