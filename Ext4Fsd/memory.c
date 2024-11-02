@@ -2249,7 +2249,7 @@ Ext2InitializeLabel(
     return status;
 }
 
-static __inline BOOLEAN Ext2IsNullUuid (__u8 * uuid)
+static inline BOOLEAN Ext2IsNullUuid (__u8 * uuid)
 {
     int i;
     for (i = 0; i < 16; i++) {

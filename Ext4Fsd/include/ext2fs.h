@@ -216,7 +216,7 @@ _InterlockedXor (
 #define SetLongFlag(_F,_SF)   Ext2SetFlag(&(_F), (ULONG)(_SF))
 #define ClearLongFlag(_F,_SF) Ext2ClearFlag(&(_F), (ULONG)(_SF))
 
-__inline
+inline
 VOID
 Ext2SetFlag(PULONG Flags, ULONG FlagBit)
 {
@@ -224,7 +224,7 @@ Ext2SetFlag(PULONG Flags, ULONG FlagBit)
     ASSERT(*Flags == (_ret | FlagBit));
 }
 
-__inline
+inline
 VOID
 Ext2ClearFlag(PULONG Flags, ULONG FlagBit)
 {
@@ -952,7 +952,7 @@ struct _EXT2_MCB {
 #define Ext2ReferXcb(_C)  InterlockedIncrement(_C)
 #define Ext2DerefXcb(_C)  DEC_OBJ_CNT(_C)
 
-__inline ULONG DEC_OBJ_CNT(PULONG _C) {
+inline ULONG DEC_OBJ_CNT(PULONG _C) {
     if (*_C <= 0) {
         DbgBreak();
     }
@@ -1122,7 +1122,7 @@ typedef struct _EXT2_EXTENT {
 // memory allocation statistics
 //
 
-__inline
+inline
 VOID
 Ext2TraceMemory(BOOLEAN _n, int _i, PVOID _p, LONG _s)
 {
@@ -1136,7 +1136,7 @@ Ext2TraceMemory(BOOLEAN _n, int _i, PVOID _p, LONG _s)
     }
 }
 
-__inline
+inline
 VOID
 Ext2TraceIrpContext(BOOLEAN _n, PEXT2_IRP_CONTEXT IrpContext)
 {
