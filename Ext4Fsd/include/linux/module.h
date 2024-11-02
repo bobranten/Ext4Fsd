@@ -438,10 +438,10 @@ extern struct task_struct *current;
 //
 
 
-static inline cond_resched() {
+static inline int cond_resched() {
     return FALSE;
 }
-static inline need_resched() {
+static inline int need_resched() {
     return FALSE;
 }
 
