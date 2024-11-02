@@ -2179,7 +2179,7 @@ Ext2PerformRegistryVolumeParams(IN PEXT2_VCB Vcb)
         memcpy(Vcb->Codepage.AnsiName, Ext2Global->Codepage.AnsiName, CODEPAGE_MAXLEN);
         Vcb->Codepage.PageTable = Ext2Global->Codepage.PageTable;
 
-        if (Vcb->bHidingPrefix = Ext2Global->bHidingPrefix) {
+        if (Vcb->bHidingPrefix == Ext2Global->bHidingPrefix) {
             RtlCopyMemory( Vcb->sHidingPrefix,
                            Ext2Global->sHidingPrefix,
                            HIDINGPAT_LEN);
@@ -2188,7 +2188,7 @@ Ext2PerformRegistryVolumeParams(IN PEXT2_VCB Vcb)
                            HIDINGPAT_LEN);
         }
 
-        if (Vcb->bHidingSuffix = Ext2Global->bHidingSuffix) {
+        if (Vcb->bHidingSuffix == Ext2Global->bHidingSuffix) {
             RtlCopyMemory( Vcb->sHidingSuffix,
                            Ext2Global->sHidingSuffix,
                            HIDINGPAT_LEN);

@@ -426,14 +426,14 @@ Ext2ProcessVolumeProperty(
         case APP_CMD_SET_PROPERTY2:
 
             RtlZeroMemory(Vcb->sHidingPrefix, HIDINGPAT_LEN);
-            if (Vcb->bHidingPrefix = Property2->bHidingPrefix) {
+            if (Vcb->bHidingPrefix == Property2->bHidingPrefix) {
                 RtlCopyMemory( Vcb->sHidingPrefix,
                                Property2->sHidingPrefix,
                                HIDINGPAT_LEN - 1);
             }
 
             RtlZeroMemory(Vcb->sHidingSuffix, HIDINGPAT_LEN);
-            if (Vcb->bHidingSuffix = Property2->bHidingSuffix) {
+            if (Vcb->bHidingSuffix == Property2->bHidingSuffix) {
                 RtlCopyMemory( Vcb->sHidingSuffix,
                                Property2->sHidingSuffix,
                                HIDINGPAT_LEN - 1);
@@ -511,7 +511,7 @@ Ext2ProcessVolumeProperty(
             RtlCopyMemory(Property2->UUID, Vcb->SuperBlock->s_uuid, 16);
             Property2->DrvLetter = Vcb->DrvLetter;
 
-            if (Property2->bHidingPrefix = Vcb->bHidingPrefix) {
+            if (Property2->bHidingPrefix == Vcb->bHidingPrefix) {
                 RtlCopyMemory( Property2->sHidingPrefix,
                                Vcb->sHidingPrefix,
                                HIDINGPAT_LEN);
@@ -520,7 +520,7 @@ Ext2ProcessVolumeProperty(
                                HIDINGPAT_LEN);
             }
 
-            if (Property2->bHidingSuffix = Vcb->bHidingSuffix) {
+            if (Property2->bHidingSuffix == Vcb->bHidingSuffix) {
                 RtlCopyMemory( Property2->sHidingSuffix,
                                Vcb->sHidingSuffix,
                                HIDINGPAT_LEN);
