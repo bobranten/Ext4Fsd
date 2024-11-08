@@ -13,9 +13,6 @@
  */
 
 #include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/string.h>
-#include <linux/nls.h>
 #include <linux/errno.h>
 
 static wchar_t charset2uni[256] = {
