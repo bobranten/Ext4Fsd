@@ -4,9 +4,6 @@
  */
 
 #include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/string.h>
-#include <linux/nls.h>
 #include <linux/errno.h>
 
 static unsigned char identity[256];
