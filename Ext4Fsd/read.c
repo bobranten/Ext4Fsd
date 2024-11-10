@@ -906,6 +906,7 @@ Ext2Read (IN PEXT2_IRP_CONTEXT IrpContext)
             if (FlagOn(Vcb->Flags, VCB_VOLUME_LOCKED) &&
                 Vcb->LockFile != FileObject ) {
                 Status = STATUS_ACCESS_DENIED;
+                bCompleteRequest = TRUE;
                 __leave;
             }
 
