@@ -2219,7 +2219,7 @@ extern struct buffer_head *ext4_read_block_bitmap(struct super_block *sb,
 extern unsigned ext4_free_clusters_after_init(struct super_block *sb,
 					      ext4_group_t block_group,
 					      struct ext4_group_desc *gdp);
-ext4_fsblk_t ext4_inode_to_goal_block(struct inode *);
+static inline ext4_fsblk_t ext4_inode_to_goal_block(struct inode *);
 #if 0
 static inline bool ext4_encrypted_inode(struct inode *inode)
 {
@@ -3370,7 +3370,7 @@ __u32 ext4_chksum(struct ext4_sb_info *sbi, __u32 crc,
 int ext4_superblock_csum_verify(struct super_block *sb,
 				       struct ext4_super_block *es);
 void ext4_superblock_csum_set(struct super_block *sb);
-__le16 ext4_group_desc_csum(struct super_block *sb, __u32 block_group,
+static __le16 ext4_group_desc_csum(struct super_block *sb, __u32 block_group,
 				   struct ext4_group_desc *gdp);
 int ext4_group_desc_csum_verify(struct super_block *sb, __u32 block_group,
 				struct ext4_group_desc *gdp);
