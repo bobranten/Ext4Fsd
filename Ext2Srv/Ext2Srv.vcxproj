@@ -130,6 +130,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <TargetName>Ext2Srv</TargetName>
+    <OutDir>$(SolutionDir)Ext2Srv\$(Configuration)\arm\</OutDir>
+    <IntDir>$(Configuration)\arm\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>Ext2Srv</TargetName>
@@ -138,6 +140,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <TargetName>Ext2Srv</TargetName>
+    <OutDir>$(SolutionDir)Ext2Srv\$(Configuration)\arm\</OutDir>
+    <IntDir>$(Configuration)\arm\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>Ext2Srv</TargetName>
@@ -146,6 +150,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <TargetName>Ext2Srv</TargetName>
+    <OutDir>$(SolutionDir)Ext2Srv\$(Configuration)\arm64\</OutDir>
+    <IntDir>$(Configuration)\arm64\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>Ext2Srv</TargetName>
@@ -154,6 +160,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <TargetName>Ext2Srv</TargetName>
+    <OutDir>$(SolutionDir)Ext2Srv\$(Configuration)\arm64\</OutDir>
+    <IntDir>$(Configuration)\arm64\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
