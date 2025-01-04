@@ -1,7 +1,7 @@
 ; ext2fsd.nsi
 ;
 ; This is a NSIS script to create an install program for the Ext2Fsd project
-; developed by Bo Brantén <bosse@acc.umu.se> in 2020 to help beta testing.
+; developed by Bo Brantén <bosse@accum.se> in 2020 to help beta testing.
 ;
 ; To build an installation program follow these steps:
 ; 1. Install NSIS (Nullsoft Scriptable Install System)
@@ -28,14 +28,15 @@ OutFile "${PROJECTNAME}-setup.exe"
 !define MGRPATH_X64 "..\Ext2Mgr\Release\x64"
 !define SRVPATH_X86 "..\Ext2Srv\Release\x86"
 !define SRVPATH_X64 "..\Ext2Srv\Release\x64"
-!define SYSPATH_X86 "..\Ext4Fsd\Release\x86"
-!define SYSPATH_X64 "..\Ext4Fsd\Release\x64"
-!define MSVPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x86\Microsoft.VC143.CRT"
-!define MSVPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x64\Microsoft.VC143.CRT"
-!define MFCPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x86\Microsoft.VC143.MFC"
-!define MFCPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33135\x64\Microsoft.VC143.MFC"
+!define SYSPATH_X86 "..\drivers\Release\x86"
+!define SYSPATH_X64 "..\drivers\Release\x64"
+!define MSVPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.42.34433\x86\Microsoft.VC143.CRT"
+!define MSVPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.42.34433\x64\Microsoft.VC143.CRT"
+!define MFCPATH_X86 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.42.34433\x86\Microsoft.VC143.MFC"
+!define MFCPATH_X64 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.42.34433\x64\Microsoft.VC143.MFC"
 !define VCDLL_X86 "vcruntime140"
-!define VCDLL_X64 "vcruntime140_1"
+!define VCDLL_X64A "vcruntime140"
+!define VCDLL_X64B "vcruntime140_1"
 !define MFCDLL "mfc140"
 
 ; the paths to the binaries when compiled with an older WDK to support Windows XP - Windows 8.1.
@@ -66,9 +67,11 @@ RequestExecutionLevel admin
 Function .onInit
     SetShellVarContext all
     IfFileExists $WINDIR\SysWOW64\*.* 0 else
+        ; 64-bit
         StrCpy $INSTDIR "$PROGRAMFILES64\${PROJECTNAME}"
         Goto endif
     else:
+        ; 32-bit
         StrCpy $INSTDIR "$PROGRAMFILES\${PROJECTNAME}"
     endif:
 FunctionEnd
@@ -86,7 +89,8 @@ SetOutPath $INSTDIR
 ; select the files.
 IfFileExists $WINDIR\SysWOW64\*.* 0 else
     ; 64-bit.
-    File "${MSVPATH_X64}\${VCDLL_X64}.dll"
+    File "${MSVPATH_X64}\${VCDLL_X64A}.dll"
+    File "${MSVPATH_X64}\${VCDLL_X64B}.dll"
     File "${MFCPATH_X64}\${MFCDLL}.dll"
     File "${MGRPATH_X64}\Ext2Mgr.exe"
     File "${SRVPATH_X64}\Ext2Srv.exe"
@@ -113,9 +117,12 @@ File "..\ext4fsd\readme.txt"
 
 ; install the driver.
 IfFileExists $WINDIR\SysWOW64\*.* 0 else32
+    ; 64-bit
+    ; the install program is a 32-bit process so the 64-bit version of rundll32 is found in the sysnative directory.
     ExecWait '"$WINDIR\sysnative\rundll32.exe" setupapi.dll,InstallHinfSection DefaultInstall 132 $INSTDIR\${DRIVERNAME}.inf'
     Goto endif32
 else32:
+    ; 32-bit
     ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultInstall 132 $INSTDIR\${DRIVERNAME}.inf'
 endif32:
 
@@ -149,9 +156,11 @@ Function un.onInit
     continue:
 
     IfFileExists $WINDIR\SysWOW64\*.* 0 else
+        ; 64-bit
         StrCpy $INSTDIR "$PROGRAMFILES64\${PROJECTNAME}"
         Goto endif
     else:
+        ; 32-bit
         StrCpy $INSTDIR "$PROGRAMFILES\${PROJECTNAME}"
     endif:
 FunctionEnd
@@ -165,10 +174,13 @@ ExecWait '"$INSTDIR\Ext2Srv.exe" /removeservice'
 
 ; uninstall the driver.
 IfFileExists $WINDIR\SysWOW64\*.* 0 else
+    ; 64-bit
     ExecWait '"$WINDIR\sysnative\rundll32.exe" setupapi.dll,InstallHinfSection DefaultUninstall 132 $INSTDIR\${DRIVERNAME}.inf'
-    Delete $INSTDIR\${VCDLL_X64}.dll"
+    Delete $INSTDIR\${VCDLL_X64A}.dll"
+    Delete $INSTDIR\${VCDLL_X64B}.dll"
     Goto endif
 else:
+    ; 32-bit
     ExecWait '"rundll32.exe" setupapi.dll,InstallHinfSection DefaultUninstall 132 $INSTDIR\${DRIVERNAME}.inf'
     Delete $INSTDIR\${VCDLL_X86}.dll"
 endif:
