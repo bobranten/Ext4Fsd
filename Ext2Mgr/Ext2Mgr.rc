@@ -383,11 +383,11 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Bo Branten <bosse@accum.se>"
-            VALUE "CompanyName", "http://www.accum.se/~bosse"
+            VALUE "CompanyName", "Ext2Fsd Group (www.ext2fsd.com)"
             VALUE "FileDescription", "Ext2 Volume Manager for Windows"
             VALUE "FileVersion", "3.0.7.9"
             VALUE "InternalName", "Ext2Mgr"
-            VALUE "LegalCopyright", "Copyright (C) GPL v2.0"
+            VALUE "LegalCopyright", "Copyright (C) 2002-2017 Matt Wu <matt@ext2fsd.com>"
             VALUE "OriginalFilename", "Ext2Mgr.exe"
             VALUE "ProductName", "Ext2 Volume Manager for Windows"
             VALUE "ProductVersion", "3.0.7.9"
