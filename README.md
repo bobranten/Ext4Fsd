@@ -5,7 +5,7 @@ Latest release
     Signed driver for Windows 10 and Windows 11:
     https://www.accum.se/~bosse/ext2fsd/0.71/Ext2Fsd-0.71-setup.exe
 
-    Updated Ext2Mgr https://www.accum.se/~bosse/ext2fsd/next/Ext2Mgr.exe
+    Updated Ext2Mgr https://www.accum.se/~bosse/ext2fsd/0.71/Ext2Mgr.exe
     that gives more detailed information on the type of filesystems on
     the disk. If an on disk filesystem contains new ext4 features that
     is not supported by the Windows driver it will show a '+' sign after
