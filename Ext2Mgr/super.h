@@ -230,6 +230,7 @@ struct ext4_super_block {
 					 EXT4_FEATURE_INCOMPAT_EXTENTS| \
 					 EXT4_FEATURE_INCOMPAT_64BIT| \
 					 EXT4_FEATURE_INCOMPAT_FLEX_BG| \
+					 EXT4_FEATURE_INCOMPAT_CASEFOLD| \
 					 EXT4_FEATURE_INCOMPAT_CSUM_SEED)
 
 /* Definitions for other common filesystems so the application can list them. */
