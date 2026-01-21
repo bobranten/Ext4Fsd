@@ -147,11 +147,6 @@ Ext2AllocateFcb (
     Fcb->Identifier.Type = EXT2FCB;
     Fcb->Identifier.Size = sizeof(EXT2_FCB);
 
-#ifndef _WIN2K_TARGET_
-    ExInitializeFastMutex(&Fcb->Mutex);
-    FsRtlSetupAdvancedHeader(&Fcb->Header,  &Fcb->Mutex);
-#endif
-
     FsRtlInitializeOplock(&Fcb->Oplock);
     FsRtlInitializeFileLock (
         &Fcb->FileLockAnchor,
@@ -171,7 +166,6 @@ Ext2AllocateFcb (
     DEBUG(DL_RES, ("Ext2AllocateFcb: Fcb %p created: %wZ.\n",
                    Fcb, &Fcb->Mcb->FullName));
 
-    RtlZeroMemory(&Fcb->Header, sizeof(FSRTL_COMMON_FCB_HEADER));
     Fcb->Header.NodeTypeCode = (USHORT) EXT2FCB;
     Fcb->Header.NodeByteSize = sizeof(EXT2_FCB);
     Fcb->Header.IsFastIoPossible = FastIoIsNotPossible;
@@ -182,6 +176,11 @@ Ext2AllocateFcb (
     Fcb->Header.ValidDataLength.QuadPart = Mcb->Inode.i_size;
     Fcb->Header.AllocationSize.QuadPart = CEILING_ALIGNED(ULONGLONG,
                                           Fcb->Header.FileSize.QuadPart, (ULONGLONG)Vcb->BlockSize);
+
+#ifndef _WIN2K_TARGET_
+	ExInitializeFastMutex(&Fcb->Mutex);
+	FsRtlSetupAdvancedHeader(&Fcb->Header, &Fcb->Mutex);
+#endif
 
     Fcb->SectionObject.DataSectionObject = NULL;
     Fcb->SectionObject.SharedCacheMap = NULL;
