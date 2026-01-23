@@ -29,22 +29,13 @@ Ext2ReadWriteBlockAsyncCompletionRoutine (
     IN PIRP Irp,
     IN PVOID Context    );
 
-
-NTSTATUS
-Ext2MediaEjectControlCompletion (
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PIRP Irp,
-    IN PVOID Contxt     );
-
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, Ext2LockUserBuffer)
 #pragma alloc_text(PAGE, Ext2ReadSync)
 #pragma alloc_text(PAGE, Ext2ReadDisk)
 #pragma alloc_text(PAGE, Ext2DiskIoControl)
-#pragma alloc_text(PAGE, Ext2MediaEjectControl)
 #pragma alloc_text(PAGE, Ext2DiskShutDown)
 #endif
-
 
 /* FUNCTIONS ***************************************************************/
 
@@ -79,7 +70,6 @@ Ext2CreateMdl (
     }
     return Mdl;
 }
-
 
 VOID
 Ext2DestroyMdl (IN PMDL Mdl)
@@ -534,7 +524,6 @@ Ext2ReadSync(
     return Status;
 }
 
-
 NTSTATUS
 Ext2ReadDisk(
     IN PEXT2_VCB   Vcb,
@@ -583,7 +572,6 @@ errorout:
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2DiskIoControl (
@@ -639,86 +627,6 @@ Ext2DiskIoControl (
 
     return Status;
 }
-
-
-NTSTATUS
-Ext2MediaEjectControlCompletion (
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PIRP Irp,
-    IN PVOID Contxt
-)
-{
-    PKEVENT Event = (PKEVENT)Contxt;
-
-    KeSetEvent( Event, 0, FALSE );
-
-    UNREFERENCED_PARAMETER( DeviceObject );
-
-    return STATUS_SUCCESS;
-}
-
-VOID
-Ext2MediaEjectControl (
-    IN PEXT2_IRP_CONTEXT IrpContext,
-    IN PEXT2_VCB Vcb,
-    IN BOOLEAN bPrevent
-)
-{
-    PIRP                    Irp;
-    KEVENT                  Event;
-    NTSTATUS                Status;
-    PREVENT_MEDIA_REMOVAL   Prevent;
-    IO_STATUS_BLOCK         IoStatus;
-
-
-    ExAcquireResourceExclusiveLite(
-        &Vcb->MainResource,
-        TRUE            );
-
-    if (bPrevent != IsFlagOn(Vcb->Flags, VCB_REMOVAL_PREVENTED)) {
-        if (bPrevent) {
-            SetFlag(Vcb->Flags, VCB_REMOVAL_PREVENTED);
-        } else {
-            ClearFlag(Vcb->Flags, VCB_REMOVAL_PREVENTED);
-        }
-    }
-
-    ExReleaseResourceLite(&Vcb->MainResource);
-
-    Prevent.PreventMediaRemoval = bPrevent;
-
-    KeInitializeEvent( &Event, NotificationEvent, FALSE );
-
-    Irp = IoBuildDeviceIoControlRequest( IOCTL_DISK_MEDIA_REMOVAL,
-                                         Vcb->TargetDeviceObject,
-                                         &Prevent,
-                                         sizeof(PREVENT_MEDIA_REMOVAL),
-                                         NULL,
-                                         0,
-                                         FALSE,
-                                         NULL,
-                                         &IoStatus );
-
-    if (Irp != NULL) {
-        IoSetCompletionRoutine( Irp,
-                                Ext2MediaEjectControlCompletion,
-                                &Event,
-                                TRUE,
-                                TRUE,
-                                TRUE );
-
-        Status = IoCallDriver(Vcb->TargetDeviceObject, Irp);
-
-        if (Status == STATUS_PENDING) {
-            Status = KeWaitForSingleObject( &Event,
-                                            Executive,
-                                            KernelMode,
-                                            FALSE,
-                                            NULL );
-        }
-    }
-}
-
 
 NTSTATUS
 Ext2DiskShutDown(PEXT2_VCB Vcb)

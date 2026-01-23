@@ -1225,12 +1225,6 @@ Ext2DiskIoControl (
     IN OUT PVOID        OutputBuffer,
     IN OUT PULONG       OutputBufferSize );
 
-VOID
-Ext2MediaEjectControl (
-    IN PEXT2_IRP_CONTEXT IrpContext,
-    IN PEXT2_VCB Vcb,
-    IN BOOLEAN bPrevent );
-
 NTSTATUS
 Ext2DiskShutDown(PEXT2_VCB Vcb);
 
