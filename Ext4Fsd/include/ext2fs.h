@@ -1066,7 +1066,6 @@ typedef struct ext2_icb {
 #define IRP_CONTEXT_STACK_IO_CONTEXT     (0x00000100)
 #define IRP_CONTEXT_FLAG_REQUEUED        (0x00000200)
 #define IRP_CONTEXT_FLAG_USER_IO         (0x00000400)
-#define IRP_CONTEXT_FLAG_DELAY_CLOSE     (0x00000800)
 #define IRP_CONTEXT_FLAG_FILE_BUSY       (0x00001000)
 
 
@@ -1242,12 +1241,6 @@ Ext2Cleanup (IN PEXT2_IRP_CONTEXT IrpContext);
 
 NTSTATUS
 Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext);
-
-VOID
-Ext2QueueCloseRequest (IN PEXT2_IRP_CONTEXT IrpContext);
-
-VOID
-Ext2DeQueueCloseRequest (IN PVOID Context);
 
 //
 // Cmcb.c

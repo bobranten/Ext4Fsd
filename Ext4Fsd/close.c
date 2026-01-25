@@ -17,11 +17,6 @@ extern PEXT2_GLOBAL Ext2Global;
 
 /* DEFINITIONS *************************************************************/
 
-#ifdef ALLOC_PRAGMA
-#pragma alloc_text(PAGE, Ext2QueueCloseRequest)
-#pragma alloc_text(PAGE, Ext2DeQueueCloseRequest)
-#endif
-
 NTSTATUS
 Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -54,23 +49,14 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
         ASSERT((Vcb->Identifier.Type == EXT2VCB) &&
                (Vcb->Identifier.Size == sizeof(EXT2_VCB)));
 
-        if (IsFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DELAY_CLOSE)) {
-
-            FileObject = NULL;
-            Fcb = IrpContext->Fcb;
-            Ccb = IrpContext->Ccb;
-
-        } else {
-
-            FileObject = IrpContext->FileObject;
-            Fcb = (PEXT2_FCB) FileObject->FsContext;
-            if (!Fcb) {
-                Status = STATUS_SUCCESS;
-                __leave;
-            }
-            ASSERT(Fcb != NULL);
-            Ccb = (PEXT2_CCB) FileObject->FsContext2;
+        FileObject = IrpContext->FileObject;
+        Fcb = (PEXT2_FCB) FileObject->FsContext;
+        if (!Fcb) {
+            Status = STATUS_SUCCESS;
+            __leave;
         }
+        ASSERT(Fcb != NULL);
+        Ccb = (PEXT2_CCB) FileObject->FsContext2;
 
         DEBUG(DL_INF, ( "Ext2Close: (VCB) Vcb = %p ReferCount = %d\n",
                          Vcb, Vcb->ReferenceCount));
@@ -86,14 +72,9 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
 
         if (Fcb->Identifier.Type == EXT2VCB) {
 
-            if (!ExAcquireResourceExclusiveLite(
-                            &Vcb->MainResource,
-                            TRUE )) {
-                DEBUG(DL_INF, ("Ext2Close: PENDING ... Vcb: %xh/%xh\n",
-                                   Vcb->OpenHandleCount, Vcb->ReferenceCount));
-                Status = STATUS_PENDING;
-                __leave;
-            }
+            ExAcquireResourceExclusiveLite(
+                &Vcb->MainResource,
+                TRUE);
             VcbResourceAcquired = TRUE;
 
             if (Ccb) {
@@ -115,12 +96,9 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
             __leave;
         }
 
-        if (!ExAcquireResourceExclusiveLite(
-                    &Fcb->MainResource,
-                    TRUE )) {
-            Status = STATUS_PENDING;
-            __leave;
-        }
+        ExAcquireResourceExclusiveLite(
+            &Fcb->MainResource,
+            TRUE);
         FcbResourceAcquired = TRUE;
 
         Fcb->Header.IsFastIoPossible = FastIoIsNotPossible;
@@ -169,14 +147,7 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
 
         if (!IrpContext->ExceptionInProgress) {
 
-            if (Status == STATUS_PENDING) {
-
-                Ext2QueueCloseRequest(IrpContext);
-
-            } else {
-
-                Ext2CompleteIrpContext(IrpContext, Status);
-            }
+            Ext2CompleteIrpContext(IrpContext, Status);
         }
 
         if (FcbDerefDeferred)
@@ -184,67 +155,4 @@ Ext2Close (IN PEXT2_IRP_CONTEXT IrpContext)
     }
 
     return Status;
-}
-
-/* TO INVESTIGATE: Since no call in Ext2Close return STATUS_PENDING (because the wait parameter to
-   ExAcquireResourceExclusiveLite is TRUE) the functions below will never be called and could be removed? */
-
-VOID
-Ext2QueueCloseRequest (IN PEXT2_IRP_CONTEXT IrpContext)
-{
-    ASSERT(IrpContext);
-    ASSERT((IrpContext->Identifier.Type == EXT2ICX) &&
-           (IrpContext->Identifier.Size == sizeof(EXT2_IRP_CONTEXT)));
-
-    if (IsFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DELAY_CLOSE)) {
-
-        if (IsFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_FILE_BUSY)) {
-            Ext2Sleep(500); /* 0.5 sec*/
-        } else {
-            Ext2Sleep(50);  /* 0.05 sec*/
-        }
-
-    } else {
-
-        SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
-        SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_DELAY_CLOSE);
-
-        IrpContext->Fcb = (PEXT2_FCB) IrpContext->FileObject->FsContext;
-        IrpContext->Ccb = (PEXT2_CCB) IrpContext->FileObject->FsContext2;
-    }
-
-    ExInitializeWorkItem(
-        &IrpContext->WorkQueueItem,
-        Ext2DeQueueCloseRequest,
-        IrpContext);
-
-    ExQueueWorkItem(&IrpContext->WorkQueueItem, DelayedWorkQueue);
-}
-
-VOID
-Ext2DeQueueCloseRequest (IN PVOID Context)
-{
-    PEXT2_IRP_CONTEXT IrpContext;
-
-    IrpContext = (PEXT2_IRP_CONTEXT) Context;
-    ASSERT(IrpContext);
-    ASSERT((IrpContext->Identifier.Type == EXT2ICX) &&
-           (IrpContext->Identifier.Size == sizeof(EXT2_IRP_CONTEXT)));
-
-    __try {
-
-        __try {
-
-            FsRtlEnterFileSystem();
-            Ext2Close(IrpContext);
-
-        } __except (Ext2ExceptionFilter(IrpContext, GetExceptionInformation())) {
-
-            Ext2ExceptionHandler(IrpContext);
-        }
-
-    } __finally {
-
-        FsRtlExitFileSystem();
-    }
 }
