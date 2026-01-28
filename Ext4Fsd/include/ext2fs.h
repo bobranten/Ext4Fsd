@@ -508,9 +508,6 @@ typedef struct _EXT2_GLOBAL {
     CACHE_MANAGER_CALLBACKS     CacheManagerCallbacks;
     CACHE_MANAGER_CALLBACKS     CacheManagerNoOpCallbacks;
 
-    /* Pointer to the driver object */
-    PDRIVER_OBJECT              DriverObject;
-
     /* Pointer to the disk device object */
     PDEVICE_OBJECT              DiskdevObject;
 
