@@ -4,3 +4,9 @@ Release/
 *.vcxproj.user
 Ext2Fsd-setup.exe
 */cab/
+
+# Local docs (moved from root); keep out of version control
+docs/
+
+# Solution file can be machine-specific; remove from .gitignore to track it
+Ext4Fsd.sln
