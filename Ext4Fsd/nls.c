@@ -96,7 +96,6 @@ DECLARE_INIT(init_nls_koi8_ru);
 DECLARE_EXIT(exit_nls_koi8_ru);
 DECLARE_INIT(init_nls_koi8_u);
 DECLARE_EXIT(exit_nls_koi8_u);
-#endif //FULL_CODEPAGES_SUPPORT
 
 /* gb2312 */
 DECLARE_INIT(init_nls_cp936);
@@ -106,18 +105,18 @@ DECLARE_EXIT(exit_nls_cp936);
 DECLARE_INIT(init_nls_cp950);
 DECLARE_EXIT(exit_nls_cp950);
 
+#endif //FULL_CODEPAGES_SUPPORT
+
 /* utf8 */
 DECLARE_INIT(init_nls_utf8);
 DECLARE_EXIT(exit_nls_utf8);
 
-
 /* FUNCTIONS ****************************************************************/
-
 
 int
 Ext2LoadAllNls()
 {
-    int rc;
+    int rc = 0;
 
     tables = NULL;
     spin_lock_init(&nls_lock);
@@ -175,7 +174,6 @@ Ext2LoadAllNls()
 
     return rc;
 }
-
 
 VOID
 Ext2UnloadAllNls()
