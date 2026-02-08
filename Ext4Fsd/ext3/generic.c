@@ -633,7 +633,7 @@ Ext2LoadInodeXattr(IN PEXT2_VCB Vcb,
 		Vcb->Volume,
 		(PLARGE_INTEGER)&Offset,
 		Vcb->InodeSize,
-		PIN_WAIT,
+		TRUE,
 		(PVOID)InodeXattr,
 		&IoStatus)) {
 		return FALSE;

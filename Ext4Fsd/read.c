@@ -59,7 +59,6 @@ Ext2CompleteIrpContext (
     return Status;
 }
 
-
 NTSTATUS
 Ext2ReadVolume (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -297,7 +296,6 @@ Ext2ReadVolume (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
-
 #define SafeZeroMemory(AT,BYTE_COUNT) {                                 \
     __try {                                                             \
         if (AT)                                                         \
@@ -435,7 +433,7 @@ Ext2ReadInode (
                             Vcb->Volume,
                             (PLARGE_INTEGER)(&(Extent->Lba)),
                             Extent->Length,
-                            PIN_WAIT,
+                            TRUE,
                             (PVOID)((PUCHAR)Buffer + Extent->Offset),
                             &IoStatus
                         )) {
@@ -858,7 +856,6 @@ Ext2ReadComplete (IN PEXT2_IRP_CONTEXT IrpContext)
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2Read (IN PEXT2_IRP_CONTEXT IrpContext)
