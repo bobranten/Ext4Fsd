@@ -43,7 +43,6 @@ Ext2FloppyFlushDpc (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2);
 
-
 NTSTATUS
 Ext2WriteComplete (IN PEXT2_IRP_CONTEXT IrpContext);
 
@@ -55,7 +54,6 @@ Ext2WriteVolume (IN PEXT2_IRP_CONTEXT IrpContext);
 
 VOID
 Ext2DeferWrite(IN PEXT2_IRP_CONTEXT, PIRP Irp);
-
 
 /* FUNCTIONS *************************************************************/
 
@@ -214,7 +212,6 @@ Ext2DeferWrite(IN PEXT2_IRP_CONTEXT IrpContext, PIRP Irp)
 
     Ext2QueueRequest(IrpContext);
 }
-
 
 NTSTATUS
 Ext2WriteVolume (IN PEXT2_IRP_CONTEXT IrpContext)
@@ -421,14 +418,7 @@ Ext2WriteVolume (IN PEXT2_IRP_CONTEXT IrpContext)
                     __leave;
                 }
 
-                if (!CcCopyWrite( Vcb->Volume,
-                                  (PLARGE_INTEGER)(&ByteOffset),
-                                  Length,
-                                  TRUE,
-                                  Buffer )) {
-                    Status = STATUS_PENDING;
-                    __leave;
-                }
+                CcCopyWrite(Vcb->Volume, (PLARGE_INTEGER)(&ByteOffset), Length, TRUE, Buffer);
 
                 Status = Irp->IoStatus.Status;
                 Ext2AddVcbExtent(Vcb, ByteOffset.QuadPart, (LONGLONG)Length);
@@ -741,7 +731,6 @@ Ext2WriteInode (
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2WriteFile(IN PEXT2_IRP_CONTEXT IrpContext)
@@ -1129,14 +1118,7 @@ Ext2WriteFile(IN PEXT2_IRP_CONTEXT IrpContext)
                     }
                 }
 
-                if (!CcCopyWrite(FileObject, &ByteOffset, Length, Ext2CanIWait(), Buffer)) {
-                    if (Ext2CanIWait() || 
-                        !CcCopyWrite(FileObject,  &ByteOffset, Length, TRUE, Buffer)) {
-                        Status = STATUS_PENDING;
-                        DbgBreak();
-                        __leave;
-                    }
-                }
+                CcCopyWrite(FileObject, &ByteOffset, Length, TRUE, Buffer);
 
                 if (ByteOffset.QuadPart + Length > Fcb->Header.ValidDataLength.QuadPart ) {
 
@@ -1332,7 +1314,6 @@ Ext2WriteComplete (IN PEXT2_IRP_CONTEXT IrpContext)
 
     return Status;
 }
-
 
 NTSTATUS
 Ext2Write (IN PEXT2_IRP_CONTEXT IrpContext)

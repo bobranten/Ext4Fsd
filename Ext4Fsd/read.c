@@ -429,18 +429,15 @@ Ext2ReadInode (
 
             for (Extent = Chain; Extent != NULL; Extent = Extent->Next) {
 
-                if (!CcCopyRead(
-                            Vcb->Volume,
-                            (PLARGE_INTEGER)(&(Extent->Lba)),
-                            Extent->Length,
-                            TRUE,
-                            (PVOID)((PUCHAR)Buffer + Extent->Offset),
-                            &IoStatus
-                        )) {
-                    Status = STATUS_CANT_WAIT;
-                } else {
-                    Status = IoStatus.Status;
-                }
+                CcCopyRead(
+                    Vcb->Volume,
+                    (PLARGE_INTEGER)(&(Extent->Lba)),
+                    Extent->Length,
+                    TRUE,
+                    (PVOID)((PUCHAR)Buffer + Extent->Offset),
+                    &IoStatus
+                );
+                Status = IoStatus.Status;
 
                 if (!NT_SUCCESS(Status)) {
                     break;
@@ -694,17 +691,7 @@ Ext2ReadFile(IN PEXT2_IRP_CONTEXT IrpContext)
                     __leave;
                 }
 
-                if (!CcCopyRead(FileObject, &ByteOffset, ReturnedLength,
-                                Ext2CanIWait(), Buffer, &Irp->IoStatus)) {
-
-                    if (Ext2CanIWait() || !CcCopyRead(FileObject, &ByteOffset,
-                                                      ReturnedLength, TRUE,
-                                                      Buffer, &Irp->IoStatus)) {
-                        Status = STATUS_PENDING;
-                        DbgBreak();
-                        __leave;
-                    }
-                }
+                CcCopyRead(FileObject, &ByteOffset, ReturnedLength, TRUE, Buffer, &Irp->IoStatus);
                 Status = Irp->IoStatus.Status;
             }
 
