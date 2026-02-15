@@ -747,14 +747,6 @@ Ext2ReadFile(IN PEXT2_IRP_CONTEXT IrpContext)
                 IrpContext->Irp = Irp = NULL;
                 __leave;
             }
-
-            Irp = IrpContext->Irp;
-            ASSERT(Irp);
-            Status = Irp->IoStatus.Status;
-
-            if (!NT_SUCCESS(Status)) {
-                Ext2NormalizeAndRaiseStatus(IrpContext, Status);
-            }
         }
 
         Irp->IoStatus.Information = ReturnedLength;
