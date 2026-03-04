@@ -198,11 +198,20 @@ Ext2PnpQueryRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
-            KeWaitForSingleObject( &Event,
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
+
             Status = IrpContext->Irp->IoStatus.Status;
         }
 
@@ -270,12 +279,19 @@ Ext2PnpRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
 
-            KeWaitForSingleObject( &Event,
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
 
             Status = IrpContext->Irp->IoStatus.Status;
         }
@@ -342,12 +358,19 @@ Ext2PnpSurpriseRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
 
-            KeWaitForSingleObject( &Event,
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
 
             Status = IrpContext->Irp->IoStatus.Status;
         }

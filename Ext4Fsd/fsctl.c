@@ -2019,14 +2019,22 @@ Ext2IsMediaWriteProtected (
     Status = IoCallDriver(TargetDevice, Irp);
 
     if (Status == STATUS_PENDING) {
+        LARGE_INTEGER Timeout;
+        Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
 
-        (VOID) KeWaitForSingleObject( &Event,
+        Status = KeWaitForSingleObject( &Event,
                                       Executive,
                                       KernelMode,
                                       FALSE,
-                                      (PLARGE_INTEGER)NULL );
+                                      &Timeout );
 
-        Status = IoStatus.Status;
+        if (Status == STATUS_TIMEOUT) {
+            IoCancelIrp(Irp);
+            KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            Status = STATUS_IO_TIMEOUT;
+        } else {
+            Status = IoStatus.Status;
+        }
     }
 
     return (BOOLEAN)(Status == STATUS_MEDIA_WRITE_PROTECTED);
