@@ -879,6 +879,12 @@ Ext2Read (IN PEXT2_IRP_CONTEXT IrpContext)
 
             FileObject = IrpContext->FileObject;
 
+            if (IsFlagOn(Vcb->Flags, VCB_DEVICE_REMOVED)) {
+                Status = STATUS_NO_SUCH_DEVICE;
+                bCompleteRequest = TRUE;
+                __leave;
+            }
+
             if (FlagOn(Vcb->Flags, VCB_VOLUME_LOCKED) &&
                 Vcb->LockFile != FileObject ) {
                 Status = STATUS_ACCESS_DENIED;

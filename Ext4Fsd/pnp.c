@@ -249,6 +249,9 @@ Ext2PnpRemove (
         Status = Ext2LockVcb(Vcb, IrpContext->FileObject);
         ExReleaseResourceLite(&Vcb->MainResource);
 
+        /* Mark device removed early so concurrent I/O threads fail fast */
+        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
+
         //
         // Setup the Irp. We'll send it to the lower disk driver.
         //
@@ -282,7 +285,6 @@ Ext2PnpRemove (
 
         /* dismount volume */
         bDeleted = Ext2CheckDismount(IrpContext, Vcb, TRUE);
-        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
 
     } __finally {
 
@@ -319,6 +321,9 @@ Ext2PnpSurpriseRemove (
 
         ExReleaseResourceLite(&Vcb->MainResource);
 
+        /* Mark device removed early so concurrent I/O threads fail fast */
+        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
+
         //
         // Setup the Irp. We'll send it to the lower disk driver.
         //
@@ -352,7 +357,6 @@ Ext2PnpSurpriseRemove (
 
         /* dismount volume */
         bDeleted = Ext2CheckDismount(IrpContext, Vcb, TRUE);
-        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
 
     } __finally {
 
