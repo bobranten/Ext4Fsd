@@ -400,8 +400,15 @@ Ext2ReadWriteBlocks(
         }
 
         if (Ext2CanIWait()) {
-            KeWaitForSingleObject( &(pContext->Event),
-                                   Executive, KernelMode, FALSE, NULL );
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+            Status = KeWaitForSingleObject( &(pContext->Event),
+                                   Executive, KernelMode, FALSE, &Timeout );
+            if (Status == STATUS_TIMEOUT) {
+                /* Device likely removed — unblock and report error */
+                MasterIrp->IoStatus.Status = STATUS_IO_TIMEOUT;
+                MasterIrp->IoStatus.Information = 0;
+            }
             KeClearEvent( &(pContext->Event) );
         } else {
             bMasterCompleted = TRUE;
@@ -496,15 +503,23 @@ Ext2ReadSync(
         Status = IoCallDriver(Vcb->TargetDeviceObject, Irp);
 
         if (Status == STATUS_PENDING) {
-            KeWaitForSingleObject(
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+            Status = KeWaitForSingleObject(
                 Event,
                 Suspended,
                 KernelMode,
                 FALSE,
-                NULL
+                &Timeout
             );
 
-            Status = IoStatus.Status;
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(Irp);
+                KeWaitForSingleObject(Event, Executive, KernelMode, FALSE, NULL);
+                Status = STATUS_IO_TIMEOUT;
+            } else {
+                Status = IoStatus.Status;
+            }
         }
 
     } __finally {
@@ -610,8 +625,16 @@ Ext2DiskIoControl (
     Status = IoCallDriver(DeviceObject, Irp);
 
     if (Status == STATUS_PENDING)  {
-        KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
-        Status = IoStatus.Status;
+        LARGE_INTEGER Timeout;
+        Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+        Status = KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, &Timeout);
+        if (Status == STATUS_TIMEOUT) {
+            IoCancelIrp(Irp);
+            KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            Status = STATUS_IO_TIMEOUT;
+        } else {
+            Status = IoStatus.Status;
+        }
     }
 
     if (OutputBufferSize) {
@@ -644,13 +667,21 @@ Ext2DiskShutDown(PEXT2_VCB Vcb)
         Status = IoCallDriver(Vcb->TargetDeviceObject, Irp);
 
         if (Status == STATUS_PENDING) {
-            KeWaitForSingleObject(&Event,
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+            Status = KeWaitForSingleObject(&Event,
                                   Executive,
                                   KernelMode,
                                   FALSE,
-                                  NULL);
+                                  &Timeout);
 
-            Status = IoStatus.Status;
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+                Status = STATUS_IO_TIMEOUT;
+            } else {
+                Status = IoStatus.Status;
+            }
         }
     } else  {
         Status = IoStatus.Status;
