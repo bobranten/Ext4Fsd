@@ -585,7 +585,7 @@ Ext2ScanDir (
         /* grab parent's reference first */
         Ext2ReferMcb(Parent);
 
-        /* bad request ! Can a man be pregnant ? Maybe:) */
+        /* bad request ! */
         if (!IsMcbDirectory(Parent)) {
             Status = STATUS_NOT_A_DIRECTORY;
             __leave;
