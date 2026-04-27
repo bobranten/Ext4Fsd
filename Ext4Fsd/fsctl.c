@@ -2867,7 +2867,7 @@ Ext2FileSystemControl (IN PEXT2_IRP_CONTEXT IrpContext)
 
     default:
 
-        DEBUG(DL_ERR, ( "Ext2FilsSystemControl: Invalid Device Request.\n"));
+        DEBUG(DL_DBG, ( "Ext2FilsSystemControl: Invalid Device Request.\n"));
         Status = STATUS_INVALID_DEVICE_REQUEST;
         Ext2CompleteIrpContext(IrpContext,  Status);
     }
