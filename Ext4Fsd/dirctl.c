@@ -444,11 +444,13 @@ static int Ext2FillEntry(void *context, const char *name, int namlen,
     Oem.Length = namlen & 0xFF;
     Oem.MaximumLength = Oem.Length;
 
-    /* skip . and .. */
-    if ((Oem.Length == 1 && name[0] == '.') || (Oem.Length == 2 &&
-            name[0] == '.' && name[1] == '.' )) {
-        goto errorout;
-    }
+    /*
+     * Do NOT skip . and .. entries. On empty directories these are
+     * the only entries in the dir block. Skipping them causes
+     * fc.efc_start to stay 0, which triggers STATUS_NO_SUCH_FILE
+     * in errorout -- FindFirstFileW then fails with
+     * ERROR_FILE_NOT_FOUND. Windows strips . and .. itself.
+     */
 
     if (Ext2IsWearingCloak(Vcb, &Oem)) {
         goto errorout;
@@ -850,11 +852,13 @@ Ext2QueryDirectory (IN PEXT2_IRP_CONTEXT IrpContext)
                 goto ProcessNextEntry;
             }
 
-            /* skip . and .. */
-            if ((pDir->name_len == 1 && pDir->name[0] == '.') ||
-                    (pDir->name_len == 2 && pDir->name[0] == '.' && pDir->name[1] == '.' )) {
-                goto ProcessNextEntry;
-            }
+            /*
+             * Do NOT skip . and .. entries. On empty directories these
+             * are the only entries in the dir block. Skipping them causes
+             * fc.efc_start to stay 0, which triggers STATUS_NO_SUCH_FILE
+             * in errorout -- FindFirstFileW then fails with
+             * ERROR_FILE_NOT_FOUND. Windows strips . and .. itself.
+             */
 
             Oem.Buffer = pDir->name;
             Oem.Length = (pDir->name_len & 0xff);
@@ -978,11 +982,11 @@ errorout:
         } else if (!fc.efc_start) {
             if (NT_SUCCESS(Status)) {
                 /*
-                 * Empty directory: . and .. are skipped above, so no real
-                 * entries were written. Return STATUS_NO_MORE_FILES instead
-                 * of STATUS_NO_SUCH_FILE so callers (FindFirstFileW,
-                 * NtQueryDirectoryFile) know enumeration completed with
-                 * no entries, rather than thinking the dir doesn't exist.
+                 * Empty directory: . and .. are now passed through above,
+                 * so on empty dirs they are the only entries and set
+                 * efc_start > 0. This path is a safety net: return
+                 * STATUS_NO_MORE_FILES instead of STATUS_NO_SUCH_FILE,
+                 * so FindFirstFileW doesn't map it to ERROR_FILE_NOT_FOUND.
                  */
                 Status = STATUS_NO_MORE_FILES;
             }
