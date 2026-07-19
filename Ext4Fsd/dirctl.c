@@ -977,11 +977,14 @@ errorout:
             /* just return fc.efc_start/EntrySize bytes that we filled */
         } else if (!fc.efc_start) {
             if (NT_SUCCESS(Status)) {
-                if (FirstQuery) {
-                    Status = STATUS_NO_SUCH_FILE;
-                } else {
-                    Status = STATUS_NO_MORE_FILES;
-                }
+                /*
+                 * Empty directory: . and .. are skipped above, so no real
+                 * entries were written. Return STATUS_NO_MORE_FILES instead
+                 * of STATUS_NO_SUCH_FILE so callers (FindFirstFileW,
+                 * NtQueryDirectoryFile) know enumeration completed with
+                 * no entries, rather than thinking the dir doesn't exist.
+                 */
+                Status = STATUS_NO_MORE_FILES;
             }
         } else {
             Status = STATUS_SUCCESS;
