@@ -508,9 +508,6 @@ typedef struct _EXT2_GLOBAL {
     CACHE_MANAGER_CALLBACKS     CacheManagerCallbacks;
     CACHE_MANAGER_CALLBACKS     CacheManagerNoOpCallbacks;
 
-    /* Pointer to the driver object */
-    PDRIVER_OBJECT              DriverObject;
-
     /* Pointer to the disk device object */
     PDEVICE_OBJECT              DiskdevObject;
 
@@ -1204,8 +1201,7 @@ Ext2ReadSync(
     IN PEXT2_VCB        Vcb,
     IN ULONGLONG        Offset,
     IN ULONG            Length,
-    OUT PVOID           Buffer,
-    IN BOOLEAN          bVerify );
+    OUT PVOID           Buffer );
 
 NTSTATUS
 Ext2ReadDisk(

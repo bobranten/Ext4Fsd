@@ -59,7 +59,6 @@ Ext2CompleteIrpContext (
     return Status;
 }
 
-
 NTSTATUS
 Ext2ReadVolume (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -297,7 +296,6 @@ Ext2ReadVolume (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
-
 #define SafeZeroMemory(AT,BYTE_COUNT) {                                 \
     __try {                                                             \
         if (AT)                                                         \
@@ -431,18 +429,15 @@ Ext2ReadInode (
 
             for (Extent = Chain; Extent != NULL; Extent = Extent->Next) {
 
-                if (!CcCopyRead(
-                            Vcb->Volume,
-                            (PLARGE_INTEGER)(&(Extent->Lba)),
-                            Extent->Length,
-                            PIN_WAIT,
-                            (PVOID)((PUCHAR)Buffer + Extent->Offset),
-                            &IoStatus
-                        )) {
-                    Status = STATUS_CANT_WAIT;
-                } else {
-                    Status = IoStatus.Status;
-                }
+                CcCopyRead(
+                    Vcb->Volume,
+                    (PLARGE_INTEGER)(&(Extent->Lba)),
+                    Extent->Length,
+                    TRUE,
+                    (PVOID)((PUCHAR)Buffer + Extent->Offset),
+                    &IoStatus
+                );
+                Status = IoStatus.Status;
 
                 if (!NT_SUCCESS(Status)) {
                     break;
@@ -696,17 +691,7 @@ Ext2ReadFile(IN PEXT2_IRP_CONTEXT IrpContext)
                     __leave;
                 }
 
-                if (!CcCopyRead(FileObject, &ByteOffset, ReturnedLength,
-                                Ext2CanIWait(), Buffer, &Irp->IoStatus)) {
-
-                    if (Ext2CanIWait() || !CcCopyRead(FileObject, &ByteOffset,
-                                                      ReturnedLength, TRUE,
-                                                      Buffer, &Irp->IoStatus)) {
-                        Status = STATUS_PENDING;
-                        DbgBreak();
-                        __leave;
-                    }
-                }
+                CcCopyRead(FileObject, &ByteOffset, ReturnedLength, TRUE, Buffer, &Irp->IoStatus);
                 Status = Irp->IoStatus.Status;
             }
 
@@ -761,14 +746,6 @@ Ext2ReadFile(IN PEXT2_IRP_CONTEXT IrpContext)
             if (Status == STATUS_PENDING) {
                 IrpContext->Irp = Irp = NULL;
                 __leave;
-            }
-
-            Irp = IrpContext->Irp;
-            ASSERT(Irp);
-            Status = Irp->IoStatus.Status;
-
-            if (!NT_SUCCESS(Status)) {
-                Ext2NormalizeAndRaiseStatus(IrpContext, Status);
             }
         }
 
@@ -859,7 +836,6 @@ Ext2ReadComplete (IN PEXT2_IRP_CONTEXT IrpContext)
     return Status;
 }
 
-
 NTSTATUS
 Ext2Read (IN PEXT2_IRP_CONTEXT IrpContext)
 {
@@ -902,6 +878,12 @@ Ext2Read (IN PEXT2_IRP_CONTEXT IrpContext)
             }
 
             FileObject = IrpContext->FileObject;
+
+            if (IsFlagOn(Vcb->Flags, VCB_DEVICE_REMOVED)) {
+                Status = STATUS_NO_SUCH_DEVICE;
+                bCompleteRequest = TRUE;
+                __leave;
+            }
 
             if (FlagOn(Vcb->Flags, VCB_VOLUME_LOCKED) &&
                 Vcb->LockFile != FileObject ) {

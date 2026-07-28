@@ -286,7 +286,6 @@ Ext2QueryGlobalParameters(IN PUNICODE_STRING RegistryPath)
     return NT_SUCCESS(Status);
 }
 
-
 BOOLEAN
 Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
 {
@@ -404,14 +403,6 @@ Ext2QueryRegistrySettings(IN PUNICODE_STRING  RegistryPath)
 
     return TRUE;
 }
-
-#define NLS_OEM_LEAD_BYTE_INFO            (*NlsOemLeadByteInfo)
-
-#define FsRtlIsLeadDbcsCharacter(DBCS_CHAR) (                      \
-    (BOOLEAN)((UCHAR)(DBCS_CHAR) < 0x80 ? FALSE :                  \
-              (NLS_MB_CODE_PAGE_TAG &&                             \
-               (NLS_OEM_LEAD_BYTE_INFO[(UCHAR)(DBCS_CHAR)] != 0))) \
-)
 
 VOID
 Ext2EresourceAlignmentChecking()

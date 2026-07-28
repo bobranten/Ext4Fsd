@@ -90,10 +90,8 @@ Ext2ShutDown (IN PEXT2_IRP_CONTEXT IrpContext)
             }
         }
 
-        /*
-                IoUnregisterFileSystem(Ext2Global->DiskdevObject);
-                IoUnregisterFileSystem(Ext2Global->CdromdevObject);
-        */
+        IoUnregisterFileSystem(Ext2Global->DiskdevObject);
+        IoUnregisterFileSystem(Ext2Global->CdromdevObject);
 
     } __finally {
 

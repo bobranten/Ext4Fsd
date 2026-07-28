@@ -198,11 +198,20 @@ Ext2PnpQueryRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
-            KeWaitForSingleObject( &Event,
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
+
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
+
             Status = IrpContext->Irp->IoStatus.Status;
         }
 
@@ -249,6 +258,9 @@ Ext2PnpRemove (
         Status = Ext2LockVcb(Vcb, IrpContext->FileObject);
         ExReleaseResourceLite(&Vcb->MainResource);
 
+        /* Mark device removed early so concurrent I/O threads fail fast */
+        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
+
         //
         // Setup the Irp. We'll send it to the lower disk driver.
         //
@@ -267,12 +279,19 @@ Ext2PnpRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
 
-            KeWaitForSingleObject( &Event,
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
 
             Status = IrpContext->Irp->IoStatus.Status;
         }
@@ -282,7 +301,6 @@ Ext2PnpRemove (
 
         /* dismount volume */
         bDeleted = Ext2CheckDismount(IrpContext, Vcb, TRUE);
-        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
 
     } __finally {
 
@@ -319,6 +337,9 @@ Ext2PnpSurpriseRemove (
 
         ExReleaseResourceLite(&Vcb->MainResource);
 
+        /* Mark device removed early so concurrent I/O threads fail fast */
+        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
+
         //
         // Setup the Irp. We'll send it to the lower disk driver.
         //
@@ -337,12 +358,19 @@ Ext2PnpSurpriseRemove (
                                IrpContext->Irp);
 
         if (Status == STATUS_PENDING) {
+            LARGE_INTEGER Timeout;
+            Timeout.QuadPart = (LONGLONG)-30 * 10 * 1000 * 1000; /* 30 seconds */
 
-            KeWaitForSingleObject( &Event,
+            Status = KeWaitForSingleObject( &Event,
                                    Executive,
                                    KernelMode,
                                    FALSE,
-                                   NULL );
+                                   &Timeout );
+
+            if (Status == STATUS_TIMEOUT) {
+                IoCancelIrp(IrpContext->Irp);
+                KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
+            }
 
             Status = IrpContext->Irp->IoStatus.Status;
         }
@@ -352,7 +380,6 @@ Ext2PnpSurpriseRemove (
 
         /* dismount volume */
         bDeleted = Ext2CheckDismount(IrpContext, Vcb, TRUE);
-        SetLongFlag(Vcb->Flags, VCB_DEVICE_REMOVED);
 
     } __finally {
 
