@@ -123,6 +123,7 @@ CMountPoints::AddMountPoint(
         if (Ext2SetRegistryMountPoint(&drvChar, devPath, bRegistry)) {
             Ext2AssignDrvLetter(drvLetter, devPath, FALSE);
             EndDialog(0);
+            return TRUE;
         } else {
             str.Format("Failed to modify registry: SYSTEM\\CurrentControlSet\\Control\\Session Manager\\DOS Devices\n");
             AfxMessageBox(str, MB_OK|MB_ICONWARNING);
@@ -152,7 +153,42 @@ CMountPoints::AddMountPoint(
         }
     }
 
-    /* create an entry in regisgtry */
+    /* Ext2 property IOCTL — only for EXT volumes (EVP non-NULL).
+       NTFS/FAT hit this path via Change Drive Letters and used to crash
+       on Ext2QueryExt2Property(NULL). Assign the DOS letter only. */
+    if (!EVP) {
+        rc = Ext2AssignDrvLetter(drvLetter, devPath, bMountMgr);
+        if (!rc && !bMountMgr) {
+            CString str;
+            str.Format("Failed to assign new drive letter %c:\n", drvChar);
+            AfxMessageBox(str, MB_OK|MB_ICONWARNING);
+            return FALSE;
+        }
+        if (rc) {
+            m_bUpdated = TRUE;
+            if (m_Part) {
+                m_Part->DrvLetters |= letterMask;
+                if (m_Part->Volume) {
+                    m_Part->Volume->DrvLetters |= letterMask;
+                }
+                InitializeList(m_Part->DrvLetters);
+            }
+            if (m_Volume) {
+                m_Volume->DrvLetters |= letterMask;
+                InitializeList(m_Volume->DrvLetters);
+            }
+            if (m_Cdrom) {
+                m_Cdrom->DrvLetters |= letterMask;
+                InitializeList(m_Cdrom->DrvLetters);
+            }
+            m_MainDlg->SendMessage(
+                        WM_MOUNTPOINT_NOTIFY,
+                        'DA', (LPARAM)drvLetter->Letter);
+        }
+        return rc;
+    }
+
+    /* create an entry in registry (EXT only) */
     {
 
         NT::NTSTATUS status;

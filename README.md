@@ -1,3 +1,26 @@
+Scripts and building from source (this fork)
+--------------------------------------------
+
+This fork adds PowerShell scripts for building, installing, signing, and diagnosing the driver. All scripts live in **Scripts/**. Run them from the repo root, e.g. `.\Scripts\build.ps1`.
+
+**Build and install**
+- **Scripts\build.ps1** — Build driver, Ext2Srv, Ext2Mgr (requires Visual Studio 2019/2022 and WDK for the driver). Optionally signs the driver if `EXT4FSD_CERT_PATH` is set. Ext2Mgr vendors a small `Ext2Mgr/mountmgr.h`, so the manager app can be built without installing the full WDK.
+- **Scripts\install_driver.ps1** — Copy driver to System32, register kernel driver, install Ext2Srv. Run as Administrator.
+- **Scripts\uninstall_driver.ps1** — Remove driver and services.
+- **Scripts\register_driver.ps1** — Register the kernel driver service (driver must already be in System32).
+- **Scripts\disable_driver.ps1** — Disable the Ext2Fsd service (e.g. to stop boot retries after signature failures).
+
+**Signing**
+- **Scripts\sign_driver.ps1** — Sign the driver with a code-signing certificate. Set `EXT4FSD_CERT_PATH` and optionally `MSIX_CERT_PASSWORD`, or pass `-CertificatePath` / `-CertificatePassword`.
+- **Scripts\install_certificate.ps1** — Install the signing certificate into Trusted Publishers (required for loading self-signed drivers). Run as Administrator.
+
+**Diagnostics**
+- **Scripts\diagnose_ext2fsd.ps1** — Unified diagnostic (signature, cert stores, event log, driver status). Use for load failures or error 577. Use `-UseSigntool:$false` to skip signtool (e.g. when SDK is not installed).
+- **Scripts\check_driver_load_error.ps1**, **Scripts\diagnose_error_577.ps1**, **Scripts\verify_driver_signature.ps1** — Wrappers that call `diagnose_ext2fsd.ps1`.
+
+**Other**
+- **Scripts\fix_sdk_version.ps1** — Update project files' `WindowsTargetPlatformVersion` to match the installed SDK.
+
 
 Latest release
 --------------
@@ -50,6 +73,16 @@ Changes to the source code in git after latest release
     - The fields s_wtime and s_wtime_hi in the superblock will be
       updated with the current time at shutdown.
 
+    - Timeouts on block/PnP/fsctl waits so surprise-removal of USB
+      or other removable ext4 volumes no longer hangs the system
+      waiting forever for I/O that will never complete.
+
+    - Corrected the wait argument to CcCopyRead / CcCopyWrite and
+      simplified the related read/write paths.
+
+    - Filesystems with EXT4_FEATURE_INCOMPAT_CASEFOLD can be mounted
+      (the feature bit is treated as supported).
+
     Application:
 
     - If an on disk filesystem contains new ext4 features that is
@@ -65,6 +98,16 @@ Changes to the source code in git after latest release
 
     - The donate dialog box is disabled because the information in
       it is outdated.
+
+    - High-DPI awareness is disabled in the Ext2Mgr project so the
+      classic Win32 UI scales more predictably on high-resolution
+      monitors.
+
+    - Ext2Mgr includes a subset of mountmgr.h so the application can
+      be compiled without installing the Windows Driver Kit.
+
+    - Fork manager notes (this tree): Ext2Mgr/IMPROVEMENTS.md covers
+      classic Ext2Mgr crash fixes and Ext2Srv pipe speedups.
 
 
 About
@@ -172,5 +215,9 @@ Unsupported Ext4 Features
     2, EXT4_FEATURE_INCOMPAT_MMP (multiple mount protection)
     3, EXT4_FEATURE_INCOMPAT_INLINE_DATA (storing small files in inode)
     4, EXT4_FEATURE_INCOMPAT_ENCRYPT
-    5, EXT4_FEATURE_INCOMPAT_CASEFOLD (case insensitive file names (claimed to be used by SteamOS as default))
-    6, EXT4_FEATURE_INCOMPAT_LARGEDIR (3-level htree)
+    5, EXT4_FEATURE_INCOMPAT_LARGEDIR (3-level htree)
+
+    Note: EXT4_FEATURE_INCOMPAT_CASEFOLD is no longer in this list;
+    the driver accepts that incompat bit so casefolded volumes can
+    be mounted. Full case-insensitive name matching semantics may
+    still be incomplete compared to Linux.
