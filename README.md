@@ -1,3 +1,39 @@
+Ext2Mgr Iced port (this branch)
+-------------------------------
+
+This branch (`ext2mgr-iced`) adds an optional **Rust + [Iced](https://iced.rs/) GUI** for managing Ext2/Ext4 volumes on Windows, under **`ext2mgr_iced/`**. It is modeled on classic MFC **Ext2 Volume Manager** (`Ext2Mgr/`) and talks to the same Ext2Fsd driver / Ext2Srv pipe.
+
+- Build / run: see [`ext2mgr_iced/README.md`](ext2mgr_iced/README.md) (`cargo build --release`, `cargo run`, `cargo run --release`)
+- What differs from classic Ext2Mgr: [`ext2mgr_iced/PORT_IMPROVEMENTS.md`](ext2mgr_iced/PORT_IMPROVEMENTS.md)
+- Source layout: [`ext2mgr_iced/docs/SOURCE_LAYOUT.md`](ext2mgr_iced/docs/SOURCE_LAYOUT.md)
+
+Classic Ext2Mgr and Ext2Srv remain available. Driver build/install scripts below are unchanged.
+
+
+Scripts and building from source (this fork)
+--------------------------------------------
+
+This fork adds PowerShell scripts for building, installing, signing, and diagnosing the driver. All scripts live in **Scripts/**. Run them from the repo root, e.g. `.\Scripts\build.ps1`.
+
+**Build and install**
+- **Scripts\build.ps1** — Build driver, Ext2Srv, and/or Ext2Mgr (Visual Studio 2019/2022). Default `-Target All` needs WDK. Use `-Target Ext2Mgr` or `-Target Ext2Srv` for user-mode only (no WDK). Optionally signs the driver if `EXT4FSD_CERT_PATH` is set. Cursor/VS Code: `.vscode/tasks.json` + `launch.json`.
+- **Scripts\release_usermode.ps1** — Package Ext2Srv + `ext2mgr_iced` user-mode zips (no driver / no WDK). Default: **host architecture only**. Pass `-Platforms x64,ARM64` for both (requires ARM64 MSVC tools). Writes `dist\usermode-<version>\` with `RELEASE_NOTES.txt` and SHA256 sums.
+- **Scripts\install_driver.ps1** — Copy driver to System32, register kernel driver, install Ext2Srv. Run as Administrator.
+- **Scripts\uninstall_driver.ps1** — Remove driver and services.
+- **Scripts\register_driver.ps1** — Register the kernel driver service (driver must already be in System32).
+- **Scripts\disable_driver.ps1** — Disable the Ext2Fsd service (e.g. to stop boot retries after signature failures).
+
+**Signing**
+- **Scripts\sign_driver.ps1** — Sign the driver with a code-signing certificate. Set `EXT4FSD_CERT_PATH` and optionally `MSIX_CERT_PASSWORD`, or pass `-CertificatePath` / `-CertificatePassword`.
+- **Scripts\install_certificate.ps1** — Install the signing certificate into Trusted Publishers (required for loading self-signed drivers). Run as Administrator.
+
+**Diagnostics**
+- **Scripts\diagnose_ext2fsd.ps1** — Unified diagnostic (signature, cert stores, event log, driver status). Use for load failures or error 577. Use `-UseSigntool:$false` to skip signtool (e.g. when SDK is not installed).
+- **Scripts\check_driver_load_error.ps1**, **Scripts\diagnose_error_577.ps1**, **Scripts\verify_driver_signature.ps1** — Wrappers that call `diagnose_ext2fsd.ps1`.
+
+**Other**
+- **Scripts\fix_sdk_version.ps1** — Update project files' `WindowsTargetPlatformVersion` to match the installed SDK.
+
 
 Latest release
 --------------

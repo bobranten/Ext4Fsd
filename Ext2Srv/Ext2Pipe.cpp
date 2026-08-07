@@ -151,8 +151,8 @@ Ext2CreatePipe()
 
     sa = Ext2CreateSA();
 
-    ap->p = CreateNamedPipe( _T(EXT2_MGR_SRV), PIPE_ACCESS_DUPLEX |
-                              FILE_FLAG_WRITE_THROUGH /* | ACCESS_SYSTEM_SECURITY */,
+    ap->p = CreateNamedPipe( _T(EXT2_MGR_SRV), PIPE_ACCESS_DUPLEX,
+                              /* no WRITE_THROUGH: tiny IPC messages; measure if needed */
                               PIPE_TYPE_BYTE | PIPE_READMODE_BYTE |
                               PIPE_WAIT /* PIPE_REJECT_REMOTE_CLIENTS */ ,
                               PIPE_UNLIMITED_INSTANCES,
@@ -429,10 +429,11 @@ retry:
         /* create named pipe */
         ap = Ext2CreatePipe();
         if (NULL == ap) {
-            if (times++ < 10) {
-                Sleep(250 * times);
+            if (times++ < 3) {
+                Sleep(50);
                 goto retry;
             }
+            Sleep(100);
             continue;
         }
 
@@ -440,10 +441,11 @@ retry:
         if (!ap->p || ap->p == INVALID_HANDLE_VALUE ||
             !ap->e || ap->e == INVALID_HANDLE_VALUE) {
             Ext2DestroyPipe(ap);
-            if (times++ < 10) {
-                Sleep(500);
+            if (times++ < 3) {
+                Sleep(50);
                 goto retry;
             }
+            Sleep(100);
             continue;
         }
 
@@ -497,6 +499,9 @@ DWORD Ext2StartPipeSrv()
         _beginthread(Ext2PipeEngine, 0, NULL);
         rc = WaitForSingleObject(g_wait, 1000*1);
     } while (rc == WAIT_TIMEOUT);
+
+    /* Second idle listener so a reconnect/overlap rarely hits PIPE_BUSY. */
+    _beginthread(Ext2PipeEngine, 0, NULL);
 
     return 0;
 }

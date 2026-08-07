@@ -1,0 +1,3 @@
+/target/
+/_recovery_backup_*/
+*.log

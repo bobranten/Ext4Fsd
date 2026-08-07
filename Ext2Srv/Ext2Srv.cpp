@@ -318,13 +318,14 @@ Ext2SetupService(BOOL bInstall)
     if (bInstall) {
 
         // now create service entry for Ext2Mgr
+        // Note: SERVICE_INTERACTIVE_PROCESS removed - interactive services are deprecated
+        // and don't work on modern Windows (can't create named pipes accessible to user sessions)
         hService = CreateService(
                 hManager,                   // SCManager database
                 _T("Ext2Srv"),                 // name of service
                 _T("Ext2Fsd Service Manager"), // name to display
                 SERVICE_ALL_ACCESS,	        // desired access
-                SERVICE_WIN32_OWN_PROCESS | // service type
-                SERVICE_INTERACTIVE_PROCESS,
+                SERVICE_WIN32_OWN_PROCESS, // service type (removed SERVICE_INTERACTIVE_PROCESS)
                 SERVICE_AUTO_START,	        // start type
                 SERVICE_ERROR_NORMAL,       // error control type
 				Target,	                    // service's binary

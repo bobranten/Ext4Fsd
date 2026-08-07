@@ -1,0 +1,44 @@
+[package]
+name = "ext2mgr_iced"
+version = "0.2.0"
+edition = "2021"
+description = "Ext2/Ext4 volume manager GUI (Iced port)"
+
+[dependencies]
+# Software renderer only (no wgpu). Slim image codecs: we only load .ico list icons.
+iced = { version = "0.14", default-features = false, features = [
+    "tiny-skia",
+    "tokio",
+    "image-without-codecs",
+    "crisp",
+    "web-colors",
+    "thread-pool",
+] }
+image = { version = "0.25", default-features = false, features = ["ico"] }
+tokio = { version = "1", features = ["rt"] }
+windows-sys = { version = "0.52", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_DataExchange",
+    "Win32_System_IO",
+    "Win32_System_Memory",
+    "Win32_System_Pipes",
+    "Win32_System_Threading",
+    "Win32_System_Registry",
+    "Win32_System_Services",
+    "Win32_System_SystemInformation",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[build-dependencies]
+winres = "0.1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
