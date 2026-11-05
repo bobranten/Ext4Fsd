@@ -638,9 +638,22 @@ BOOL CExt2MgrDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
         case DBT_DEVICEREMOVEPENDING:
             break;
         case DBT_DEVICEREMOVECOMPLETE:
-            if (lpdb->dbch_devicetype == DBT_DEVTYP_VOLUME) {
+
+            if (!lpdb ||
+                lpdb->dbch_devicetype != DBT_DEVTYP_VOLUME ||
+                lpdb->dbch_size < sizeof (DEV_BROADCAST_VOLUME))
+            {
+                break;
+            }
+            else
+            {
                 PDEV_BROADCAST_VOLUME lpdbv = (PDEV_BROADCAST_VOLUME)lpdb;
-                DriversChangeNotify(lpdbv->dbcv_unitmask, FALSE);
+                if (lpdbv->dbcv_flags & DBTF_MEDIA) // media only
+                {
+                    break;
+                }
+                // remove mount
+                DriversChangeNotify (lpdbv->dbcv_unitmask, FALSE);
             }
             break;
         case DBT_DEVICETYPESPECIFIC:
